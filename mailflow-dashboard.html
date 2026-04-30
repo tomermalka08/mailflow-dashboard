@@ -1,0 +1,1191 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MailFlow — Email Automation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Hebrew:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --bg2: #151820;
+  --bg3: #1c2030;
+  --bg4: #242840;
+  --border: rgba(255,255,255,0.07);
+  --border-hi: rgba(255,255,255,0.14);
+  --accent: #5b6ef5;
+  --accent2: #7c8fff;
+  --green: #22d3a0;
+  --amber: #f59e0b;
+  --red: #f87171;
+  --muted: #6b7280;
+  --text: #e2e8f0;
+  --text2: #94a3b8;
+  --font: 'IBM Plex Sans Hebrew', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --radius: 10px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);font-size:14px;line-height:1.6}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;font-family:var(--font)}
+input,textarea,select{font-family:var(--font)}
+
+/* ── Layout ─────────────────────────────── */
+.app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
+
+/* ── Sidebar ────────────────────────────── */
+.sidebar{
+  background:var(--bg2);
+  border-left:1px solid var(--border);
+  padding:0;
+  display:flex;flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow:auto;
+}
+.sidebar-logo{
+  padding:24px 20px 20px;
+  border-bottom:1px solid var(--border);
+}
+.sidebar-logo .logo-mark{
+  display:flex;align-items:center;gap:10px;
+  font-size:18px;font-weight:600;
+}
+.logo-icon{
+  width:32px;height:32px;border-radius:8px;
+  background:linear-gradient(135deg,var(--accent),var(--green));
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+}
+.sidebar-nav{padding:12px 10px;flex:1}
+.nav-section{margin-bottom:20px}
+.nav-label{
+  font-size:10px;font-weight:600;letter-spacing:.08em;
+  color:var(--muted);text-transform:uppercase;
+  padding:0 10px 8px;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:9px 10px;border-radius:8px;
+  color:var(--text2);font-size:13px;font-weight:400;
+  cursor:pointer;transition:all .15s;border:none;background:none;
+  width:100%;text-align:right;
+}
+.nav-item:hover{background:var(--bg3);color:var(--text)}
+.nav-item.active{background:rgba(91,110,245,.15);color:var(--accent2);font-weight:500}
+.nav-item .icon{font-size:16px;flex-shrink:0}
+.sidebar-footer{
+  padding:16px;border-top:1px solid var(--border);
+  font-size:12px;color:var(--muted);
+}
+
+/* ── Main ───────────────────────────────── */
+.main{overflow:auto}
+.topbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 32px;border-bottom:1px solid var(--border);
+  background:var(--bg);position:sticky;top:0;z-index:10;
+}
+.topbar-title{font-size:20px;font-weight:600}
+.topbar-right{display:flex;align-items:center;gap:12px}
+
+/* ── Buttons ────────────────────────────── */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;
+  border:1px solid var(--border-hi);background:var(--bg3);color:var(--text);
+  transition:all .15s;
+}
+.btn:hover{background:var(--bg4);border-color:var(--border-hi)}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
+.btn-sm{padding:5px 12px;font-size:12px}
+.btn-danger{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3);color:var(--red)}
+
+/* ── Content ────────────────────────────── */
+.content{padding:28px 32px}
+.section{display:none}
+.section.active{display:block}
+
+/* ── Stat cards ─────────────────────────── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
+.stat-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);padding:20px;
+}
+.stat-label{font-size:11px;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.stat-value{font-size:28px;font-weight:600;line-height:1}
+.stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
+.stat-card.green .stat-value{color:var(--green)}
+.stat-card.blue  .stat-value{color:var(--accent2)}
+.stat-card.amber .stat-value{color:var(--amber)}
+.stat-card.red   .stat-value{color:var(--red)}
+
+/* ── Table ──────────────────────────────── */
+.card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;margin-bottom:24px;
+}
+.card-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;border-bottom:1px solid var(--border);
+}
+.card-title{font-size:14px;font-weight:600}
+table{width:100%;border-collapse:collapse}
+thead tr{background:var(--bg3)}
+th{
+  padding:10px 16px;font-size:11px;font-weight:600;
+  letter-spacing:.06em;text-transform:uppercase;
+  color:var(--muted);text-align:right;
+}
+td{padding:12px 16px;border-top:1px solid var(--border);font-size:13px}
+tr:hover td{background:var(--bg3)}
+
+/* ── Badges ─────────────────────────────── */
+.badge{
+  display:inline-block;padding:2px 8px;border-radius:20px;
+  font-size:11px;font-weight:600;
+}
+.badge-green{background:rgba(34,211,160,.12);color:var(--green);border:1px solid rgba(34,211,160,.25)}
+.badge-blue{background:rgba(91,110,245,.12);color:var(--accent2);border:1px solid rgba(91,110,245,.25)}
+.badge-amber{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
+.badge-red{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.25)}
+.badge-gray{background:rgba(107,114,128,.12);color:var(--muted);border:1px solid rgba(107,114,128,.25)}
+
+/* ── Progress bar ───────────────────────── */
+.progress-bar{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;border-radius:4px;transition:width .6s ease}
+
+/* ── Upload zone ────────────────────────── */
+.upload-zone{
+  border:2px dashed var(--border-hi);border-radius:12px;
+  padding:48px;text-align:center;cursor:pointer;
+  transition:all .2s;margin-bottom:24px;
+  background:var(--bg2);
+}
+.upload-zone:hover,.upload-zone.drag{
+  border-color:var(--accent);
+  background:rgba(91,110,245,.04);
+}
+.upload-icon{font-size:40px;margin-bottom:12px}
+.upload-title{font-size:16px;font-weight:600;margin-bottom:6px}
+.upload-sub{color:var(--muted);font-size:13px}
+
+/* ── Form ───────────────────────────────── */
+.form-group{margin-bottom:18px}
+.form-label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px}
+.form-input{
+  width:100%;padding:9px 12px;border-radius:8px;
+  background:var(--bg3);border:1px solid var(--border-hi);
+  color:var(--text);font-size:13px;outline:none;transition:border .15s;
+}
+.form-input:focus{border-color:var(--accent)}
+textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);font-size:12px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+/* ── Preview table ──────────────────────── */
+.preview-table-wrap{overflow-x:auto;max-height:240px;overflow-y:auto}
+.preview-table{font-size:12px;font-family:var(--mono)}
+.preview-table th{font-size:10px}
+
+/* ── Chart container ────────────────────── */
+.chart-container{padding:20px;height:280px}
+
+/* ── Modal ──────────────────────────────── */
+.modal-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:flex;align-items:center;justify-content:center;z-index:100;
+  opacity:0;pointer-events:none;transition:opacity .2s;
+}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{
+  background:var(--bg2);border:1px solid var(--border-hi);
+  border-radius:14px;padding:28px;width:600px;max-width:92vw;
+  max-height:88vh;overflow-y:auto;
+  transform:translateY(16px);transition:transform .2s;
+}
+.modal-overlay.open .modal{transform:translateY(0)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.modal-title{font-size:16px;font-weight:600}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
+
+/* ── Empty state ────────────────────────── */
+.empty{text-align:center;padding:60px 20px;color:var(--muted)}
+.empty-icon{font-size:36px;margin-bottom:12px}
+
+/* ── Toast ──────────────────────────────── */
+#toast{
+  position:fixed;bottom:24px;left:24px;z-index:999;
+  background:var(--bg3);border:1px solid var(--border-hi);
+  border-radius:10px;padding:12px 18px;font-size:13px;
+  transform:translateY(80px);opacity:0;transition:all .25s;
+  max-width:320px;
+}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{border-color:rgba(34,211,160,.4);color:var(--green)}
+#toast.error{border-color:rgba(248,113,113,.4);color:var(--red)}
+
+/* ── Tabs ───────────────────────────────── */
+.tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0}
+.tab{
+  padding:8px 16px;font-size:13px;color:var(--muted);cursor:pointer;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;
+}
+.tab.active{color:var(--accent2);border-bottom-color:var(--accent)}
+
+/* ── Rate meter ─────────────────────────── */
+.rate-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+.rate-label{width:80px;font-size:12px;color:var(--muted);flex-shrink:0}
+.rate-bar{flex:1;height:6px;background:var(--bg3);border-radius:4px;overflow:hidden}
+.rate-fill{height:100%;border-radius:4px}
+.rate-pct{width:40px;text-align:left;font-size:12px;font-family:var(--mono)}
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <div class="logo-mark">
+        <div class="logo-icon">✉</div>
+        MailFlow
+      </div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section">
+        <div class="nav-label">ראשי</div>
+        <button class="nav-item active" onclick="showSection('dashboard',this)">
+          <span class="icon">📊</span> דאשבורד
+        </button>
+        <button class="nav-item" onclick="showSection('campaigns',this)">
+          <span class="icon">📨</span> קמפיינים
+        </button>
+        <button class="nav-item" onclick="showSection('contacts',this)">
+          <span class="icon">👥</span> אנשי קשר
+        </button>
+        <button class="nav-item" onclick="showSection('upload',this)">
+          <span class="icon">📥</span> העלאת קובץ
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">ניתוח</div>
+        <button class="nav-item" onclick="showSection('analytics',this)">
+          <span class="icon">📈</span> אנליטיקה
+        </button>
+        <button class="nav-item" onclick="showSection('followup',this)">
+          <span class="icon">🔁</span> Follow-up
+        </button>
+      </div>
+      <div class="nav-section">
+        <div class="nav-label">הגדרות</div>
+        <button class="nav-item" onclick="showSection('settings',this)">
+          <span class="icon">⚙️</span> הגדרות
+        </button>
+      </div>
+    </div>
+    <div class="sidebar-footer">
+      MailFlow v1.0.0 · Admin
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="page-title">דאשבורד</div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" onclick="openModal('campaign-modal')">
+          ✚ קמפיין חדש
+        </button>
+      </div>
+    </div>
+
+    <div class="content">
+
+      <!-- ════ DASHBOARD ════ -->
+      <div class="section active" id="sec-dashboard">
+        <div class="stat-grid">
+          <div class="stat-card blue">
+            <div class="stat-label">קמפיינים פעילים</div>
+            <div class="stat-value" id="stat-active">—</div>
+            <div class="stat-sub">מתוך <span id="stat-total">—</span> סה"כ</div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-label">Open Rate ממוצע</div>
+            <div class="stat-value" id="stat-open">—</div>
+            <div class="stat-sub">אחוז פתיחה</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">Click Rate ממוצע</div>
+            <div class="stat-value" id="stat-click">—</div>
+            <div class="stat-sub">אחוז קליקים</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">אנשי קשר</div>
+            <div class="stat-value" id="stat-contacts">—</div>
+            <div class="stat-sub">פעילים</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">קמפיינים אחרונים</span>
+            <button class="btn btn-sm" onclick="showSection('campaigns',null)">הצג הכל</button>
+          </div>
+          <table>
+            <thead><tr>
+              <th>שם קמפיין</th><th>נשלח</th><th>פתיחות</th><th>קליקים</th><th>סטטוס</th>
+            </tr></thead>
+            <tbody id="dashboard-campaigns"><tr><td colspan="5" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><span class="card-title">ביצועי קמפיינים</span></div>
+          <div class="chart-container" id="chart-area">
+            <canvas id="perf-chart" style="width:100%;height:240px"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ CAMPAIGNS ════ -->
+      <div class="section" id="sec-campaigns">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">כל הקמפיינים</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal('campaign-modal')">✚ חדש</button>
+          </div>
+          <table>
+            <thead><tr>
+              <th>שם</th><th>נשלח לכמה</th><th>Open%</th><th>Click%</th><th>Bounce%</th><th>סטטוס</th><th>פעולות</th>
+            </tr></thead>
+            <tbody id="campaigns-table"><tr><td colspan="7" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ════ CONTACTS ════ -->
+      <div class="section" id="sec-contacts">
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
+          <div class="stat-card green">
+            <div class="stat-label">פעילים</div>
+            <div class="stat-value" id="ct-active">—</div>
+          </div>
+          <div class="stat-card amber">
+            <div class="stat-label">Unsubscribed</div>
+            <div class="stat-value" id="ct-unsub">—</div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-label">Bounced</div>
+            <div class="stat-value" id="ct-bounce">—</div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">אנשי קשר</span>
+            <div style="display:flex;gap:8px;align-items:center">
+              <input class="form-input" id="contact-search" placeholder="חיפוש לפי מייל..." style="width:220px" oninput="searchContacts(this.value)"/>
+              <button class="btn btn-sm" onclick="loadContacts()">רענן</button>
+            </div>
+          </div>
+          <table>
+            <thead><tr><th>מייל</th><th>שם</th><th>חברה</th><th>סטטוס</th><th>נוצר</th></tr></thead>
+            <tbody id="contacts-table"><tr><td colspan="5" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
+          </table>
+          <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px">
+            <button class="btn btn-sm" onclick="prevPage()">‹ הקודם</button>
+            <span id="page-info" style="padding:5px 8px;font-size:12px;color:var(--muted)">עמוד 1</span>
+            <button class="btn btn-sm" onclick="nextPage()">הבא ›</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ UPLOAD ════ -->
+      <div class="section" id="sec-upload">
+        <div
+          class="upload-zone"
+          id="drop-zone"
+          onclick="document.getElementById('file-input').click()"
+          ondragover="ev(event);this.classList.add('drag')"
+          ondragleave="this.classList.remove('drag')"
+          ondrop="handleDrop(event)"
+        >
+          <div class="upload-icon">📂</div>
+          <div class="upload-title">גרור קובץ לכאן או לחץ לבחירה</div>
+          <div class="upload-sub">CSV או Excel (.xlsx) · עד 25MB</div>
+          <input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileSelect(this)"/>
+        </div>
+
+        <div id="upload-result" style="display:none">
+          <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
+            <div class="stat-card green">
+              <div class="stat-label">שורות תקינות</div>
+              <div class="stat-value" id="up-valid">—</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">סה"כ שורות</div>
+              <div class="stat-value" id="up-total">—</div>
+            </div>
+            <div class="stat-card amber">
+              <div class="stat-label">כפילויות</div>
+              <div class="stat-value" id="up-dupes">—</div>
+            </div>
+            <div class="stat-card red">
+              <div class="stat-label">לא תקינים</div>
+              <div class="stat-value" id="up-invalid">—</div>
+            </div>
+          </div>
+          <div class="card" id="preview-card">
+            <div class="card-header">
+              <span class="card-title">תצוגה מקדימה (20 שורות ראשונות)</span>
+              <span id="detected-cols" style="font-size:12px;color:var(--muted)"></span>
+            </div>
+            <div class="preview-table-wrap">
+              <table class="preview-table" id="preview-tbl">
+                <thead id="preview-head"></thead>
+                <tbody id="preview-body"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ ANALYTICS ════ -->
+      <div class="section" id="sec-analytics">
+        <div class="card" style="margin-bottom:24px">
+          <div class="card-header"><span class="card-title">ביצועים לפי קמפיין</span></div>
+          <table>
+            <thead><tr>
+              <th>שם</th><th>נשלח</th><th>פתיחות</th><th>קליקים</th><th>Bounces</th><th>Open Rate</th><th>Click Rate</th>
+            </tr></thead>
+            <tbody id="analytics-table"></tbody>
+          </table>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">השוואת מדדים</span></div>
+          <div style="padding:20px" id="analytics-rates"></div>
+        </div>
+      </div>
+
+      <!-- ════ FOLLOW-UP ════ -->
+      <div class="section" id="sec-followup">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">חוקי Follow-up</span>
+          </div>
+          <div style="padding:20px">
+            <p style="color:var(--muted);margin-bottom:20px;font-size:13px">
+              Follow-up Rules מוגדרים לפי קמפיין. בחר קמפיין כדי לנהל את הכללים שלו.
+            </p>
+            <div class="form-group">
+              <label class="form-label">בחר קמפיין</label>
+              <select class="form-input" id="followup-campaign-select" onchange="loadFollowupRules(this.value)" style="max-width:300px">
+                <option value="">— בחר קמפיין —</option>
+              </select>
+            </div>
+            <div id="followup-rules-list"></div>
+            <div id="followup-form" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
+              <div class="form-group">
+                <label class="form-label">טריגר</label>
+                <select class="form-input" id="fu-trigger" style="max-width:300px">
+                  <option value="not_opened">לא נפתח</option>
+                  <option value="opened_not_clicked">נפתח אבל לא לחץ</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">המתן (שעות)</label>
+                <input type="number" class="form-input" id="fu-hours" value="48" style="max-width:120px"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Subject לfollowup</label>
+                <input type="text" class="form-input" id="fu-subject" placeholder="פניה נוספת: {{name}}"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">תוכן HTML</label>
+                <textarea class="form-input" id="fu-html" placeholder="<p>שלום {{name}}, רצינו לחזור אליך...</p>"></textarea>
+              </div>
+              <button class="btn btn-primary" onclick="saveFollowupRule()">שמור כלל</button>
+            </div>
+            <button class="btn btn-sm" style="margin-top:12px" id="show-fu-form" onclick="toggleFuForm()" style="display:none">✚ הוסף כלל</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ════ SETTINGS ════ -->
+      <div class="section" id="sec-settings">
+        <div class="card">
+          <div class="card-header"><span class="card-title">הגדרות שליחה</span></div>
+          <div style="padding:24px;max-width:520px">
+            <div class="tabs">
+              <div class="tab active" onclick="settingsTab('smtp',this)">SMTP</div>
+              <div class="tab" onclick="settingsTab('sendgrid',this)">SendGrid</div>
+              <div class="tab" onclick="settingsTab('ses',this)">Amazon SES</div>
+            </div>
+            <div id="settings-smtp">
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Host</label><input class="form-input" placeholder="smtp.gmail.com"/></div>
+                <div class="form-group"><label class="form-label">Port</label><input class="form-input" value="587"/></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">User</label><input class="form-input" type="email"/></div>
+                <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password"/></div>
+              </div>
+            </div>
+            <div id="settings-sendgrid" style="display:none">
+              <div class="form-group"><label class="form-label">API Key</label><input class="form-input" type="password" placeholder="SG.xxxxxxxx..."/></div>
+              <div class="form-group"><label class="form-label">From Email</label><input class="form-input" type="email"/></div>
+            </div>
+            <div id="settings-ses" style="display:none">
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Access Key</label><input class="form-input"/></div>
+                <div class="form-group"><label class="form-label">Secret Key</label><input class="form-input" type="password"/></div>
+              </div>
+              <div class="form-row">
+                <div class="form-group"><label class="form-label">Region</label>
+                  <select class="form-input"><option>us-east-1</option><option>eu-west-1</option><option>ap-southeast-1</option></select>
+                </div>
+                <div class="form-group"><label class="form-label">From Email</label><input class="form-input" type="email"/></div>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:8px">
+              <label class="form-label">Rate Limit (מיילים לדקה)</label>
+              <input type="range" min="10" max="300" value="60" id="rate-slider" oninput="document.getElementById('rate-val').textContent=this.value" style="width:100%"/>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px"><span id="rate-val">60</span> מיילים/דקה</div>
+            </div>
+            <button class="btn btn-primary" onclick="toast('ההגדרות נשמרו','success')">שמור הגדרות</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /app -->
+
+<!-- ═══ CAMPAIGN MODAL ═══ -->
+<div class="modal-overlay" id="campaign-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">קמפיין חדש</span>
+      <button class="modal-close" onclick="closeModal('campaign-modal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">שם הקמפיין</label>
+      <input class="form-input" id="c-name" placeholder="קמפיין ינואר 2025"/>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">From Name</label>
+        <input class="form-input" id="c-from-name" placeholder="החברה שלי"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">From Email</label>
+        <input class="form-input" id="c-from-email" type="email" placeholder="hello@company.com"/>
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Subject</label>
+      <input class="form-input" id="c-subject" placeholder="שלום {{name}}, יש לנו משהו בשבילך"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">תוכן HTML (תומך ב-{{name}}, {{company}})</label>
+      <textarea class="form-input" id="c-html" placeholder="<h1>שלום {{name}},</h1><p>...</p><br><a href='https://yoursite.com'>לחץ כאן</a><br><br><a href='{{unsubscribe_url}}'>הסר מרשימה</a>"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">תוכן טקסט (Plain Text)</label>
+      <textarea class="form-input" id="c-text" style="min-height:80px" placeholder="שלום {{name}},&#10;..."></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Rate Limit (מיילים/דקה)</label>
+      <input type="number" class="form-input" id="c-rate" value="60" style="max-width:120px"/>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+      <button class="btn" onclick="closeModal('campaign-modal')">ביטול</button>
+      <button class="btn btn-primary" onclick="createCampaign()">✚ צור קמפיין</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LAUNCH MODAL ═══ -->
+<div class="modal-overlay" id="launch-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="launch-title">שליחת קמפיין</span>
+      <button class="modal-close" onclick="closeModal('launch-modal')">✕</button>
+    </div>
+    <p style="color:var(--text2);margin-bottom:20px;font-size:13px">
+      הקמפיין ישלח לכל אנשי הקשר הפעילים שלא הסירו עצמם מהרשימה.
+    </p>
+    <div style="background:var(--bg3);border-radius:8px;padding:16px;margin-bottom:20px;font-size:13px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+        <span style="color:var(--muted)">אנשי קשר פעילים:</span>
+        <span id="launch-contact-count" style="font-weight:600">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between">
+        <span style="color:var(--muted)">זמן שליחה משוער:</span>
+        <span id="launch-eta" style="font-family:var(--mono)">—</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn" onclick="closeModal('launch-modal')">ביטול</button>
+      <button class="btn btn-primary" onclick="launchCampaign()" id="launch-btn">🚀 שלח עכשיו</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+// ── Config ────────────────────────────────────────────────────────────────────
+const API = 'https://mailflow-api-production-73a1.up.railway.app';let TOKEN = localStorage.getItem('mf_token') || '';
+let currentPage = 1;
+let contactSearch = '';
+let launchCampaignId = null;
+let analyticsData = [];
+
+// ── API helper ────────────────────────────────────────────────────────────────
+async function api(method, path, body, isForm) {
+  const headers = { 'Authorization': `Bearer ${TOKEN}` };
+  if (!isForm) headers['Content-Type'] = 'application/json';
+  const opts = { method, headers };
+  if (body) opts.body = isForm ? body : JSON.stringify(body);
+  try {
+    const r = await fetch(API + path, opts);
+    if (r.status === 401) { TOKEN = ''; return null; }
+    return r.ok ? r.json() : null;
+  } catch { return null; }
+}
+
+// ── Toast ─────────────────────────────────────────────────────────────────────
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className = '', 3000);
+}
+
+// ── Nav ───────────────────────────────────────────────────────────────────────
+const titles = {
+  dashboard:'דאשבורד', campaigns:'קמפיינים', contacts:'אנשי קשר',
+  upload:'העלאת קובץ', analytics:'אנליטיקה', followup:'Follow-up', settings:'הגדרות'
+};
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('page-title').textContent = titles[name];
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'campaigns') loadCampaigns();
+  if (name === 'contacts') loadContacts();
+  if (name === 'analytics') loadAnalytics();
+  if (name === 'followup') loadFollowupCampaigns();
+}
+
+// ── Modal ─────────────────────────────────────────────────────────────────────
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// ── Badge helpers ─────────────────────────────────────────────────────────────
+function statusBadge(s) {
+  const map = {
+    sent:'green',sending:'blue',draft:'gray',scheduled:'amber',
+    failed:'red',paused:'amber',cancelled:'red',active:'green',
+    unsubscribed:'amber',bounced:'red',complained:'red'
+  };
+  return `<span class="badge badge-${map[s]||'gray'}">${s}</span>`;
+}
+
+// ── Date format ───────────────────────────────────────────────────────────────
+function fmt(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('he-IL', {day:'numeric',month:'short',year:'numeric'});
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DASHBOARD
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const [stats, contacts] = await Promise.all([
+    api('GET', '/analytics/campaigns'),
+    api('GET', '/contacts?page=1&page_size=1&status=active'),
+  ]);
+
+  if (stats) {
+    analyticsData = stats;
+    const active = stats.filter(c => c.status === 'sending').length;
+    const avgOpen = stats.length ? (stats.reduce((a,c)=>a+c.open_rate,0)/stats.length).toFixed(1) : 0;
+    const avgClick = stats.length ? (stats.reduce((a,c)=>a+c.click_rate,0)/stats.length).toFixed(1) : 0;
+    document.getElementById('stat-active').textContent = active;
+    document.getElementById('stat-total').textContent = stats.length;
+    document.getElementById('stat-open').textContent = avgOpen + '%';
+    document.getElementById('stat-click').textContent = avgClick + '%';
+
+    const tbody = document.getElementById('dashboard-campaigns');
+    tbody.innerHTML = stats.slice(0,6).map(c => `
+      <tr>
+        <td style="font-weight:500">${c.name}</td>
+        <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div></div>
+            <span style="font-size:12px">${c.open_rate}%</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div></div>
+            <span style="font-size:12px">${c.click_rate}%</span>
+          </div>
+        </td>
+        <td>${statusBadge(c.status)}</td>
+      </tr>
+    `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">אין קמפיינים</td></tr>';
+
+    drawChart(stats.slice(0,8));
+  }
+
+  if (contacts) {
+    document.getElementById('stat-contacts').textContent = contacts.total?.toLocaleString() || '0';
+  }
+}
+
+function drawChart(data) {
+  const canvas = document.getElementById('perf-chart');
+  if (!canvas || !data.length) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * devicePixelRatio;
+  canvas.height = 240 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = canvas.offsetWidth, H = 240;
+  ctx.clearRect(0,0,W,H);
+
+  const pad = {l:40,r:20,t:20,b:40};
+  const cw = W - pad.l - pad.r;
+  const ch = H - pad.t - pad.b;
+  const n = data.length;
+  const barW = Math.min(40, cw / n - 8);
+
+  ctx.fillStyle = 'rgba(255,255,255,0.03)';
+  ctx.fillRect(pad.l, pad.t, cw, ch);
+
+  // Grid lines
+  [0,25,50,75,100].forEach(v => {
+    const y = pad.t + ch - (v/100)*ch;
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l+cw, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(148,163,184,0.6)';
+    ctx.font = '10px "JetBrains Mono"';
+    ctx.textAlign = 'right';
+    ctx.fillText(v+'%', pad.l-6, y+4);
+  });
+
+  data.forEach((c, i) => {
+    const x = pad.l + (i / n) * cw + (cw/n - barW*2 - 4)/2;
+    const openH = (c.open_rate/100)*ch;
+    const clickH = (c.click_rate/100)*ch;
+
+    // Open bar
+    const grad1 = ctx.createLinearGradient(0, pad.t+ch-openH, 0, pad.t+ch);
+    grad1.addColorStop(0, 'rgba(34,211,160,0.9)');
+    grad1.addColorStop(1, 'rgba(34,211,160,0.2)');
+    ctx.fillStyle = grad1;
+    ctx.beginPath();
+    ctx.roundRect(x, pad.t+ch-openH, barW, openH, [3,3,0,0]);
+    ctx.fill();
+
+    // Click bar
+    const grad2 = ctx.createLinearGradient(0, pad.t+ch-clickH, 0, pad.t+ch);
+    grad2.addColorStop(0, 'rgba(91,110,245,0.9)');
+    grad2.addColorStop(1, 'rgba(91,110,245,0.2)');
+    ctx.fillStyle = grad2;
+    ctx.beginPath();
+    ctx.roundRect(x+barW+4, pad.t+ch-clickH, barW, clickH, [3,3,0,0]);
+    ctx.fill();
+
+    // Label
+    const name = c.name.length > 10 ? c.name.slice(0,8)+'…' : c.name;
+    ctx.fillStyle = 'rgba(148,163,184,0.7)';
+    ctx.font = '10px "IBM Plex Sans Hebrew"';
+    ctx.textAlign = 'center';
+    ctx.fillText(name, x + barW, pad.t+ch+16);
+  });
+
+  // Legend
+  ctx.fillStyle = 'rgba(34,211,160,0.9)';
+  ctx.fillRect(W-120, 8, 10, 10);
+  ctx.fillStyle = 'rgba(148,163,184,0.8)';
+  ctx.font = '11px "IBM Plex Sans Hebrew"';
+  ctx.textAlign = 'left';
+  ctx.fillText('Open Rate', W-106, 17);
+  ctx.fillStyle = 'rgba(91,110,245,0.9)';
+  ctx.fillRect(W-120, 24, 10, 10);
+  ctx.fillStyle = 'rgba(148,163,184,0.8)';
+  ctx.fillText('Click Rate', W-106, 33);
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CAMPAIGNS
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadCampaigns() {
+  const data = await api('GET', '/analytics/campaigns');
+  if (!data) return;
+  analyticsData = data;
+  const tbody = document.getElementById('campaigns-table');
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td style="font-weight:500">${c.name}</td>
+      <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
+      <td>${c.open_rate}%</td>
+      <td>${c.click_rate}%</td>
+      <td>${c.bounce_rate}%</td>
+      <td>${statusBadge(c.status)}</td>
+      <td>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm btn-primary" onclick="prepareLaunch('${c.id}','${c.name}')">🚀 שלח</button>
+          <button class="btn btn-sm btn-danger" onclick="deleteCampaign('${c.id}')">🗑</button>
+        </div>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין קמפיינים</td></tr>';
+}
+
+async function createCampaign() {
+  const body = {
+    name: document.getElementById('c-name').value,
+    subject: document.getElementById('c-subject').value,
+    body_html: document.getElementById('c-html').value,
+    body_text: document.getElementById('c-text').value,
+    from_name: document.getElementById('c-from-name').value,
+    from_email: document.getElementById('c-from-email').value,
+    rate_limit_per_minute: parseInt(document.getElementById('c-rate').value) || 60,
+  };
+  if (!body.name || !body.subject) { toast('מלא שם ו-Subject', 'error'); return; }
+  const res = await api('POST', '/campaigns', body);
+  if (res) {
+    closeModal('campaign-modal');
+    toast('הקמפיין נוצר בהצלחה ✓', 'success');
+    loadCampaigns();
+  } else toast('שגיאה ביצירת הקמפיין', 'error');
+}
+
+async function prepareLaunch(id, name) {
+  launchCampaignId = id;
+  document.getElementById('launch-title').textContent = 'שליחת: ' + name;
+  const contacts = await api('GET', '/contacts?page=1&page_size=1&status=active');
+  const count = contacts?.total || 0;
+  document.getElementById('launch-contact-count').textContent = count.toLocaleString();
+  const eta = Math.ceil(count / 60);
+  document.getElementById('launch-eta').textContent = eta < 2 ? 'פחות מדקה' : `~${eta} דקות`;
+  openModal('launch-modal');
+}
+
+async function launchCampaign() {
+  if (!launchCampaignId) return;
+  document.getElementById('launch-btn').textContent = 'מאתחל שליחה...';
+  document.getElementById('launch-btn').disabled = true;
+  const res = await api('POST', `/campaigns/${launchCampaignId}/launch`);
+  document.getElementById('launch-btn').textContent = '🚀 שלח עכשיו';
+  document.getElementById('launch-btn').disabled = false;
+  if (res) {
+    closeModal('launch-modal');
+    toast(`${res.queued} מיילים נשלחו לתור ✓`, 'success');
+    loadCampaigns();
+  } else toast('שגיאה בהפעלת הקמפיין', 'error');
+}
+
+async function deleteCampaign(id) {
+  if (!confirm('למחוק קמפיין זה?')) return;
+  await api('DELETE', `/campaigns/${id}`);
+  toast('נמחק ✓', 'success');
+  loadCampaigns();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// CONTACTS
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadContacts() {
+  const q = `/contacts?page=${currentPage}&page_size=50${contactSearch ? '&search=' + contactSearch : ''}`;
+  const data = await api('GET', q);
+  if (!data) return;
+
+  const [active, unsub, bounce] = await Promise.all([
+    api('GET', '/contacts?page=1&page_size=1&status=active'),
+    api('GET', '/contacts?page=1&page_size=1&status=unsubscribed'),
+    api('GET', '/contacts?page=1&page_size=1&status=bounced'),
+  ]);
+  document.getElementById('ct-active').textContent = active?.total?.toLocaleString() || '0';
+  document.getElementById('ct-unsub').textContent = unsub?.total?.toLocaleString() || '0';
+  document.getElementById('ct-bounce').textContent = bounce?.total?.toLocaleString() || '0';
+
+  const tbody = document.getElementById('contacts-table');
+  tbody.innerHTML = data.items.map(c => `
+    <tr>
+      <td style="font-family:var(--mono);font-size:12px">${c.email}</td>
+      <td>${c.name || '—'}</td>
+      <td>${c.company || '—'}</td>
+      <td>${statusBadge(c.status)}</td>
+      <td style="color:var(--muted);font-size:12px">${fmt(c.created_at)}</td>
+    </tr>
+  `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
+
+  document.getElementById('page-info').textContent = `עמוד ${currentPage} · ${data.total.toLocaleString()} סה"כ`;
+}
+
+let searchTimer;
+function searchContacts(v) {
+  contactSearch = v;
+  currentPage = 1;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(loadContacts, 400);
+}
+function nextPage() { currentPage++; loadContacts(); }
+function prevPage() { if (currentPage > 1) { currentPage--; loadContacts(); } }
+
+// ─────────────────────────────────────────────────────────────────────────────
+// UPLOAD
+// ─────────────────────────────────────────────────────────────────────────────
+function ev(e) { e.preventDefault(); e.stopPropagation(); }
+
+function handleDrop(e) {
+  ev(e);
+  document.getElementById('drop-zone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) uploadFile(file);
+}
+
+function handleFileSelect(input) {
+  const file = input.files[0];
+  if (file) uploadFile(file);
+}
+
+async function uploadFile(file) {
+  const zone = document.getElementById('drop-zone');
+  zone.querySelector('.upload-title').textContent = 'מעלה: ' + file.name;
+  zone.querySelector('.upload-sub').textContent = 'אנא המתן...';
+
+  const form = new FormData();
+  form.append('file', file);
+
+  if (!TOKEN) {
+    // Demo mode without backend
+    showFakeUploadResult(file);
+    return;
+  }
+
+  const res = await api('POST', '/uploads', form, true);
+  if (res) {
+    showUploadResult(res);
+    toast(`${res.inserted} אנשי קשר יובאו ✓`, 'success');
+  } else {
+    toast('שגיאה בהעלאה', 'error');
+  }
+  zone.querySelector('.upload-title').textContent = 'גרור קובץ לכאן או לחץ לבחירה';
+  zone.querySelector('.upload-sub').textContent = 'CSV או Excel (.xlsx) · עד 25MB';
+}
+
+function showUploadResult(res) {
+  document.getElementById('up-valid').textContent = res.valid_count;
+  document.getElementById('up-total').textContent = res.row_count;
+  document.getElementById('up-dupes').textContent = res.duplicates;
+  document.getElementById('up-invalid').textContent = res.invalid;
+
+  const dcols = res.detected_columns;
+  document.getElementById('detected-cols').textContent =
+    `זוהו: מייל=${dcols.email||'?'}, שם=${dcols.name||'—'}, חברה=${dcols.company||'—'}`;
+
+  if (res.preview?.length) {
+    const cols = Object.keys(res.preview[0]);
+    document.getElementById('preview-head').innerHTML =
+      '<tr>' + cols.map(c=>`<th>${c}</th>`).join('') + '</tr>';
+    document.getElementById('preview-body').innerHTML =
+      res.preview.map(row =>
+        '<tr>' + cols.map(c=>`<td>${row[c]||''}</td>`).join('') + '</tr>'
+      ).join('');
+  }
+  document.getElementById('upload-result').style.display = 'block';
+}
+
+function showFakeUploadResult(file) {
+  // Demo preview when no backend
+  document.getElementById('up-valid').textContent = '—';
+  document.getElementById('up-total').textContent = '—';
+  document.getElementById('up-dupes').textContent = '—';
+  document.getElementById('up-invalid').textContent = '—';
+  document.getElementById('detected-cols').textContent = 'Backend לא מחובר — Demo Mode';
+  document.getElementById('upload-result').style.display = 'block';
+  toast('Demo mode: Backend לא פעיל', '');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ANALYTICS
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadAnalytics() {
+  const data = await api('GET', '/analytics/campaigns') || mockAnalytics();
+  analyticsData = data;
+
+  const tbody = document.getElementById('analytics-table');
+  tbody.innerHTML = data.map(c => `
+    <tr>
+      <td style="font-weight:500">${c.name}</td>
+      <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
+      <td>${c.opens}</td>
+      <td>${c.clicks}</td>
+      <td>${c.bounces}</td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress-bar" style="width:80px">
+            <div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div>
+          </div>
+          <span style="font-size:12px;font-family:var(--mono)">${c.open_rate}%</span>
+        </div>
+      </td>
+      <td>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div class="progress-bar" style="width:80px">
+            <div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div>
+          </div>
+          <span style="font-size:12px;font-family:var(--mono)">${c.click_rate}%</span>
+        </div>
+      </td>
+    </tr>
+  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין נתונים</td></tr>';
+
+  // Rate comparison bars
+  const ratesEl = document.getElementById('analytics-rates');
+  const avg = key => data.length ? (data.reduce((s,c)=>s+c[key],0)/data.length).toFixed(1) : 0;
+  const metrics = [
+    {label:'Open Rate', val:avg('open_rate'), color:'var(--green)'},
+    {label:'Click Rate', val:avg('click_rate'), color:'var(--accent)'},
+    {label:'Bounce Rate', val:avg('bounce_rate'), color:'var(--red)'},
+  ];
+  ratesEl.innerHTML = metrics.map(m => `
+    <div class="rate-row">
+      <div class="rate-label">${m.label}</div>
+      <div class="rate-bar"><div class="rate-fill" style="width:${m.val}%;background:${m.color}"></div></div>
+      <div class="rate-pct" style="font-family:var(--mono)">${m.val}%</div>
+    </div>
+  `).join('');
+}
+
+function mockAnalytics() {
+  return [
+    {id:'1',name:'קמפיין ינואר',status:'sent',sent:1240,opens:310,clicks:87,bounces:12,open_rate:25.0,click_rate:7.0,bounce_rate:1.0},
+    {id:'2',name:'ניוזלטר פברואר',status:'sent',sent:980,opens:294,clicks:108,bounces:8,open_rate:30.0,click_rate:11.0,bounce_rate:0.8},
+    {id:'3',name:'קמפיין מרץ',status:'sending',sent:450,opens:162,clicks:54,bounces:3,open_rate:36.0,click_rate:12.0,bounce_rate:0.7},
+  ];
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// FOLLOW-UP
+// ─────────────────────────────────────────────────────────────────────────────
+async function loadFollowupCampaigns() {
+  const data = await api('GET', '/campaigns') || [];
+  const sel = document.getElementById('followup-campaign-select');
+  sel.innerHTML = '<option value="">— בחר קמפיין —</option>';
+  data.forEach(c => {
+    const opt = document.createElement('option');
+    opt.value = c.id;
+    opt.textContent = c.name;
+    sel.appendChild(opt);
+  });
+}
+
+async function loadFollowupRules(campaignId) {
+  if (!campaignId) return;
+  document.getElementById('show-fu-form').style.display = 'inline-flex';
+  const data = await api('GET', `/campaigns/${campaignId}/followup`) || [];
+  const list = document.getElementById('followup-rules-list');
+  list.innerHTML = data.length ? data.map(r => `
+    <div style="background:var(--bg3);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:500;margin-bottom:4px">${r.subject}</div>
+        <div style="font-size:12px;color:var(--muted)">
+          טריגר: ${r.trigger === 'not_opened' ? 'לא נפתח' : 'נפתח לא לחץ'} ·
+          המתן ${r.wait_hours} שעות
+        </div>
+      </div>
+      <span class="badge badge-${r.is_active ? 'green' : 'gray'}">${r.is_active ? 'פעיל' : 'כבוי'}</span>
+    </div>
+  `).join('') : '<div style="color:var(--muted);font-size:13px">אין כללים לקמפיין זה</div>';
+}
+
+function toggleFuForm() {
+  const el = document.getElementById('followup-form');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function saveFollowupRule() {
+  const campaignId = document.getElementById('followup-campaign-select').value;
+  if (!campaignId) { toast('בחר קמפיין', 'error'); return; }
+  const body = {
+    trigger_event: document.getElementById('fu-trigger').value,
+    wait_hours: parseInt(document.getElementById('fu-hours').value),
+    followup_subject: document.getElementById('fu-subject').value,
+    followup_body_html: document.getElementById('fu-html').value,
+  };
+  const res = await api('POST', `/campaigns/${campaignId}/followup`, body);
+  if (res) {
+    toast('כלל נשמר ✓', 'success');
+    toggleFuForm();
+    loadFollowupRules(campaignId);
+  } else toast('שגיאה', 'error');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// SETTINGS TABS
+// ─────────────────────────────────────────────────────────────────────────────
+function settingsTab(name, el) {
+  ['smtp','sendgrid','ses'].forEach(t => {
+    document.getElementById('settings-'+t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// INIT – Load demo data if no backend
+// ─────────────────────────────────────────────────────────────────────────────
+(async function init() {
+  // Try real backend
+  const health = await fetch(API + '/health').then(r=>r.json()).catch(()=>null);
+  if (!health) {
+    // Demo mode: show mock analytics
+    analyticsData = mockAnalytics();
+    document.getElementById('stat-active').textContent = '1';
+    document.getElementById('stat-total').textContent = '3';
+    document.getElementById('stat-open').textContent = '30.3%';
+    document.getElementById('stat-click').textContent = '10.0%';
+    document.getElementById('stat-contacts').textContent = '2,670';
+
+    const tbody = document.getElementById('dashboard-campaigns');
+    tbody.innerHTML = analyticsData.map(c => `
+      <tr>
+        <td style="font-weight:500">${c.name}</td>
+        <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div></div>
+            <span style="font-size:12px">${c.open_rate}%</span>
+          </div>
+        </td>
+        <td>
+          <div style="display:flex;align-items:center;gap:8px">
+            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div></div>
+            <span style="font-size:12px">${c.click_rate}%</span>
+          </div>
+        </td>
+        <td>${statusBadge(c.status)}</td>
+      </tr>
+    `).join('');
+
+    setTimeout(() => drawChart(analyticsData), 100);
+  } else {
+    loadDashboard();
+  }
+})();
+</script>
+</body>
+</html>
