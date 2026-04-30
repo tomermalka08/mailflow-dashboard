@@ -1212,6 +1212,49 @@ async function doLogin() {
   }
 }
 
+function showRegister() {
+  document.getElementById('login-overlay').style.display = 'none';
+  const el = document.getElementById('register-overlay');
+  el.style.display = 'flex';
+}
+
+function showLogin() {
+  document.getElementById('register-overlay').style.display = 'none';
+  const el = document.getElementById('login-overlay');
+  el.style.display = 'flex';
+}
+
+async function doRegister() {
+  const name = document.getElementById('reg-name').value;
+  const email = document.getElementById('reg-email').value;
+  const password = document.getElementById('reg-password').value;
+  const errEl = document.getElementById('reg-error');
+  errEl.textContent = '';
+
+  if (!name || !email || !password) { errEl.textContent = 'מלא את כל השדות'; return; }
+  if (password.length < 6) { errEl.textContent = 'סיסמה חייבת להיות לפחות 6 תווים'; return; }
+
+  try {
+    const r = await fetch(API + '/auth/register', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email, password, name})
+    });
+    const data = await r.json();
+    if (!r.ok) {
+      errEl.textContent = data.detail || 'שגיאה בהרשמה';
+      return;
+    }
+    TOKEN = data.access_token;
+    localStorage.setItem('mf_token', TOKEN);
+    document.getElementById('register-overlay').style.display = 'none';
+    toast('ברוך הבא! ' + name, 'success');
+    loadDashboard();
+  } catch(e) {
+    errEl.textContent = 'שגיאת התחברות';
+  }
+}
+
 // Check if already logged in on page load
 if (TOKEN) {
   document.getElementById('login-overlay').style.display = 'none';
@@ -1241,6 +1284,41 @@ if (TOKEN) {
     </div>
     <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()">כניסה</button>
     <div id="login-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
+      אין לך חשבון? <span onclick="showRegister()" style="color:var(--accent2);cursor:pointer;text-decoration:underline">הירשם כאן</span>
+    </div>
+  </div>
+</div>
+
+<!-- REGISTER OVERLAY -->
+<div id="register-overlay" style="
+  position:fixed;inset:0;background:var(--bg);
+  display:none;align-items:center;justify-content:center;
+  z-index:1001;flex-direction:column;gap:20px;
+">
+  <div style="text-align:center;margin-bottom:8px">
+    <div style="font-size:32px;margin-bottom:8px">✉</div>
+    <div style="font-size:22px;font-weight:600">MailFlow</div>
+    <div style="color:var(--muted);font-size:13px;margin-top:4px">יצירת חשבון חדש</div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:320px">
+    <div class="form-group">
+      <label class="form-label">שם מלא</label>
+      <input class="form-input" id="reg-name" type="text" placeholder="ישראל ישראלי"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">מייל</label>
+      <input class="form-input" id="reg-email" type="email" placeholder="your@email.com" style="direction:ltr"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">סיסמה</label>
+      <input class="form-input" id="reg-password" type="password" placeholder="לפחות 6 תווים" style="direction:ltr" onkeydown="if(event.key==='Enter')doRegister()"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doRegister()">צור חשבון</button>
+    <div id="reg-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
+      כבר יש לך חשבון? <span onclick="showLogin()" style="color:var(--accent2);cursor:pointer;text-decoration:underline">התחבר כאן</span>
+    </div>
   </div>
 </div>
 </body>
