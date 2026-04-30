@@ -637,7 +637,8 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API = 'https://mailflow-api-production-73a1.up.railway.app';let TOKEN = localStorage.getItem('mf_token') || '';
+const API = 'http://localhost:8000';
+let TOKEN = localStorage.getItem('mf_token') || '';
 let currentPage = 1;
 let contactSearch = '';
 let launchCampaignId = null;
@@ -1186,6 +1187,61 @@ function settingsTab(name, el) {
     loadDashboard();
   }
 })();
+
+// ── Login ─────────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  
+  try {
+    const r = await fetch(API + '/auth/token', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+      body: 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password)
+    });
+    if (!r.ok) { errEl.textContent = 'מייל או סיסמה שגויים'; return; }
+    const data = await r.json();
+    TOKEN = data.access_token;
+    localStorage.setItem('mf_token', TOKEN);
+    document.getElementById('login-overlay').style.display = 'none';
+    loadDashboard();
+  } catch(e) {
+    errEl.textContent = 'שגיאת התחברות';
+  }
+}
+
+// Check if already logged in on page load
+if (TOKEN) {
+  document.getElementById('login-overlay').style.display = 'none';
+}
+
 </script>
+
+<!-- LOGIN OVERLAY -->
+<div id="login-overlay" style="
+  position:fixed;inset:0;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  z-index:1000;flex-direction:column;gap:20px;
+">
+  <div style="text-align:center;margin-bottom:8px">
+    <div style="font-size:32px;margin-bottom:8px">✉</div>
+    <div style="font-size:22px;font-weight:600">MailFlow</div>
+    <div style="color:var(--muted);font-size:13px;margin-top:4px">התחבר לחשבון שלך</div>
+  </div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:320px">
+    <div class="form-group">
+      <label class="form-label">מייל</label>
+      <input class="form-input" id="login-email" type="email" placeholder="your@email.com" style="direction:ltr"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">סיסמה</label>
+      <input class="form-input" id="login-password" type="password" placeholder="••••••••" style="direction:ltr" onkeydown="if(event.key==='Enter')doLogin()"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()">כניסה</button>
+    <div id="login-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
+  </div>
+</div>
 </body>
 </html>
