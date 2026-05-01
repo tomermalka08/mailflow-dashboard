@@ -241,6 +241,24 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 .rate-bar{flex:1;height:6px;background:var(--bg3);border-radius:4px;overflow:hidden}
 .rate-fill{height:100%;border-radius:4px}
 .rate-pct{width:40px;text-align:left;font-size:12px;font-family:var(--mono)}
+
+/* ── Toolbar buttons ──────────────────────────────────────────── */
+.tbtn{
+  background:var(--bg4);border:1px solid var(--border);border-radius:5px;
+  color:var(--text);font-size:13px;padding:4px 8px;cursor:pointer;
+  transition:all .12s;line-height:1;
+}
+.tbtn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+#email-editor:empty:before{
+  content:attr(placeholder);color:var(--muted);pointer-events:none;
+}
+#email-editor img{max-width:100%;border-radius:6px;margin:4px 0}
+.attach-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:20px;padding:3px 10px;font-size:12px;
+}
+.attach-chip button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1}
 </style>
 </head>
 <body>
@@ -563,16 +581,26 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 </div><!-- /app -->
 
 <!-- ═══ CAMPAIGN MODAL ═══ -->
-<div class="modal-overlay" id="campaign-modal">
-  <div class="modal">
+<div class="modal-overlay" id="campaign-modal" style="align-items:flex-start;padding:20px;overflow-y:auto">
+  <div class="modal" style="width:780px;max-width:96vw">
     <div class="modal-header">
-      <span class="modal-title">קמפיין חדש</span>
+      <span class="modal-title">✚ קמפיין חדש</span>
       <button class="modal-close" onclick="closeModal('campaign-modal')">✕</button>
     </div>
-    <div class="form-group">
-      <label class="form-label">שם הקמפיין</label>
-      <input class="form-input" id="c-name" placeholder="קמפיין ינואר 2025"/>
+
+    <!-- Row 1: Name + Rate -->
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">שם הקמפיין</label>
+        <input class="form-input" id="c-name" placeholder="קמפיין ינואר 2025"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Rate Limit (מיילים/דקה)</label>
+        <input type="number" class="form-input" id="c-rate" value="60"/>
+      </div>
     </div>
+
+    <!-- Row 2: From -->
     <div class="form-row">
       <div class="form-group">
         <label class="form-label">From Name</label>
@@ -583,23 +611,139 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
         <input class="form-input" id="c-from-email" type="email" placeholder="hello@company.com"/>
       </div>
     </div>
+
+    <!-- Subject -->
     <div class="form-group">
       <label class="form-label">Subject</label>
       <input class="form-input" id="c-subject" placeholder="שלום {{name}}, יש לנו משהו בשבילך"/>
     </div>
+
+    <!-- Visual Email Editor -->
     <div class="form-group">
-      <label class="form-label">תוכן HTML (תומך ב-{{name}}, {{company}})</label>
-      <textarea class="form-input" id="c-html" placeholder="<h1>שלום {{name}},</h1><p>...</p><br><a href='https://yoursite.com'>לחץ כאן</a><br><br><a href='{{unsubscribe_url}}'>הסר מרשימה</a>"></textarea>
+      <label class="form-label" style="margin-bottom:8px">עורך המייל</label>
+
+      <!-- Toolbar -->
+      <div id="editor-toolbar" style="
+        background:var(--bg3);border:1px solid var(--border-hi);
+        border-bottom:none;border-radius:8px 8px 0 0;
+        padding:8px 10px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;
+      ">
+        <!-- Font family -->
+        <select onchange="execCmd('fontName',this.value)" style="
+          background:var(--bg4);border:1px solid var(--border);border-radius:5px;
+          color:var(--text);font-size:12px;padding:4px 6px;cursor:pointer;
+        ">
+          <option value="Arial">Arial</option>
+          <option value="Georgia">Georgia</option>
+          <option value="Helvetica">Helvetica</option>
+          <option value="Tahoma">Tahoma</option>
+          <option value="Times New Roman">Times New Roman</option>
+          <option value="Verdana">Verdana</option>
+          <option value="Courier New">Courier New</option>
+        </select>
+
+        <!-- Font size -->
+        <select onchange="execCmd('fontSize',this.value)" style="
+          background:var(--bg4);border:1px solid var(--border);border-radius:5px;
+          color:var(--text);font-size:12px;padding:4px 6px;cursor:pointer;width:56px;
+        ">
+          <option value="1">10</option>
+          <option value="2">12</option>
+          <option value="3" selected>14</option>
+          <option value="4">18</option>
+          <option value="5">24</option>
+          <option value="6">32</option>
+          <option value="7">48</option>
+        </select>
+
+        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+
+        <!-- Format buttons -->
+        <button class="tbtn" title="Bold" onclick="execCmd('bold')"><b>B</b></button>
+        <button class="tbtn" title="Italic" onclick="execCmd('italic')"><i>I</i></button>
+        <button class="tbtn" title="Underline" onclick="execCmd('underline')"><u>U</u></button>
+        <button class="tbtn" title="Strikethrough" onclick="execCmd('strikeThrough')"><s>S</s></button>
+
+        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+
+        <!-- Color -->
+        <label title="צבע טקסט" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
+          A <input type="color" onchange="execCmd('foreColor',this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
+        </label>
+        <label title="צבע רקע" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
+          BG <input type="color" value="#ffff00" onchange="execCmd('hiliteColor',this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
+        </label>
+
+        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+
+        <!-- Align -->
+        <button class="tbtn" title="יישור שמאל" onclick="execCmd('justifyRight')">≡→</button>
+        <button class="tbtn" title="מרכז" onclick="execCmd('justifyCenter')">≡</button>
+        <button class="tbtn" title="יישור ימין" onclick="execCmd('justifyLeft')">←≡</button>
+
+        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+
+        <!-- Lists -->
+        <button class="tbtn" title="רשימת תבליטים" onclick="execCmd('insertUnorderedList')">• ≡</button>
+        <button class="tbtn" title="רשימה ממוספרת" onclick="execCmd('insertOrderedList')">1. ≡</button>
+
+        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+
+        <!-- Emoji picker -->
+        <div style="position:relative;display:inline-block">
+          <button class="tbtn" title="אימוג׳י" onclick="toggleEmojiPicker()" id="emoji-btn">😊</button>
+          <div id="emoji-picker" style="
+            display:none;position:absolute;top:32px;right:0;z-index:200;
+            background:var(--bg2);border:1px solid var(--border-hi);
+            border-radius:10px;padding:10px;width:280px;
+            box-shadow:0 8px 32px rgba(0,0,0,.5);
+          ">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:6px">בחר אימוג׳י</div>
+            <div id="emoji-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:160px;overflow-y:auto;font-size:20px"></div>
+          </div>
+        </div>
+
+        <!-- Insert image -->
+        <button class="tbtn" title="הכנס תמונה/GIF" onclick="document.getElementById('img-upload').click()">🖼</button>
+        <input type="file" id="img-upload" accept="image/*,.gif" style="display:none" onchange="insertImage(this)"/>
+
+        <!-- Insert link button -->
+        <button class="tbtn" title="כפתור קישור" onclick="insertLinkButton()" style="font-size:10px;padding:4px 7px">🔗 כפתור</button>
+
+        <!-- Attach files -->
+        <button class="tbtn" title="צרף קבצים" onclick="document.getElementById('attach-files').click()" style="font-size:10px;padding:4px 7px">📎 קובץ</button>
+        <input type="file" id="attach-files" multiple accept=".pdf,.html,.doc,.docx,.xls,.xlsx,.zip" style="display:none" onchange="addAttachments(this)"/>
+
+        <!-- Variables -->
+        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+        <button class="tbtn" onclick="insertVar('{{name}}')" style="font-size:10px;padding:3px 6px">{{name}}</button>
+        <button class="tbtn" onclick="insertVar('{{company}}')" style="font-size:10px;padding:3px 6px">{{company}}</button>
+      </div>
+
+      <!-- Editor area -->
+      <div
+        id="email-editor"
+        contenteditable="true"
+        dir="rtl"
+        style="
+          min-height:260px;padding:16px;
+          background:var(--bg3);border:1px solid var(--border-hi);
+          border-radius:0 0 8px 8px;color:var(--text);
+          font-size:14px;line-height:1.7;outline:none;
+          overflow-y:auto;
+        "
+        placeholder="כתוב את תוכן המייל כאן... אפשר להשתמש ב-{{name}} ו-{{company}}"
+      ></div>
+
+      <!-- Attachments list -->
+      <div id="attachments-list" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">תוכן טקסט (Plain Text)</label>
-      <textarea class="form-input" id="c-text" style="min-height:80px" placeholder="שלום {{name}},&#10;..."></textarea>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Rate Limit (מיילים/דקה)</label>
-      <input type="number" class="form-input" id="c-rate" value="60" style="max-width:120px"/>
-    </div>
-    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:8px">
+
+    <!-- Hidden fields for API -->
+    <input type="hidden" id="c-html"/>
+    <input type="hidden" id="c-text"/>
+
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeModal('campaign-modal')">ביטול</button>
       <button class="btn btn-primary" onclick="createCampaign()">✚ צור קמפיין</button>
     </div>
@@ -637,7 +781,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API = 'https://mailflow-api-production-73a1.up.railway.app';
+const API = 'http://localhost:8000';
 let TOKEN = localStorage.getItem('mf_token') || '';
 let currentPage = 1;
 let contactSearch = '';
@@ -857,8 +1001,8 @@ async function createCampaign() {
   const body = {
     name: document.getElementById('c-name').value,
     subject: document.getElementById('c-subject').value,
-    body_html: document.getElementById('c-html').value,
-    body_text: document.getElementById('c-text').value,
+    body_html: getEditorHTML(),
+    body_text: getEditorText(),
     from_name: document.getElementById('c-from-name').value,
     from_email: document.getElementById('c-from-email').value,
     rate_limit_per_minute: parseInt(document.getElementById('c-rate').value) || 60,
