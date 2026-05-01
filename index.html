@@ -782,7 +782,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API = 'https://mailflow-api-production-73a1.up.railway.app';
+const API = 'http://localhost:8000';
 let TOKEN = localStorage.getItem('mf_token') || '';
 let currentPage = 1;
 let contactSearch = '';
@@ -1356,6 +1356,173 @@ async function doLogin() {
     errEl.textContent = 'שגיאת התחברות';
   }
 }
+
+
+// ═══════════════════════════════════════════════════════════════════════════
+// EMAIL EDITOR FUNCTIONS
+// ═══════════════════════════════════════════════════════════════════════════
+
+function execCmd(cmd, val) {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+  editor.focus();
+  try {
+    document.execCommand(cmd, false, val !== undefined ? val : null);
+  } catch(e) {}
+}
+
+function insertVar(v) {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+  editor.focus();
+  const sel = window.getSelection();
+  if (sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(v));
+    range.collapse(false);
+  } else {
+    editor.innerHTML += v;
+  }
+}
+
+// Emoji
+const EMOJIS = ['😊','😀','😎','🎉','🔥','💡','✅','❌','📧','📢','💼','🚀','⭐','💪','🙏','👋','💰','📈','🎯','🏆','💎','🌟','❤️','👍','🔗','📎','📄','🖼','💬','🔔','⚡','🌈','🎁','🤝','📱','💻','🛒','✉️','📝','🗂️'];
+
+function initEmojiGrid() {
+  const grid = document.getElementById('emoji-grid');
+  if (!grid || grid.children.length > 0) return;
+  EMOJIS.forEach(e => {
+    const btn = document.createElement('button');
+    btn.textContent = e;
+    btn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:4px;transition:background .1s';
+    btn.onmouseover = () => btn.style.background = 'var(--bg4)';
+    btn.onmouseout  = () => btn.style.background = 'none';
+    btn.onclick = (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      insertVar(e);
+      toggleEmojiPicker();
+    };
+    grid.appendChild(btn);
+  });
+}
+
+function toggleEmojiPicker() {
+  const p = document.getElementById('emoji-picker');
+  if (!p) return;
+  const isOpen = p.style.display === 'block';
+  p.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) initEmojiGrid();
+}
+
+document.addEventListener('click', e => {
+  if (!e.target.closest('#emoji-btn') && !e.target.closest('#emoji-picker')) {
+    const p = document.getElementById('emoji-picker');
+    if (p) p.style.display = 'none';
+  }
+});
+
+// Insert image/GIF
+function insertImage(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const editor = document.getElementById('email-editor');
+    editor.focus();
+    document.execCommand('insertHTML', false,
+      `<img src="${ev.target.result}" style="max-width:100%;border-radius:6px;margin:8px 0;display:block"/><br>`
+    );
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+// Insert CTA button
+function insertLinkButton() {
+  const url = prompt('הכנס URL לכפתור (או השאר ריק לשימוש בלינק מאוחר יותר):', 'https://');
+  if (url === null) return;
+  const text = prompt('טקסט על הכפתור:', 'לחץ כאן');
+  if (!text) return;
+  const finalUrl = url || '#';
+  const html = `<div style="text-align:center;margin:20px 0"><a href="${finalUrl}" style="display:inline-block;background:#5b6ef5;color:#ffffff;padding:13px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;font-family:Arial,sans-serif">${text}</a></div><br>`;
+  const editor = document.getElementById('email-editor');
+  editor.focus();
+  document.execCommand('insertHTML', false, html);
+}
+
+// Attachments
+let attachedFiles = [];
+
+function addAttachments(input) {
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      attachedFiles.push({
+        name: file.name,
+        data: ev.target.result.split(',')[1],
+        type: file.type
+      });
+      renderAttachments();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function renderAttachments() {
+  const list = document.getElementById('attachments-list');
+  if (!list) return;
+  list.innerHTML = attachedFiles.map((f, i) => `
+    <div class="attach-chip">
+      📎 ${f.name}
+      <button onclick="removeAttachment(${i})" title="הסר">✕</button>
+    </div>
+  `).join('');
+}
+
+function removeAttachment(i) {
+  attachedFiles.splice(i, 1);
+  renderAttachments();
+}
+
+// Get editor content as clean HTML
+function getEditorHTML() {
+  const editor = document.getElementById('email-editor');
+  if (!editor || !editor.innerHTML.trim()) return '';
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
+<div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)">
+  <div style="padding:32px;direction:rtl;text-align:right;color:#333333;font-size:15px;line-height:1.7">
+    ${editor.innerHTML}
+    <br>
+    <div style="border-top:1px solid #eeeeee;padding-top:16px;margin-top:24px;font-size:12px;color:#999999;text-align:center">
+      <a href="{{unsubscribe_url}}" style="color:#999999;text-decoration:underline">הסר מרשימה</a>
+    </div>
+  </div>
+</div>
+</body></html>`;
+}
+
+function getEditorText() {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return '';
+  return editor.innerText || editor.textContent || '';
+}
+
+// Reset editor when campaign modal opens
+const _origOpenModal = openModal;
+openModal = function(id) {
+  _origOpenModal(id);
+  if (id === 'campaign-modal') {
+    setTimeout(() => {
+      const editor = document.getElementById('email-editor');
+      if (editor) editor.innerHTML = '';
+      attachedFiles = [];
+      renderAttachments();
+    }, 100);
+  }
+};
 
 function showRegister() {
   document.getElementById('login-overlay').style.display = 'none';
