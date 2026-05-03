@@ -1597,23 +1597,27 @@ openModal = function(id) {
 };
 
 
-// Text/BG color with inline styles (works in all email clients)
+// Text/BG color — works in editor AND in email clients
 function applyTextColor(color) {
   const editor = document.getElementById('email-editor');
   editor.focus();
   const sel = window.getSelection();
   if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
-    toast('סמן טקסט קודם כדי לשנות את הצבע', '');
+    toast('סמן טקסט קודם', '');
     return;
   }
-  const range = sel.getRangeAt(0);
+  // Save selection
+  const range = sel.getRangeAt(0).cloneRange();
+  const selected = range.extractContents();
   const span = document.createElement('span');
   span.style.color = color;
-  try {
-    range.surroundContents(span);
-  } catch(e) {
-    document.execCommand('foreColor', false, color);
-  }
+  span.appendChild(selected);
+  range.insertNode(span);
+  // Restore selection
+  sel.removeAllRanges();
+  const newRange = document.createRange();
+  newRange.selectNodeContents(span);
+  sel.addRange(newRange);
 }
 
 function applyBgColor(color) {
@@ -1621,17 +1625,19 @@ function applyBgColor(color) {
   editor.focus();
   const sel = window.getSelection();
   if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
-    toast('סמן טקסט קודם כדי לשנות את הרקע', '');
+    toast('סמן טקסט קודם', '');
     return;
   }
-  const range = sel.getRangeAt(0);
+  const range = sel.getRangeAt(0).cloneRange();
+  const selected = range.extractContents();
   const span = document.createElement('span');
   span.style.backgroundColor = color;
-  try {
-    range.surroundContents(span);
-  } catch(e) {
-    document.execCommand('hiliteColor', false, color);
-  }
+  span.appendChild(selected);
+  range.insertNode(span);
+  sel.removeAllRanges();
+  const newRange = document.createRange();
+  newRange.selectNodeContents(span);
+  sel.addRange(newRange);
 }
 function showRegister() {
   document.getElementById('login-overlay').style.display = 'none';
