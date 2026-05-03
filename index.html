@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -536,12 +535,47 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
         <div class="card">
           <div class="card-header"><span class="card-title">הגדרות שליחה</span></div>
           <div style="padding:24px;max-width:520px">
+            <!-- Provider selector -->
+            <div class="form-group" style="margin-bottom:16px">
+              <label class="form-label">ספק שליחה פעיל</label>
+              <select class="form-input" id="active-provider" onchange="switchProvider(this.value)" style="max-width:200px">
+                <option value="sendgrid">SendGrid</option>
+                <option value="brevo">Brevo</option>
+                <option value="smtp">SMTP (Dev/Gmail)</option>
+              </select>
+            </div>
+
             <div class="tabs">
-              <div class="tab active" onclick="settingsTab('smtp',this)">SMTP</div>
-              <div class="tab" onclick="settingsTab('sendgrid',this)">SendGrid</div>
+              <div class="tab active" onclick="settingsTab('sendgrid',this)">SendGrid</div>
+              <div class="tab" onclick="settingsTab('brevo',this)">Brevo</div>
+              <div class="tab" onclick="settingsTab('smtp',this)">SMTP</div>
               <div class="tab" onclick="settingsTab('ses',this)">Amazon SES</div>
             </div>
-            <div id="settings-smtp">
+
+            <div id="settings-sendgrid">
+              <div class="form-group"><label class="form-label">API Key</label><input class="form-input" type="password" placeholder="SG.xxxxxxxx..."/></div>
+              <div class="form-group"><label class="form-label">From Email</label><input class="form-input" type="email"/></div>
+              <div style="background:rgba(91,110,245,.08);border:1px solid rgba(91,110,245,.2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-top:8px">
+                מקבלים 100 מיילים/יום בחינם · <a href="https://sendgrid.com" target="_blank" style="color:var(--accent2)">sendgrid.com</a>
+              </div>
+            </div>
+
+            <div id="settings-brevo" style="display:none">
+              <div class="form-group">
+                <label class="form-label">SMTP User (המייל שלך ב-Brevo)</label>
+                <input class="form-input" type="email" placeholder="your@email.com"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">SMTP Key (לא הסיסמה — מפתח SMTP)</label>
+                <input class="form-input" type="password" placeholder="xsmtp-..."/>
+              </div>
+              <div style="background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-top:8px">
+                300 מיילים/יום בחינם · Host: smtp-relay.brevo.com · Port: 587<br>
+                <a href="https://app.brevo.com" target="_blank" style="color:var(--green)">app.brevo.com</a> → SMTP & API → Generate SMTP Key
+              </div>
+            </div>
+
+            <div id="settings-smtp" style="display:none">
               <div class="form-row">
                 <div class="form-group"><label class="form-label">Host</label><input class="form-input" placeholder="smtp.gmail.com"/></div>
                 <div class="form-group"><label class="form-label">Port</label><input class="form-input" value="587"/></div>
@@ -551,10 +585,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
                 <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password"/></div>
               </div>
             </div>
-            <div id="settings-sendgrid" style="display:none">
-              <div class="form-group"><label class="form-label">API Key</label><input class="form-input" type="password" placeholder="SG.xxxxxxxx..."/></div>
-              <div class="form-group"><label class="form-label">From Email</label><input class="form-input" type="email"/></div>
-            </div>
+
             <div id="settings-ses" style="display:none">
               <div class="form-row">
                 <div class="form-group"><label class="form-label">Access Key</label><input class="form-input"/></div>
@@ -669,10 +700,10 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 
         <!-- Color -->
         <label title="צבע טקסט" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
-          A <input type="color" onchange="execCmd('foreColor',this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
+          A <input type="color" id="txt-color" value="#000000" onchange="applyTextColor(this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
         </label>
-        <label title="צבע רקע" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
-          BG <input type="color" value="#ffff00" onchange="execCmd('hiliteColor',this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
+        <label title="צבע רקע טקסט" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
+          BG <input type="color" id="bg-color" value="#ffff00" onchange="applyBgColor(this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
         </label>
 
         <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
@@ -782,7 +813,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API = 'https://mailflow-api-production-73a1.up.railway.app';
+const API = 'http://localhost:8000';
 let TOKEN = localStorage.getItem('mf_token') || '';
 let currentPage = 1;
 let contactSearch = '';
@@ -1004,6 +1035,7 @@ async function createCampaign() {
     subject: document.getElementById('c-subject').value,
     body_html: getEditorHTML(),
     body_text: getEditorText(),
+    attachments: attachedFiles || [],
     from_name: document.getElementById('c-from-name').value,
     from_email: document.getElementById('c-from-email').value,
     rate_limit_per_minute: parseInt(document.getElementById('c-rate').value) || 60,
@@ -1284,11 +1316,15 @@ async function saveFollowupRule() {
 // SETTINGS TABS
 // ─────────────────────────────────────────────────────────────────────────────
 function settingsTab(name, el) {
-  ['smtp','sendgrid','ses'].forEach(t => {
+  ['smtp','sendgrid','ses','brevo'].forEach(t => {
     document.getElementById('settings-'+t).style.display = t === name ? 'block' : 'none';
   });
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
+}
+
+function switchProvider(val) {
+  toast('ספק ' + val + ' נבחר — עדכן ב-Railway Variables', 'success');
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -1423,19 +1459,55 @@ document.addEventListener('click', e => {
   }
 });
 
-// Insert image/GIF
-function insertImage(input) {
+// Insert image/GIF — upload to imgbb for email compatibility
+async function insertImage(input) {
   const file = input.files[0];
   if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const editor = document.getElementById('email-editor');
-    editor.focus();
-    document.execCommand('insertHTML', false,
-      `<img src="${ev.target.result}" style="max-width:100%;border-radius:6px;margin:8px 0;display:block"/><br>`
-    );
-  };
-  reader.readAsDataURL(file);
+  
+  const editor = document.getElementById('email-editor');
+  
+  // Show loading placeholder
+  editor.focus();
+  const placeholder = `<span id="img-loading-${Date.now()}" style="background:var(--bg3);padding:8px 16px;border-radius:6px;color:var(--muted);font-size:12px">⏳ מעלה תמונה...</span>`;
+  document.execCommand('insertHTML', false, placeholder);
+  
+  try {
+    // Upload to imgbb (free image hosting, no signup needed for API)
+    const formData = new FormData();
+    formData.append('image', file);
+    
+    formData.append('purpose', 'email_image');
+    const res = await fetch(API + '/uploads/image', {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${TOKEN}` },
+      body: formData
+    });
+    
+    if (res.ok) {
+      const data = await res.json();
+      const imgUrl = data.url;
+      // Remove placeholder and insert real image
+      editor.innerHTML = editor.innerHTML.replace(/<span id="img-loading-[^"]*"[^>]*>.*?<\/span>/g, '');
+      editor.focus();
+      document.execCommand('insertHTML', false,
+        `<img src="${imgUrl}" style="max-width:100%;border-radius:6px;margin:8px 0;display:block"/><br>`
+      );
+    } else {
+      throw new Error('Upload failed');
+    }
+  } catch(e) {
+    // Fallback: use base64 with warning
+    editor.innerHTML = editor.innerHTML.replace(/<span id="img-loading-[^"]*"[^>]*>.*?<\/span>/g, '');
+    const reader = new FileReader();
+    reader.onload = ev => {
+      editor.focus();
+      document.execCommand('insertHTML', false,
+        `<img src="${ev.target.result}" style="max-width:100%;border-radius:6px;margin:8px 0;display:block"/><br>`
+      );
+      toast('התמונה נטענה אבל ייתכן שלא תופיע בכל לקוחות מייל', '');
+    };
+    reader.readAsDataURL(file);
+  }
   input.value = '';
 }
 
@@ -1524,6 +1596,43 @@ openModal = function(id) {
   }
 };
 
+
+// Text/BG color with inline styles (works in all email clients)
+function applyTextColor(color) {
+  const editor = document.getElementById('email-editor');
+  editor.focus();
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+    toast('סמן טקסט קודם כדי לשנות את הצבע', '');
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  span.style.color = color;
+  try {
+    range.surroundContents(span);
+  } catch(e) {
+    document.execCommand('foreColor', false, color);
+  }
+}
+
+function applyBgColor(color) {
+  const editor = document.getElementById('email-editor');
+  editor.focus();
+  const sel = window.getSelection();
+  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
+    toast('סמן טקסט קודם כדי לשנות את הרקע', '');
+    return;
+  }
+  const range = sel.getRangeAt(0);
+  const span = document.createElement('span');
+  span.style.backgroundColor = color;
+  try {
+    range.surroundContents(span);
+  } catch(e) {
+    document.execCommand('hiliteColor', false, color);
+  }
+}
 function showRegister() {
   document.getElementById('login-overlay').style.display = 'none';
   const el = document.getElementById('register-overlay');
