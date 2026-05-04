@@ -813,7 +813,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 
 <script>
 // ── Config ────────────────────────────────────────────────────────────────────
-const API = 'https://mailflow-api-378f.onrender.com';
+const API = 'http://localhost:8000';
 let TOKEN = localStorage.getItem('mf_token') || '';
 let currentPage = 1;
 let contactSearch = '';
@@ -1460,56 +1460,156 @@ document.addEventListener('click', e => {
 });
 
 // Insert image/GIF — upload to imgbb for email compatibility
+// ── Image upload + editor ──────────────────────────────────────────────────
+
+// Upload image to ImgBB (free CDN, works in all email clients)
 async function insertImage(input) {
   const file = input.files[0];
   if (!file) return;
-  
+  input.value = '';
+
   const editor = document.getElementById('email-editor');
-  
-  // Show loading placeholder
+  const loadId = 'img-load-' + Date.now();
+
+  // Show loading indicator
   editor.focus();
-  const placeholder = `<span id="img-loading-${Date.now()}" style="background:var(--bg3);padding:8px 16px;border-radius:6px;color:var(--muted);font-size:12px">⏳ מעלה תמונה...</span>`;
-  document.execCommand('insertHTML', false, placeholder);
-  
+  document.execCommand('insertHTML', false,
+    `<span id="${loadId}" style="display:inline-block;padding:6px 12px;background:#333;color:#aaa;border-radius:4px;font-size:12px">⏳ מעלה תמונה...</span>`
+  );
+
   try {
-    // Upload to imgbb (free image hosting, no signup needed for API)
-    const formData = new FormData();
-    formData.append('image', file);
-    
-    formData.append('purpose', 'email_image');
-    const res = await fetch(API + '/uploads/image', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${TOKEN}` },
-      body: formData
+    // Convert to base64
+    const b64 = await new Promise((res, rej) => {
+      const r = new FileReader();
+      r.onload = () => res(r.result.split(',')[1]);
+      r.onerror = rej;
+      r.readAsDataURL(file);
     });
-    
-    if (res.ok) {
-      const data = await res.json();
-      const imgUrl = data.url;
-      // Remove placeholder and insert real image
-      editor.innerHTML = editor.innerHTML.replace(/<span id="img-loading-[^"]*"[^>]*>.*?<\/span>/g, '');
-      editor.focus();
-      document.execCommand('insertHTML', false,
-        `<img src="${imgUrl}" style="max-width:100%;border-radius:6px;margin:8px 0;display:block"/><br>`
-      );
+
+    // Upload to our API which serves as CDN
+    let imgUrl;
+    try {
+      const fd2 = new FormData();
+      fd2.append('file', file);
+      const r2 = await fetch(API + '/uploads/image', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${TOKEN}` },
+        body: fd2
+      });
+      if (r2.ok) {
+        const d2 = await r2.json();
+        imgUrl = d2.url;
+      }
+    } catch(uploadErr) {
+      console.warn('API upload failed:', uploadErr);
+    }
+
+    // Remove loading span
+    const loadSpan = document.getElementById(loadId);
+    if (loadSpan) loadSpan.remove();
+
+    if (imgUrl) {
+      insertImageWithControls(editor, imgUrl, file.name);
     } else {
-      throw new Error('Upload failed');
+      // Last resort: inline base64 (may not show in some email clients)
+      insertImageWithControls(editor, `data:${file.type};base64,${b64}`, file.name);
+      toast('⚠️ התמונה עלתה מקומית — ייתכן שלא תופיע בכל תיבות המייל', '');
     }
   } catch(e) {
-    // Fallback: use base64 with warning
-    editor.innerHTML = editor.innerHTML.replace(/<span id="img-loading-[^"]*"[^>]*>.*?<\/span>/g, '');
-    const reader = new FileReader();
-    reader.onload = ev => {
-      editor.focus();
-      document.execCommand('insertHTML', false,
-        `<img src="${ev.target.result}" style="max-width:100%;border-radius:6px;margin:8px 0;display:block"/><br>`
-      );
-      toast('התמונה נטענה אבל ייתכן שלא תופיע בכל לקוחות מייל', '');
-    };
-    reader.readAsDataURL(file);
+    const loadSpan = document.getElementById(loadId);
+    if (loadSpan) loadSpan.remove();
+    toast('שגיאה בהעלאת תמונה: ' + e.message, 'error');
   }
-  input.value = '';
 }
+
+function insertImageWithControls(editor, src, name) {
+  const imgId = 'img-' + Date.now();
+  const wrapId = 'wrap-' + imgId;
+
+  const html = `<div id="${wrapId}" style="display:block;margin:8px 0;line-height:0">
+    <img id="${imgId}" src="${src}" alt="${name}"
+      style="width:320px;max-width:100%;border-radius:4px;cursor:pointer;display:block"
+      onclick="showImgControls('${imgId}')"
+    />
+    <div id="ctrl-${imgId}" style="display:none;margin-top:6px;padding:8px;background:#1c2030;border:1px solid #333;border-radius:8px;line-height:1.4">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+        <button class="tbtn" onclick="resizeImg('${imgId}',0.75)" title="הקטן">🔍−</button>
+        <button class="tbtn" onclick="resizeImg('${imgId}',1.33)" title="הגדל">🔍+</button>
+        <span style="color:#666;font-size:11px">גודל:</span>
+        <input type="range" min="80" max="900" value="320"
+          style="width:100px;cursor:pointer"
+          oninput="setImgWidth('${imgId}',+this.value)"
+          title="גודל"/>
+        <span id="size-${imgId}" style="color:#888;font-size:11px;font-family:monospace">320px</span>
+        <span style="color:#444">|</span>
+        <button class="tbtn" onclick="floatImg('${imgId}','right')" title="יישור ימין (טקסט מימין)">⬅📝</button>
+        <button class="tbtn" onclick="floatImg('${imgId}','none')"  title="בלוק — שורה שלמה">⬜</button>
+        <button class="tbtn" onclick="floatImg('${imgId}','left')" title="יישור שמאל (טקסט משמאל)">📝➡</button>
+        <button class="tbtn" style="color:#f87171;margin-right:auto" onclick="removeImg('${wrapId}')" title="מחק תמונה">🗑 מחק</button>
+      </div>
+    </div>
+  </div><br>`;
+
+  editor.focus();
+  document.execCommand('insertHTML', false, html);
+  setTimeout(() => showImgControls(imgId), 100);
+}
+
+function showImgControls(imgId) {
+  // Hide all other controls
+  document.querySelectorAll('[id^="ctrl-img-"]').forEach(el => el.style.display = 'none');
+  const ctrl = document.getElementById('ctrl-' + imgId);
+  if (ctrl) ctrl.style.display = 'block';
+}
+
+function resizeImg(imgId, factor) {
+  const img = document.getElementById(imgId);
+  if (!img) return;
+  const cur = parseInt(img.style.width) || 320;
+  const nw = Math.max(80, Math.min(900, Math.round(cur * factor)));
+  img.style.width = nw + 'px';
+  const sizeEl = document.getElementById('size-' + imgId);
+  if (sizeEl) sizeEl.textContent = nw + 'px';
+  // Sync slider
+  const ctrl = document.getElementById('ctrl-' + imgId);
+  if (ctrl) { const sl = ctrl.querySelector('input[type=range]'); if (sl) sl.value = nw; }
+}
+
+function setImgWidth(imgId, val) {
+  const img = document.getElementById(imgId);
+  if (!img) return;
+  img.style.width = val + 'px';
+  const sizeEl = document.getElementById('size-' + imgId);
+  if (sizeEl) sizeEl.textContent = val + 'px';
+}
+
+function floatImg(imgId, direction) {
+  const img = document.getElementById(imgId);
+  const wrap = document.getElementById('wrap-' + imgId);
+  if (!img || !wrap) return;
+  if (direction === 'right') {
+    // Image on right, text wraps on left
+    wrap.style.cssText = 'float:right;margin:4px 0 8px 16px;line-height:0;display:block';
+  } else if (direction === 'left') {
+    // Image on left, text wraps on right
+    wrap.style.cssText = 'float:left;margin:4px 16px 8px 0;line-height:0;display:block';
+  } else {
+    // Full block, no float
+    wrap.style.cssText = 'display:block;clear:both;margin:8px 0;line-height:0';
+  }
+}
+
+function removeImg(wrapId) {
+  const wrap = document.getElementById(wrapId);
+  if (wrap) { wrap.nextSibling && wrap.nextSibling.nodeName === 'BR' && wrap.nextSibling.remove(); wrap.remove(); }
+}
+
+// Hide controls when clicking outside
+document.addEventListener('click', e => {
+  if (!e.target.closest('[id^="wrap-img-"]') && !e.target.closest('[id^="ctrl-img-"]') && e.target.id && !e.target.id.startsWith('img-')) {
+    document.querySelectorAll('[id^="ctrl-img-"]').forEach(el => el.style.display = 'none');
+  }
+});
 
 // Insert CTA button
 function insertLinkButton() {
