@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -345,6 +346,25 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
             <div class="stat-sub">פעילים</div>
           </div>
         </div>
+        <!-- Daily counter row -->
+        <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:28px;display:flex;align-items:center;gap:20px">
+          <div style="flex:1">
+            <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">יתרת מיילים יומית (Brevo — 300/יום)</div>
+            <div class="progress-bar" style="height:8px;border-radius:6px">
+              <div class="progress-fill" id="daily-bar" style="width:0%;background:var(--green);transition:width .6s"></div>
+            </div>
+          </div>
+          <div style="text-align:center;min-width:80px">
+            <div style="font-size:22px;font-weight:600" id="daily-remaining">—</div>
+            <div style="font-size:11px;color:var(--muted)">נותרו היום</div>
+          </div>
+          <div style="text-align:center;min-width:80px">
+            <div style="font-size:22px;font-weight:600;color:var(--amber)" id="daily-used">—</div>
+            <div style="font-size:11px;color:var(--muted)">נשלחו היום</div>
+          </div>
+        </div>
+        <div class="stat-grid" style="display:none">
+        </div>
 
         <div class="card">
           <div class="card-header">
@@ -408,7 +428,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
             </div>
           </div>
           <table>
-            <thead><tr><th>מייל</th><th>שם</th><th>חברה</th><th>סטטוס</th><th>נוצר</th></tr></thead>
+            <thead><tr><th>מייל</th><th>שם</th><th>חברה</th><th>סטטוס</th><th>נוצר</th><th></th></tr></thead>
             <tbody id="contacts-table"><tr><td colspan="5" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
           </table>
           <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px">
@@ -783,28 +803,40 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
 </div>
 
 <!-- ═══ LAUNCH MODAL ═══ -->
-<div class="modal-overlay" id="launch-modal">
-  <div class="modal">
+<div class="modal-overlay" id="launch-modal" style="align-items:flex-start;padding:20px;overflow-y:auto">
+  <div class="modal" style="width:680px;max-width:96vw">
     <div class="modal-header">
       <span class="modal-title" id="launch-title">שליחת קמפיין</span>
       <button class="modal-close" onclick="closeModal('launch-modal')">✕</button>
     </div>
-    <p style="color:var(--text2);margin-bottom:20px;font-size:13px">
-      הקמפיין ישלח לכל אנשי הקשר הפעילים שלא הסירו עצמם מהרשימה.
-    </p>
-    <div style="background:var(--bg3);border-radius:8px;padding:16px;margin-bottom:20px;font-size:13px">
-      <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-        <span style="color:var(--muted)">אנשי קשר פעילים:</span>
-        <span id="launch-contact-count" style="font-weight:600">—</span>
-      </div>
-      <div style="display:flex;justify-content:space-between">
-        <span style="color:var(--muted)">זמן שליחה משוער:</span>
-        <span id="launch-eta" style="font-family:var(--mono)">—</span>
-      </div>
+
+    <!-- Stats bar -->
+    <div style="background:var(--bg3);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;gap:24px;font-size:13px">
+      <div><span style="color:var(--muted)">נבחרו: </span><span id="launch-selected-count" style="font-weight:600;color:var(--accent2)">0</span></div>
+      <div><span style="color:var(--muted)">סה"כ פעילים: </span><span id="launch-contact-count" style="font-weight:600">—</span></div>
+      <div><span style="color:var(--muted)">זמן משוער: </span><span id="launch-eta" style="font-family:var(--mono)">—</span></div>
     </div>
+
+    <!-- Search + Select All -->
+    <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
+      <input class="form-input" id="launch-search" placeholder="חיפוש לפי מייל או שם..." style="flex:1"
+        oninput="filterLaunchContacts(this.value)"/>
+      <button class="btn btn-sm" onclick="selectAllLaunch(true)">✓ בחר הכל</button>
+      <button class="btn btn-sm" onclick="selectAllLaunch(false)">✕ בטל הכל</button>
+    </div>
+
+    <!-- Contact list -->
+    <div id="launch-contact-list" style="
+      max-height:320px;overflow-y:auto;
+      border:1px solid var(--border);border-radius:8px;
+      background:var(--bg3);margin-bottom:16px;
+    ">
+      <div style="text-align:center;padding:20px;color:var(--muted)">טוען...</div>
+    </div>
+
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button class="btn" onclick="closeModal('launch-modal')">ביטול</button>
-      <button class="btn btn-primary" onclick="launchCampaign()" id="launch-btn">🚀 שלח עכשיו</button>
+      <button class="btn btn-primary" onclick="launchCampaign()" id="launch-btn">🚀 שלח לנבחרים</button>
     </div>
   </div>
 </div>
@@ -926,6 +958,26 @@ async function loadDashboard() {
   if (contacts) {
     document.getElementById('stat-contacts').textContent = contacts.total?.toLocaleString() || '0';
   }
+
+  // Daily email counter — count today's sends
+  if (stats) {
+    const today = new Date().toISOString().slice(0, 10);
+    const todaySent = stats.reduce((sum, c) => {
+      // Use sent_at date if available, else estimate
+      return sum + (c.sent || 0);
+    }, 0);
+    // Get today's count from API
+    const todayRes = await api('GET', '/analytics/today');
+    const sentToday = todayRes?.sent_today || 0;
+    const limit = 300;
+    const remaining = Math.max(0, limit - sentToday);
+    const pct = Math.min(100, (sentToday / limit) * 100);
+    document.getElementById('daily-used').textContent = sentToday;
+    document.getElementById('daily-remaining').textContent = remaining;
+    document.getElementById('daily-bar').style.width = pct + '%';
+    document.getElementById('daily-bar').style.background =
+      pct > 80 ? 'var(--red)' : pct > 60 ? 'var(--amber)' : 'var(--green)';
+  }
 }
 
 function drawChart(data) {
@@ -1021,7 +1073,9 @@ async function loadCampaigns() {
       <td>${statusBadge(c.status)}</td>
       <td>
         <div style="display:flex;gap:6px">
-          <button class="btn btn-sm btn-primary" onclick="prepareLaunch('${c.id}','${c.name}')">🚀 שלח</button>
+          <button class="btn btn-sm ${c.status === 'sent' ? '' : 'btn-primary'}" onclick="prepareLaunch('${c.id}','${c.name}')">
+            ${c.status === 'sent' ? '🔁 שלח שוב' : '🚀 שלח'}
+          </button>
           <button class="btn btn-sm btn-danger" onclick="deleteCampaign('${c.id}')">🗑</button>
         </div>
       </td>
@@ -1049,29 +1103,124 @@ async function createCampaign() {
   } else toast('שגיאה ביצירת הקמפיין', 'error');
 }
 
+let launchAllContacts = [];
+let launchFilteredContacts = [];
+
 async function prepareLaunch(id, name) {
   launchCampaignId = id;
   document.getElementById('launch-title').textContent = 'שליחת: ' + name;
-  const contacts = await api('GET', '/contacts?page=1&page_size=1&status=active');
-  const count = contacts?.total || 0;
-  document.getElementById('launch-contact-count').textContent = count.toLocaleString();
-  const eta = Math.ceil(count / 60);
-  document.getElementById('launch-eta').textContent = eta < 2 ? 'פחות מדקה' : `~${eta} דקות`;
+  document.getElementById('launch-search').value = '';
+
+  // Load all active contacts
+  const listEl = document.getElementById('launch-contact-list');
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">טוען אנשי קשר...</div>';
   openModal('launch-modal');
+
+  let allContacts = [];
+  let page = 1;
+  while (true) {
+    const res = await api('GET', `/contacts?page=${page}&page_size=100&status=active`);
+    if (!res || !res.items.length) break;
+    allContacts = allContacts.concat(res.items);
+    if (allContacts.length >= res.total) break;
+    page++;
+  }
+
+  launchAllContacts = allContacts;
+  launchFilteredContacts = [...allContacts];
+
+  document.getElementById('launch-contact-count').textContent = allContacts.length.toLocaleString();
+  renderLaunchContacts();
+  updateLaunchCount();
+}
+
+function renderLaunchContacts() {
+  const listEl = document.getElementById('launch-contact-list');
+  if (!launchFilteredContacts.length) {
+    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">אין אנשי קשר</div>';
+    return;
+  }
+  listEl.innerHTML = launchFilteredContacts.map(c => `
+    <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s"
+      onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background=''">
+      <input type="checkbox" id="chk-${c.id}" checked
+        style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)"
+        onchange="updateLaunchCount()"/>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500">${c.name || '—'}</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono)">${c.email}</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">${c.company || ''}</div>
+    </label>
+  `).join('');
+  updateLaunchCount();
+}
+
+function filterLaunchContacts(q) {
+  const ql = q.toLowerCase();
+  launchFilteredContacts = launchAllContacts.filter(c =>
+    c.email.toLowerCase().includes(ql) ||
+    (c.name || '').toLowerCase().includes(ql) ||
+    (c.company || '').toLowerCase().includes(ql)
+  );
+  renderLaunchContacts();
+}
+
+function selectAllLaunch(checked) {
+  launchFilteredContacts.forEach(c => {
+    const el = document.getElementById('chk-' + c.id);
+    if (el) el.checked = checked;
+  });
+  updateLaunchCount();
+}
+
+function updateLaunchCount() {
+  const checked = launchAllContacts.filter(c => {
+    const el = document.getElementById('chk-' + c.id);
+    return el && el.checked;
+  });
+  document.getElementById('launch-selected-count').textContent = checked.length;
+  const eta = Math.ceil(checked.length * 0.5 / 60);
+  document.getElementById('launch-eta').textContent =
+    checked.length === 0 ? '—' : checked.length < 120 ? 'פחות מדקה' : `~${eta} דקות`;
+}
+
+function getSelectedContactIds() {
+  return launchAllContacts
+    .filter(c => { const el = document.getElementById('chk-' + c.id); return el && el.checked; })
+    .map(c => c.id);
 }
 
 async function launchCampaign() {
   if (!launchCampaignId) return;
-  document.getElementById('launch-btn').textContent = 'מאתחל שליחה...';
-  document.getElementById('launch-btn').disabled = true;
-  const res = await api('POST', `/campaigns/${launchCampaignId}/launch`);
-  document.getElementById('launch-btn').textContent = '🚀 שלח עכשיו';
-  document.getElementById('launch-btn').disabled = false;
+  const selectedIds = getSelectedContactIds();
+  if (!selectedIds.length) { toast('בחר לפחות איש קשר אחד', 'error'); return; }
+
+  const btn = document.getElementById('launch-btn');
+  btn.textContent = 'שולח...';
+  btn.disabled = true;
+
+  const res = await api('POST', `/campaigns/${launchCampaignId}/launch`,
+    { contact_ids: selectedIds }
+  );
+
+  btn.textContent = '🚀 שלח לנבחרים';
+  btn.disabled = false;
+
   if (res) {
     closeModal('launch-modal');
-    toast(`${res.queued} מיילים נשלחו לתור ✓`, 'success');
+    toast(`${res.queued} מיילים נשלחים ✓`, 'success');
     loadCampaigns();
-  } else toast('שגיאה בהפעלת הקמפיין', 'error');
+  } else {
+    toast('שגיאה בשליחה', 'error');
+  }
+}
+
+async function deleteContact(id, email) {
+  if (!confirm(`למחוק את ${email}?`)) return;
+  const res = await api('DELETE', `/contacts/${id}`);
+  if (res) { toast('נמחק ✓', 'success'); loadContacts(); }
+  else toast('שגיאה במחיקה', 'error');
 }
 
 async function deleteCampaign(id) {
@@ -1106,8 +1255,11 @@ async function loadContacts() {
       <td>${c.company || '—'}</td>
       <td>${statusBadge(c.status)}</td>
       <td style="color:var(--muted);font-size:12px">${fmt(c.created_at)}</td>
+      <td>
+        <button class="btn btn-sm btn-danger" onclick="deleteContact('${c.id}','${c.email}')" title="מחק">🗑</button>
+      </td>
     </tr>
-  `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
+  `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
 
   document.getElementById('page-info').textContent = `עמוד ${currentPage} · ${data.total.toLocaleString()} סה"כ`;
 }
@@ -1663,10 +1815,36 @@ function removeAttachment(i) {
 function getEditorHTML() {
   const editor = document.getElementById('email-editor');
   if (!editor || !editor.innerHTML.trim()) return '';
+
+  // Clone editor and remove all control panels (not for email)
+  const clone = editor.cloneNode(true);
+  clone.querySelectorAll('[id^="ctrl-"]').forEach(el => el.remove());
+  // Fix image wrappers — keep only the img tag with its styles
+  clone.querySelectorAll('[id^="wrap-img-"]').forEach(wrap => {
+    const img = wrap.querySelector('img');
+    if (img) {
+      // Apply float style to img directly
+      const wrapStyle = wrap.getAttribute('style') || '';
+      if (wrapStyle.includes('float:right')) {
+        img.style.float = 'right';
+        img.style.margin = '4px 0 8px 16px';
+      } else if (wrapStyle.includes('float:left')) {
+        img.style.float = 'left';
+        img.style.margin = '4px 16px 8px 0';
+      } else {
+        img.style.display = 'block';
+        img.style.margin = '8px auto';
+      }
+      img.removeAttribute('onclick');
+      img.style.cursor = 'default';
+      wrap.replaceWith(img);
+    }
+  });
+
   return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
 <div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)">
   <div style="padding:32px;direction:rtl;text-align:right;color:#333333;font-size:15px;line-height:1.7">
-    ${editor.innerHTML}
+    ${clone.innerHTML}
     <br>
     <div style="border-top:1px solid #eeeeee;padding-top:16px;margin-top:24px;font-size:12px;color:#999999;text-align:center">
       <a href="{{unsubscribe_url}}" style="color:#999999;text-decoration:underline">הסר מרשימה</a>
