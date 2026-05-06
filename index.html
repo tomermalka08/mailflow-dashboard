@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -1827,26 +1828,60 @@ function getEditorHTML() {
 
   // Clone editor and remove all control panels (not for email)
   const clone = editor.cloneNode(true);
+
+  // Remove all control divs
   clone.querySelectorAll('[id^="ctrl-"]').forEach(el => el.remove());
-  // Fix image wrappers — keep only the img tag with its styles
+
+  // Fix image wrappers — convert to email-safe HTML table layout
   clone.querySelectorAll('[id^="wrap-img-"]').forEach(wrap => {
     const img = wrap.querySelector('img');
-    if (img) {
-      // Apply float style to img directly
-      const wrapStyle = wrap.getAttribute('style') || '';
-      if (wrapStyle.includes('float:right')) {
-        img.style.float = 'right';
-        img.style.margin = '4px 0 8px 16px';
-      } else if (wrapStyle.includes('float:left')) {
-        img.style.float = 'left';
-        img.style.margin = '4px 16px 8px 0';
-      } else {
-        img.style.display = 'block';
-        img.style.margin = '8px auto';
-      }
-      img.removeAttribute('onclick');
-      img.style.cursor = 'default';
-      wrap.replaceWith(img);
+    if (!img) { wrap.remove(); return; }
+
+    const wrapStyle = wrap.getAttribute('style') || '';
+    const imgWidth = img.style.width || '320px';
+    const imgSrc = img.getAttribute('src') || '';
+    const imgAlt = img.getAttribute('alt') || '';
+
+    let emailHtml;
+    if (wrapStyle.includes('float:right') || wrapStyle.includes('float: right')) {
+      // Image on right, text on left — use table for email compatibility
+      emailHtml = `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0">
+        <tr>
+          <td style="padding-right:12px;vertical-align:top">
+            <img src="${imgSrc}" alt="${imgAlt}" width="${parseInt(imgWidth)}" style="width:${imgWidth};max-width:100%;display:block;border-radius:4px"/>
+          </td>
+          <td style="vertical-align:top;width:100%">&nbsp;</td>
+        </tr>
+      </table>`;
+    } else if (wrapStyle.includes('float:left') || wrapStyle.includes('float: left')) {
+      // Image on left, text on right
+      emailHtml = `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0">
+        <tr>
+          <td style="vertical-align:top;width:100%">&nbsp;</td>
+          <td style="padding-left:12px;vertical-align:top">
+            <img src="${imgSrc}" alt="${imgAlt}" width="${parseInt(imgWidth)}" style="width:${imgWidth};max-width:100%;display:block;border-radius:4px"/>
+          </td>
+        </tr>
+      </table>`;
+    } else {
+      // Center/block
+      emailHtml = `<div style="text-align:center;margin:8px 0">
+        <img src="${imgSrc}" alt="${imgAlt}" width="${parseInt(imgWidth)}" style="width:${imgWidth};max-width:100%;display:inline-block;border-radius:4px"/>
+      </div>`;
+    }
+
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = emailHtml;
+    wrap.replaceWith(tempDiv.firstChild);
+  });
+
+  // Also fix any plain img tags with onclick
+  clone.querySelectorAll('img').forEach(img => {
+    img.removeAttribute('onclick');
+    img.style.cursor = 'default';
+    // Ensure width is set as attribute too (for Outlook)
+    if (img.style.width) {
+      img.setAttribute('width', parseInt(img.style.width));
     }
   });
 
