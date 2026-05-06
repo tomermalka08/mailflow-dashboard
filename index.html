@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -298,6 +299,12 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
         </button>
       </div>
       <div class="nav-section">
+        <div class="nav-label">WhatsApp</div>
+        <button class="nav-item" onclick="showSection('whatsapp',this)">
+          <span class="icon">💬</span> WhatsApp
+        </button>
+      </div>
+      <div class="nav-section">
         <div class="nav-label">הגדרות</div>
         <button class="nav-item" onclick="showSection('settings',this)">
           <span class="icon">⚙️</span> הגדרות
@@ -547,6 +554,37 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
               <button class="btn btn-primary" onclick="saveFollowupRule()">שמור כלל</button>
             </div>
             <button class="btn btn-sm" style="margin-top:12px" id="show-fu-form" onclick="toggleFuForm()" style="display:none">✚ הוסף כלל</button>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ════ WHATSAPP ════ -->
+      <div class="section" id="sec-whatsapp">
+        <div class="card" style="margin-bottom:24px">
+          <div class="card-header">
+            <span class="card-title">💬 חיבורי WhatsApp — Green API</span>
+            <button class="btn btn-primary btn-sm" onclick="openModal('wa-modal')">✚ חבר מספר חדש</button>
+          </div>
+          <div style="padding:20px">
+            <div style="background:rgba(34,211,160,.06);border:1px solid rgba(34,211,160,.18);border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--text2)">
+              <strong style="color:var(--green)">כיצד מחברים Green API?</strong><br>
+              1. היכנס ל-console.green-api.com וצור Instance חדש<br>
+              2. העתק את <strong>idInstance</strong> ואת <strong>apiTokenInstance</strong><br>
+              3. לחץ "חבר מספר חדש", הדבק את הפרטים וסרוק QR בוואטסאפ<br>
+              4. לאחר החיבור — בנה קמפיין עם ערוץ WhatsApp
+            </div>
+            <table>
+              <thead><tr><th>כינוי</th><th>מספר</th><th>Instance ID</th><th>סטטוס</th><th>נוצר</th><th>פעולות</th></tr></thead>
+              <tbody id="wa-instances-table"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">טוען...</td></tr></tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><span class="card-title">📊 סטטיסטיקת WhatsApp היום</span></div>
+          <div style="padding:20px;display:flex;gap:32px">
+            <div><div class="stat-label">הודעות נשלחו היום</div><div style="font-size:28px;font-weight:600;color:var(--green)" id="wa-today-sent">—</div></div>
+            <div><div class="stat-label">הגבלת Green API</div><div style="font-size:14px;color:var(--muted);margin-top:4px">500 הודעות/חודש | ≈ 16/יום בתוכנית חינם</div></div>
           </div>
         </div>
       </div>
@@ -2070,5 +2108,171 @@ if (TOKEN) {
     </div>
   </div>
 </div>
+
+<!-- ═══ WHATSAPP INSTANCE MODAL ═══ -->
+<div class="modal-overlay" id="wa-modal">
+  <div class="modal" style="width:520px;max-width:96vw">
+    <div class="modal-header">
+      <span class="modal-title">💬 חיבור מספר WhatsApp</span>
+      <button class="modal-close" onclick="closeModal('wa-modal')">✕</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">כינוי (לזיהוי שלך בלבד)</label>
+      <input class="form-input" id="wa-label" placeholder="מכירות IL, תמיכה..."/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">idInstance (מ-Green API)</label>
+      <input class="form-input" id="wa-id-instance" placeholder="1234567890" style="direction:ltr;font-family:monospace"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">apiTokenInstance (מ-Green API)</label>
+      <input class="form-input" id="wa-api-token" placeholder="abc123..." style="direction:ltr;font-family:monospace"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">מספר הטלפון (אופציונלי)</label>
+      <input class="form-input" id="wa-phone" placeholder="0501234567" style="direction:ltr"/>
+    </div>
+    <div style="background:rgba(91,110,245,.06);border:1px solid rgba(91,110,245,.18);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-bottom:20px">
+      <strong>איפה למצוא את הפרטים?</strong><br>
+      היכנס ל <a href="https://console.green-api.com" target="_blank" style="color:var(--accent2)">console.green-api.com</a> → My instances → בחר instance → תראה את idInstance ואת apiTokenInstance
+    </div>
+    <div id="wa-qr-container" style="display:none;text-align:center;margin-bottom:16px">
+      <img id="wa-qr-img" src="" style="max-width:220px;border-radius:8px;border:2px solid var(--border)"/>
+      <div style="font-size:12px;color:var(--muted);margin-top:8px">סרוק עם WhatsApp ← Linked devices ← Link a device</div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end">
+      <button class="btn" onclick="closeModal('wa-modal')">ביטול</button>
+      <button class="btn btn-primary" onclick="addWaInstance()">✚ חבר</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════ WHATSAPP MANAGEMENT ════
+
+async function loadWaInstances() {
+  try {
+    const r = await fetch(API + '/whatsapp/instances', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    if (!r.ok) { document.getElementById('wa-instances-table').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red)">שגיאה בטעינה</td></tr>'; return; }
+    const instances = await r.json();
+    const tbody = document.getElementById('wa-instances-table');
+    if (!instances.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">אין מספרים מחוברים עדיין. לחץ "חבר מספר חדש"</td></tr>';
+      return;
+    }
+    tbody.innerHTML = instances.map(i => {
+      const stateColor = i.state === 'authorized' ? 'green' : i.state === 'notAuthorized' ? 'red' : 'amber';
+      const stateLabel = i.state === 'authorized' ? '✅ מחובר' : i.state === 'notAuthorized' ? '❌ לא מחובר' : '⏳ ' + i.state;
+      return `<tr>
+        <td><strong>${i.label}</strong></td>
+        <td style="font-family:monospace">${i.phone_number || '—'}</td>
+        <td style="font-family:monospace;font-size:12px">${i.id_instance}</td>
+        <td><span class="badge badge-${stateColor}">${stateLabel}</span></td>
+        <td style="font-size:12px;color:var(--muted)">${i.created_at ? new Date(i.created_at).toLocaleDateString('he-IL') : '—'}</td>
+        <td>
+          <button class="btn btn-sm" onclick="checkWaStatus('${i.id}')">בדוק</button>
+          ${i.state !== 'authorized' ? `<button class="btn btn-sm" onclick="showWaQR('${i.id}')" style="margin-right:4px">QR</button>` : ''}
+          <button class="btn btn-sm btn-danger" onclick="deleteWaInstance('${i.id}')" style="margin-right:4px">מחק</button>
+        </td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    document.getElementById('wa-instances-table').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red)">' + e.message + '</td></tr>';
+  }
+}
+
+async function addWaInstance() {
+  const label = document.getElementById('wa-label').value.trim();
+  const idInstance = document.getElementById('wa-id-instance').value.trim();
+  const apiToken = document.getElementById('wa-api-token').value.trim();
+  const phone = document.getElementById('wa-phone').value.trim();
+
+  if (!label || !idInstance || !apiToken) { toast('מלא את כל השדות החובה', 'error'); return; }
+
+  try {
+    const r = await fetch(API + '/whatsapp/instances', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ label, id_instance: idInstance, api_token: apiToken, phone_number: phone || null })
+    });
+    const data = await r.json();
+    if (!r.ok) { toast(data.detail || 'שגיאה', 'error'); return; }
+
+    toast('✅ ' + data.message, 'success');
+    closeModal('wa-modal');
+    loadWaInstances();
+
+    // If not authorized, offer QR
+    if (data.state !== 'authorized') {
+      setTimeout(() => {
+        if (confirm('המספר עדיין לא מחובר. האם לפתוח QR לסריקה?')) {
+          showWaQR(data.id);
+        }
+      }, 500);
+    }
+  } catch(e) {
+    toast('שגיאה: ' + e.message, 'error');
+  }
+}
+
+async function checkWaStatus(instanceId) {
+  try {
+    const r = await fetch(API + '/whatsapp/instances/' + instanceId + '/status', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    const data = await r.json();
+    const label = data.state === 'authorized' ? '✅ מחובר' : '❌ ' + data.state;
+    toast(data.label + ': ' + label, data.state === 'authorized' ? 'success' : '');
+    loadWaInstances();
+  } catch(e) { toast('שגיאה: ' + e.message, 'error'); }
+}
+
+async function showWaQR(instanceId) {
+  try {
+    const r = await fetch(API + '/whatsapp/instances/' + instanceId + '/qr', {
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    const data = await r.json();
+    if (data.type === 'qrCode' && data.message) {
+      document.getElementById('wa-qr-img').src = 'data:image/png;base64,' + data.message;
+      document.getElementById('wa-qr-container').style.display = 'block';
+      openModal('wa-modal');
+      toast('סרוק את ה-QR בוואטסאפ', 'success');
+    } else if (data.type === 'alreadyLogged') {
+      toast('✅ כבר מחובר!', 'success');
+      loadWaInstances();
+    } else {
+      toast('לא ניתן לקבל QR: ' + (data.message || JSON.stringify(data)), 'error');
+    }
+  } catch(e) { toast('שגיאה: ' + e.message, 'error'); }
+}
+
+async function deleteWaInstance(instanceId) {
+  if (!confirm('למחוק את החיבור הזה?')) return;
+  try {
+    const r = await fetch(API + '/whatsapp/instances/' + instanceId, {
+      method: 'DELETE',
+      headers: { 'Authorization': 'Bearer ' + TOKEN }
+    });
+    if (r.ok) { toast('החיבור נמחק', ''); loadWaInstances(); }
+    else toast('שגיאה במחיקה', 'error');
+  } catch(e) { toast('שגיאה: ' + e.message, 'error'); }
+}
+
+// Load WA instances when switching to whatsapp section
+const _origShowSection2 = showSection;
+showSection = function(sec, el) {
+  _origShowSection2(sec, el);
+  if (sec === 'whatsapp') {
+    loadWaInstances();
+    fetch(API + '/analytics/today', { headers: { 'Authorization': 'Bearer ' + TOKEN } })
+      .then(r => r.json())
+      .then(d => { document.getElementById('wa-today-sent').textContent = d.wa_sent_today ?? '0'; })
+      .catch(() => {});
+  }
+};
+</script>
 </body>
 </html>
