@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -34,409 +33,201 @@ html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--f
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:var(--font)}
 input,textarea,select{font-family:var(--font)}
-
-/* ── Layout ─────────────────────────────── */
 .app{display:grid;grid-template-columns:220px 1fr;min-height:100vh}
-
-/* ── Sidebar ────────────────────────────── */
-.sidebar{
-  background:var(--bg2);
-  border-left:1px solid var(--border);
-  padding:0;
-  display:flex;flex-direction:column;
-  position:sticky;top:0;height:100vh;overflow:auto;
-}
-.sidebar-logo{
-  padding:24px 20px 20px;
-  border-bottom:1px solid var(--border);
-}
-.sidebar-logo .logo-mark{
-  display:flex;align-items:center;gap:10px;
-  font-size:18px;font-weight:600;
-}
-.logo-icon{
-  width:32px;height:32px;border-radius:8px;
-  background:linear-gradient(135deg,var(--accent),var(--green));
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;
-}
+.sidebar{background:var(--bg2);border-left:1px solid var(--border);padding:0;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;overflow:auto;}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border);}
+.sidebar-logo .logo-mark{display:flex;align-items:center;gap:10px;font-size:18px;font-weight:600;}
+.logo-icon{width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,var(--accent),var(--green));display:flex;align-items:center;justify-content:center;font-size:16px;}
 .sidebar-nav{padding:12px 10px;flex:1}
 .nav-section{margin-bottom:20px}
-.nav-label{
-  font-size:10px;font-weight:600;letter-spacing:.08em;
-  color:var(--muted);text-transform:uppercase;
-  padding:0 10px 8px;
-}
-.nav-item{
-  display:flex;align-items:center;gap:10px;
-  padding:9px 10px;border-radius:8px;
-  color:var(--text2);font-size:13px;font-weight:400;
-  cursor:pointer;transition:all .15s;border:none;background:none;
-  width:100%;text-align:right;
-}
+.nav-label{font-size:10px;font-weight:600;letter-spacing:.08em;color:var(--muted);text-transform:uppercase;padding:0 10px 8px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;color:var(--text2);font-size:13px;font-weight:400;cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:right;}
 .nav-item:hover{background:var(--bg3);color:var(--text)}
 .nav-item.active{background:rgba(91,110,245,.15);color:var(--accent2);font-weight:500}
 .nav-item .icon{font-size:16px;flex-shrink:0}
-.sidebar-footer{
-  padding:16px;border-top:1px solid var(--border);
-  font-size:12px;color:var(--muted);
-}
-
-/* ── Main ───────────────────────────────── */
+.sidebar-footer{padding:16px;border-top:1px solid var(--border);font-size:12px;color:var(--muted);}
 .main{overflow:auto}
-.topbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:20px 32px;border-bottom:1px solid var(--border);
-  background:var(--bg);position:sticky;top:0;z-index:10;
-}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;border-bottom:1px solid var(--border);background:var(--bg);position:sticky;top:0;z-index:10;}
 .topbar-title{font-size:20px;font-weight:600}
 .topbar-right{display:flex;align-items:center;gap:12px}
-
-/* ── Buttons ────────────────────────────── */
-.btn{
-  display:inline-flex;align-items:center;gap:6px;
-  padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;
-  border:1px solid var(--border-hi);background:var(--bg3);color:var(--text);
-  transition:all .15s;
-}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-weight:500;border:1px solid var(--border-hi);background:var(--bg3);color:var(--text);transition:all .15s;}
 .btn:hover{background:var(--bg4);border-color:var(--border-hi)}
 .btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn-primary:hover{background:var(--accent2);border-color:var(--accent2)}
 .btn-sm{padding:5px 12px;font-size:12px}
 .btn-danger{background:rgba(248,113,113,.1);border-color:rgba(248,113,113,.3);color:var(--red)}
-
-/* ── Content ────────────────────────────── */
 .content{padding:28px 32px}
 .section{display:none}
 .section.active{display:block}
-
-/* ── Stat cards ─────────────────────────── */
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px}
-.stat-card{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:var(--radius);padding:20px;
-}
-.stat-label{font-size:11px;font-weight:600;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:20px;}
+.stat-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
 .stat-value{font-size:28px;font-weight:600;line-height:1}
 .stat-sub{font-size:12px;color:var(--muted);margin-top:4px}
 .stat-card.green .stat-value{color:var(--green)}
 .stat-card.blue  .stat-value{color:var(--accent2)}
 .stat-card.amber .stat-value{color:var(--amber)}
 .stat-card.red   .stat-value{color:var(--red)}
-
-/* ── Table ──────────────────────────────── */
-.card{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:var(--radius);overflow:hidden;margin-bottom:24px;
-}
-.card-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:16px 20px;border-bottom:1px solid var(--border);
-}
+.card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:24px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);}
 .card-title{font-size:14px;font-weight:600}
 table{width:100%;border-collapse:collapse}
 thead tr{background:var(--bg3)}
-th{
-  padding:10px 16px;font-size:11px;font-weight:600;
-  letter-spacing:.06em;text-transform:uppercase;
-  color:var(--muted);text-align:right;
-}
+th{padding:10px 16px;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;}
 td{padding:12px 16px;border-top:1px solid var(--border);font-size:13px}
 tr:hover td{background:var(--bg3)}
-
-/* ── Badges ─────────────────────────────── */
-.badge{
-  display:inline-block;padding:2px 8px;border-radius:20px;
-  font-size:11px;font-weight:600;
-}
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;}
 .badge-green{background:rgba(34,211,160,.12);color:var(--green);border:1px solid rgba(34,211,160,.25)}
 .badge-blue{background:rgba(91,110,245,.12);color:var(--accent2);border:1px solid rgba(91,110,245,.25)}
 .badge-amber{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.25)}
 .badge-red{background:rgba(248,113,113,.12);color:var(--red);border:1px solid rgba(248,113,113,.25)}
 .badge-gray{background:rgba(107,114,128,.12);color:var(--muted);border:1px solid rgba(107,114,128,.25)}
-
-/* ── Progress bar ───────────────────────── */
 .progress-bar{height:4px;background:var(--bg3);border-radius:4px;overflow:hidden;margin-top:4px}
 .progress-fill{height:100%;border-radius:4px;transition:width .6s ease}
-
-/* ── Upload zone ────────────────────────── */
-.upload-zone{
-  border:2px dashed var(--border-hi);border-radius:12px;
-  padding:48px;text-align:center;cursor:pointer;
-  transition:all .2s;margin-bottom:24px;
-  background:var(--bg2);
-}
-.upload-zone:hover,.upload-zone.drag{
-  border-color:var(--accent);
-  background:rgba(91,110,245,.04);
-}
+.upload-zone{border:2px dashed var(--border-hi);border-radius:12px;padding:48px;text-align:center;cursor:pointer;transition:all .2s;margin-bottom:24px;background:var(--bg2);}
+.upload-zone:hover,.upload-zone.drag{border-color:var(--accent);background:rgba(91,110,245,.04);}
 .upload-icon{font-size:40px;margin-bottom:12px}
 .upload-title{font-size:16px;font-weight:600;margin-bottom:6px}
 .upload-sub{color:var(--muted);font-size:13px}
-
-/* ── Form ───────────────────────────────── */
 .form-group{margin-bottom:18px}
 .form-label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:6px}
-.form-input{
-  width:100%;padding:9px 12px;border-radius:8px;
-  background:var(--bg3);border:1px solid var(--border-hi);
-  color:var(--text);font-size:13px;outline:none;transition:border .15s;
-}
+.form-input{width:100%;padding:9px 12px;border-radius:8px;background:var(--bg3);border:1px solid var(--border-hi);color:var(--text);font-size:13px;outline:none;transition:border .15s;}
 .form-input:focus{border-color:var(--accent)}
 textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);font-size:12px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-
-/* ── Preview table ──────────────────────── */
 .preview-table-wrap{overflow-x:auto;max-height:240px;overflow-y:auto}
 .preview-table{font-size:12px;font-family:var(--mono)}
 .preview-table th{font-size:10px}
-
-/* ── Chart container ────────────────────── */
 .chart-container{padding:20px;height:280px}
-
-/* ── Modal ──────────────────────────────── */
-.modal-overlay{
-  position:fixed;inset:0;background:rgba(0,0,0,.7);
-  display:flex;align-items:center;justify-content:center;z-index:100;
-  opacity:0;pointer-events:none;transition:opacity .2s;
-}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;z-index:100;opacity:0;pointer-events:none;transition:opacity .2s;}
 .modal-overlay.open{opacity:1;pointer-events:all}
-.modal{
-  background:var(--bg2);border:1px solid var(--border-hi);
-  border-radius:14px;padding:28px;width:600px;max-width:92vw;
-  max-height:88vh;overflow-y:auto;
-  transform:translateY(16px);transition:transform .2s;
-}
+.modal{background:var(--bg2);border:1px solid var(--border-hi);border-radius:14px;padding:28px;width:600px;max-width:92vw;max-height:88vh;overflow-y:auto;transform:translateY(16px);transition:transform .2s;}
 .modal-overlay.open .modal{transform:translateY(0)}
 .modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
 .modal-title{font-size:16px;font-weight:600}
 .modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;line-height:1}
-
-/* ── Empty state ────────────────────────── */
 .empty{text-align:center;padding:60px 20px;color:var(--muted)}
 .empty-icon{font-size:36px;margin-bottom:12px}
-
-/* ── Toast ──────────────────────────────── */
-#toast{
-  position:fixed;bottom:24px;left:24px;z-index:999;
-  background:var(--bg3);border:1px solid var(--border-hi);
-  border-radius:10px;padding:12px 18px;font-size:13px;
-  transform:translateY(80px);opacity:0;transition:all .25s;
-  max-width:320px;
-}
+#toast{position:fixed;bottom:24px;left:24px;z-index:999;background:var(--bg3);border:1px solid var(--border-hi);border-radius:10px;padding:12px 18px;font-size:13px;transform:translateY(80px);opacity:0;transition:all .25s;max-width:320px;}
 #toast.show{transform:translateY(0);opacity:1}
 #toast.success{border-color:rgba(34,211,160,.4);color:var(--green)}
 #toast.error{border-color:rgba(248,113,113,.4);color:var(--red)}
-
-/* ── Tabs ───────────────────────────────── */
 .tabs{display:flex;gap:4px;margin-bottom:20px;border-bottom:1px solid var(--border);padding-bottom:0}
-.tab{
-  padding:8px 16px;font-size:13px;color:var(--muted);cursor:pointer;
-  border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;
-}
+.tab{padding:8px 16px;font-size:13px;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all .15s;}
 .tab.active{color:var(--accent2);border-bottom-color:var(--accent)}
-
-/* ── Rate meter ─────────────────────────── */
 .rate-row{display:flex;align-items:center;gap:12px;margin-bottom:12px}
 .rate-label{width:80px;font-size:12px;color:var(--muted);flex-shrink:0}
 .rate-bar{flex:1;height:6px;background:var(--bg3);border-radius:4px;overflow:hidden}
 .rate-fill{height:100%;border-radius:4px}
 .rate-pct{width:40px;text-align:left;font-size:12px;font-family:var(--mono)}
-
-/* ── Toolbar buttons ──────────────────────────────────────────── */
-.tbtn{
-  background:var(--bg4);border:1px solid var(--border);border-radius:5px;
-  color:var(--text);font-size:13px;padding:4px 8px;cursor:pointer;
-  transition:all .12s;line-height:1;
-}
+.tbtn{background:var(--bg4);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:13px;padding:4px 8px;cursor:pointer;transition:all .12s;line-height:1;}
 .tbtn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
-#email-editor:empty:before{
-  content:attr(placeholder);color:var(--muted);pointer-events:none;
-}
+#email-editor:empty:before{content:attr(placeholder);color:var(--muted);pointer-events:none;}
 #email-editor img{max-width:100%;border-radius:6px;margin:4px 0}
-.attach-chip{
-  display:inline-flex;align-items:center;gap:6px;
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:20px;padding:3px 10px;font-size:12px;
-}
+.attach-chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:3px 10px;font-size:12px;}
 .attach-chip button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px;line-height:1}
 </style>
 </head>
 <body>
 <div class="app">
-  <!-- SIDEBAR -->
   <nav class="sidebar">
     <div class="sidebar-logo">
-      <div class="logo-mark">
-        <div class="logo-icon">✉</div>
-        MailFlow
-      </div>
+      <div class="logo-mark"><div class="logo-icon">✉</div>MailFlow</div>
     </div>
     <div class="sidebar-nav">
       <div class="nav-section">
         <div class="nav-label">ראשי</div>
-        <button class="nav-item active" onclick="showSection('dashboard',this)">
-          <span class="icon">📊</span> דאשבורד
-        </button>
-        <button class="nav-item" onclick="showSection('campaigns',this)">
-          <span class="icon">📨</span> קמפיינים
-        </button>
-        <button class="nav-item" onclick="showSection('contacts',this)">
-          <span class="icon">👥</span> אנשי קשר
-        </button>
-        <button class="nav-item" onclick="showSection('upload',this)">
-          <span class="icon">📥</span> העלאת קובץ
-        </button>
+        <button class="nav-item active" onclick="showSection('dashboard',this)"><span class="icon">📊</span> דאשבורד</button>
+        <button class="nav-item" onclick="showSection('campaigns',this)"><span class="icon">📨</span> קמפיינים</button>
+        <button class="nav-item" onclick="showSection('contacts',this)"><span class="icon">👥</span> אנשי קשר</button>
+        <button class="nav-item" onclick="showSection('upload',this)"><span class="icon">📥</span> העלאת קובץ</button>
       </div>
       <div class="nav-section">
         <div class="nav-label">ניתוח</div>
-        <button class="nav-item" onclick="showSection('analytics',this)">
-          <span class="icon">📈</span> אנליטיקה
-        </button>
-        <button class="nav-item" onclick="showSection('followup',this)">
-          <span class="icon">🔁</span> Follow-up
-        </button>
+        <button class="nav-item" onclick="showSection('analytics',this)"><span class="icon">📈</span> אנליטיקה</button>
+        <button class="nav-item" onclick="showSection('followup',this)"><span class="icon">🔁</span> Follow-up</button>
       </div>
       <div class="nav-section">
         <div class="nav-label">WhatsApp</div>
-        <button class="nav-item" onclick="showSection('whatsapp',this)">
-          <span class="icon">💬</span> WhatsApp
-        </button>
+        <button class="nav-item" onclick="showSection('whatsapp',this)"><span class="icon">💬</span> WhatsApp</button>
       </div>
       <div class="nav-section">
         <div class="nav-label">הגדרות</div>
-        <button class="nav-item" onclick="showSection('settings',this)">
-          <span class="icon">⚙️</span> הגדרות
-        </button>
+        <button class="nav-item" onclick="showSection('settings',this)"><span class="icon">⚙️</span> הגדרות</button>
       </div>
     </div>
-    <div class="sidebar-footer">
-      MailFlow v1.0.0 · Admin
-    </div>
+    <div class="sidebar-footer">MailFlow v1.0.0 · Admin</div>
   </nav>
 
-  <!-- MAIN -->
   <div class="main">
     <div class="topbar">
       <div class="topbar-title" id="page-title">דאשבורד</div>
       <div class="topbar-right">
-        <button class="btn btn-primary btn-sm" onclick="openModal('campaign-modal')">
-          ✚ קמפיין חדש
-        </button>
+        <button class="btn btn-primary btn-sm" onclick="openModal('campaign-modal')">✚ קמפיין חדש</button>
       </div>
     </div>
 
     <div class="content">
 
-      <!-- ════ DASHBOARD ════ -->
+      <!-- DASHBOARD -->
       <div class="section active" id="sec-dashboard">
         <div class="stat-grid">
-          <div class="stat-card blue">
-            <div class="stat-label">קמפיינים פעילים</div>
-            <div class="stat-value" id="stat-active">—</div>
-            <div class="stat-sub">מתוך <span id="stat-total">—</span> סה"כ</div>
-          </div>
-          <div class="stat-card green">
-            <div class="stat-label">Open Rate ממוצע</div>
-            <div class="stat-value" id="stat-open">—</div>
-            <div class="stat-sub">אחוז פתיחה</div>
-          </div>
-          <div class="stat-card amber">
-            <div class="stat-label">Click Rate ממוצע</div>
-            <div class="stat-value" id="stat-click">—</div>
-            <div class="stat-sub">אחוז קליקים</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">אנשי קשר</div>
-            <div class="stat-value" id="stat-contacts">—</div>
-            <div class="stat-sub">פעילים</div>
-          </div>
+          <div class="stat-card blue"><div class="stat-label">קמפיינים פעילים</div><div class="stat-value" id="stat-active">—</div><div class="stat-sub">מתוך <span id="stat-total">—</span> סה"כ</div></div>
+          <div class="stat-card green"><div class="stat-label">Open Rate ממוצע</div><div class="stat-value" id="stat-open">—</div><div class="stat-sub">אחוז פתיחה</div></div>
+          <div class="stat-card amber"><div class="stat-label">Click Rate ממוצע</div><div class="stat-value" id="stat-click">—</div><div class="stat-sub">אחוז קליקים</div></div>
+          <div class="stat-card"><div class="stat-label">אנשי קשר</div><div class="stat-value" id="stat-contacts">—</div><div class="stat-sub">פעילים</div></div>
         </div>
-        <!-- Daily counter row -->
         <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-bottom:28px;display:flex;align-items:center;gap:20px">
           <div style="flex:1">
             <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:6px">יתרת מיילים יומית (Brevo — 300/יום)</div>
-            <div class="progress-bar" style="height:8px;border-radius:6px">
-              <div class="progress-fill" id="daily-bar" style="width:0%;background:var(--green);transition:width .6s"></div>
-            </div>
+            <div class="progress-bar" style="height:8px;border-radius:6px"><div class="progress-fill" id="daily-bar" style="width:0%;background:var(--green);transition:width .6s"></div></div>
           </div>
-          <div style="text-align:center;min-width:80px">
-            <div style="font-size:22px;font-weight:600" id="daily-remaining">—</div>
-            <div style="font-size:11px;color:var(--muted)">נותרו היום</div>
-          </div>
-          <div style="text-align:center;min-width:80px">
-            <div style="font-size:22px;font-weight:600;color:var(--amber)" id="daily-used">—</div>
-            <div style="font-size:11px;color:var(--muted)">נשלחו היום</div>
-          </div>
+          <div style="text-align:center;min-width:80px"><div style="font-size:22px;font-weight:600" id="daily-remaining">—</div><div style="font-size:11px;color:var(--muted)">נותרו היום</div></div>
+          <div style="text-align:center;min-width:80px"><div style="font-size:22px;font-weight:600;color:var(--amber)" id="daily-used">—</div><div style="font-size:11px;color:var(--muted)">נשלחו היום</div></div>
         </div>
-        <div class="stat-grid" style="display:none">
-        </div>
-
         <div class="card">
-          <div class="card-header">
-            <span class="card-title">קמפיינים אחרונים</span>
-            <button class="btn btn-sm" onclick="showSection('campaigns',null)">הצג הכל</button>
-          </div>
-          <table>
-            <thead><tr>
-              <th>שם קמפיין</th><th>נשלח</th><th>פתיחות</th><th>קליקים</th><th>סטטוס</th>
-            </tr></thead>
-            <tbody id="dashboard-campaigns"><tr><td colspan="5" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
-          </table>
+          <div class="card-header"><span class="card-title">קמפיינים אחרונים</span><button class="btn btn-sm" onclick="showSection('campaigns',null)">הצג הכל</button></div>
+          <table><thead><tr><th>שם קמפיין</th><th>נשלח</th><th>פתיחות</th><th>קליקים</th><th>סטטוס</th></tr></thead>
+          <tbody id="dashboard-campaigns"><tr><td colspan="5" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody></table>
         </div>
-
-        <div class="card">
-          <div class="card-header"><span class="card-title">ביצועי קמפיינים</span></div>
-          <div class="chart-container" id="chart-area">
-            <canvas id="perf-chart" style="width:100%;height:240px"></canvas>
-          </div>
-        </div>
+        <div class="card"><div class="card-header"><span class="card-title">ביצועי קמפיינים</span></div><div class="chart-container"><canvas id="perf-chart" style="width:100%;height:240px"></canvas></div></div>
       </div>
 
-      <!-- ════ CAMPAIGNS ════ -->
+      <!-- CAMPAIGNS -->
       <div class="section" id="sec-campaigns">
         <div class="card">
-          <div class="card-header">
-            <span class="card-title">כל הקמפיינים</span>
-            <button class="btn btn-primary btn-sm" onclick="openModal('campaign-modal')">✚ חדש</button>
-          </div>
-          <table>
-            <thead><tr>
-              <th>שם</th><th>נשלח לכמה</th><th>Open%</th><th>Click%</th><th>Bounce%</th><th>סטטוס</th><th>פעולות</th>
-            </tr></thead>
-            <tbody id="campaigns-table"><tr><td colspan="7" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
-          </table>
+          <div class="card-header"><span class="card-title">כל הקמפיינים</span><button class="btn btn-primary btn-sm" onclick="openModal('campaign-modal')">✚ חדש</button></div>
+          <table><thead><tr><th>שם</th><th>ערוץ</th><th>נשלח לכמה</th><th>Open%</th><th>Click%</th><th>WA נשלח</th><th>סטטוס</th><th>פעולות</th></tr></thead>
+          <tbody id="campaigns-table"><tr><td colspan="8" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody></table>
         </div>
       </div>
 
-      <!-- ════ CONTACTS ════ -->
+      <!-- CONTACTS -->
       <div class="section" id="sec-contacts">
         <div class="stat-grid" style="grid-template-columns:repeat(3,1fr)">
-          <div class="stat-card green">
-            <div class="stat-label">פעילים</div>
-            <div class="stat-value" id="ct-active">—</div>
-          </div>
-          <div class="stat-card amber">
-            <div class="stat-label">Unsubscribed</div>
-            <div class="stat-value" id="ct-unsub">—</div>
-          </div>
-          <div class="stat-card red">
-            <div class="stat-label">Bounced</div>
-            <div class="stat-value" id="ct-bounce">—</div>
-          </div>
+          <div class="stat-card green"><div class="stat-label">פעילים</div><div class="stat-value" id="ct-active">—</div></div>
+          <div class="stat-card amber"><div class="stat-label">Unsubscribed</div><div class="stat-value" id="ct-unsub">—</div></div>
+          <div class="stat-card red"><div class="stat-label">Bounced</div><div class="stat-value" id="ct-bounce">—</div></div>
         </div>
         <div class="card">
           <div class="card-header">
             <span class="card-title">אנשי קשר</span>
             <div style="display:flex;gap:8px;align-items:center">
-              <input class="form-input" id="contact-search" placeholder="חיפוש לפי מייל..." style="width:220px" oninput="searchContacts(this.value)"/>
+              <input class="form-input" id="contact-search" placeholder="חיפוש לפי מייל / שם / טלפון..." style="width:260px" oninput="searchContacts(this.value)"/>
               <button class="btn btn-sm" onclick="loadContacts()">רענן</button>
             </div>
           </div>
           <table>
-            <thead><tr><th>מייל</th><th>שם</th><th>חברה</th><th>סטטוס</th><th>נוצר</th><th></th></tr></thead>
-            <tbody id="contacts-table"><tr><td colspan="5" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
+            <thead><tr>
+              <th>מייל</th>
+              <th>טלפון</th>
+              <th>שם</th>
+              <th>חברה</th>
+              <th>סטטוס</th>
+              <th>נוצר</th>
+              <th></th>
+            </tr></thead>
+            <tbody id="contacts-table"><tr><td colspan="7" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
           </table>
           <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px">
             <button class="btn btn-sm" onclick="prevPage()">‹ הקודם</button>
@@ -446,44 +237,24 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
         </div>
       </div>
 
-      <!-- ════ UPLOAD ════ -->
+      <!-- UPLOAD -->
       <div class="section" id="sec-upload">
-        <div
-          class="upload-zone"
-          id="drop-zone"
-          onclick="document.getElementById('file-input').click()"
-          ondragover="ev(event);this.classList.add('drag')"
-          ondragleave="this.classList.remove('drag')"
-          ondrop="handleDrop(event)"
-        >
+        <div class="upload-zone" id="drop-zone" onclick="document.getElementById('file-input').click()" ondragover="ev(event);this.classList.add('drag')" ondragleave="this.classList.remove('drag')" ondrop="handleDrop(event)">
           <div class="upload-icon">📂</div>
           <div class="upload-title">גרור קובץ לכאן או לחץ לבחירה</div>
-          <div class="upload-sub">CSV או Excel (.xlsx) · עד 25MB</div>
+          <div class="upload-sub">CSV או Excel (.xlsx) · עד 25MB · תומך בעמודות מייל + טלפון</div>
           <input type="file" id="file-input" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleFileSelect(this)"/>
         </div>
-
         <div id="upload-result" style="display:none">
           <div class="stat-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:20px">
-            <div class="stat-card green">
-              <div class="stat-label">שורות תקינות</div>
-              <div class="stat-value" id="up-valid">—</div>
-            </div>
-            <div class="stat-card">
-              <div class="stat-label">סה"כ שורות</div>
-              <div class="stat-value" id="up-total">—</div>
-            </div>
-            <div class="stat-card amber">
-              <div class="stat-label">כפילויות</div>
-              <div class="stat-value" id="up-dupes">—</div>
-            </div>
-            <div class="stat-card red">
-              <div class="stat-label">לא תקינים</div>
-              <div class="stat-value" id="up-invalid">—</div>
-            </div>
+            <div class="stat-card green"><div class="stat-label">שורות תקינות</div><div class="stat-value" id="up-valid">—</div></div>
+            <div class="stat-card"><div class="stat-label">סה"כ שורות</div><div class="stat-value" id="up-total">—</div></div>
+            <div class="stat-card amber"><div class="stat-label">כפילויות</div><div class="stat-value" id="up-dupes">—</div></div>
+            <div class="stat-card red"><div class="stat-label">לא תקינים</div><div class="stat-value" id="up-invalid">—</div></div>
           </div>
           <div class="card" id="preview-card">
             <div class="card-header">
-              <span class="card-title">תצוגה מקדימה (20 שורות ראשונות)</span>
+              <span class="card-title">תצוגה מקדימה</span>
               <span id="detected-cols" style="font-size:12px;color:var(--muted)"></span>
             </div>
             <div class="preview-table-wrap">
@@ -496,34 +267,21 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
         </div>
       </div>
 
-      <!-- ════ ANALYTICS ════ -->
+      <!-- ANALYTICS -->
       <div class="section" id="sec-analytics">
         <div class="card" style="margin-bottom:24px">
           <div class="card-header"><span class="card-title">ביצועים לפי קמפיין</span></div>
-          <table>
-            <thead><tr>
-              <th>שם</th><th>נשלח</th><th>פתיחות</th><th>קליקים</th><th>Bounces</th><th>Open Rate</th><th>Click Rate</th>
-            </tr></thead>
-            <tbody id="analytics-table"></tbody>
-          </table>
+          <table><thead><tr><th>שם</th><th>נשלח</th><th>פתיחות</th><th>קליקים</th><th>Bounces</th><th>Open Rate</th><th>Click Rate</th></tr></thead>
+          <tbody id="analytics-table"></tbody></table>
         </div>
-        <div class="card">
-          <div class="card-header"><span class="card-title">השוואת מדדים</span></div>
-          <div style="padding:20px" id="analytics-rates"></div>
-        </div>
+        <div class="card"><div class="card-header"><span class="card-title">השוואת מדדים</span></div><div style="padding:20px" id="analytics-rates"></div></div>
       </div>
 
-      <!-- ════ FOLLOW-UP ════ -->
+      <!-- FOLLOW-UP -->
       <div class="section" id="sec-followup">
         <div class="card">
-          <div class="card-header">
-            <span class="card-title">חוקי Follow-up</span>
-            <button class="btn btn-sm btn-primary" onclick="runFollowup()">▶ הרץ עכשיו</button>
-          </div>
+          <div class="card-header"><span class="card-title">חוקי Follow-up</span><button class="btn btn-sm btn-primary" onclick="runFollowup()">▶ הרץ עכשיו</button></div>
           <div style="padding:20px">
-            <p style="color:var(--muted);margin-bottom:20px;font-size:13px">
-              Follow-up Rules מוגדרים לפי קמפיין. בחר קמפיין כדי לנהל את הכללים שלו.
-            </p>
             <div class="form-group">
               <label class="form-label">בחר קמפיין</label>
               <select class="form-input" id="followup-campaign-select" onchange="loadFollowupRules(this.value)" style="max-width:300px">
@@ -532,52 +290,35 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
             </div>
             <div id="followup-rules-list"></div>
             <div id="followup-form" style="display:none;margin-top:20px;padding-top:20px;border-top:1px solid var(--border)">
-              <div class="form-group">
-                <label class="form-label">טריגר</label>
+              <div class="form-group"><label class="form-label">טריגר</label>
                 <select class="form-input" id="fu-trigger" style="max-width:300px">
                   <option value="not_opened">לא נפתח</option>
                   <option value="opened_not_clicked">נפתח אבל לא לחץ</option>
                 </select>
               </div>
-              <div class="form-group">
-                <label class="form-label">המתן (שעות)</label>
-                <input type="number" class="form-input" id="fu-hours" value="48" style="max-width:120px"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Subject לfollowup</label>
-                <input type="text" class="form-input" id="fu-subject" placeholder="פניה נוספת: {{name}}"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">תוכן HTML</label>
-                <textarea class="form-input" id="fu-html" placeholder="<p>שלום {{name}}, רצינו לחזור אליך...</p>"></textarea>
-              </div>
+              <div class="form-group"><label class="form-label">המתן (שעות)</label><input type="number" class="form-input" id="fu-hours" value="48" style="max-width:120px"/></div>
+              <div class="form-group"><label class="form-label">Subject</label><input type="text" class="form-input" id="fu-subject" placeholder="פניה נוספת: {{name}}"/></div>
+              <div class="form-group"><label class="form-label">תוכן HTML</label><textarea class="form-input" id="fu-html" placeholder="<p>שלום {{name}}...</p>"></textarea></div>
               <button class="btn btn-primary" onclick="saveFollowupRule()">שמור כלל</button>
             </div>
-            <button class="btn btn-sm" style="margin-top:12px" id="show-fu-form" onclick="toggleFuForm()" style="display:none">✚ הוסף כלל</button>
+            <button class="btn btn-sm" style="margin-top:12px" id="show-fu-form" onclick="toggleFuForm()">✚ הוסף כלל</button>
           </div>
         </div>
       </div>
 
-
-      <!-- ════ WHATSAPP ════ -->
+      <!-- WHATSAPP -->
       <div class="section" id="sec-whatsapp">
         <div class="card" style="margin-bottom:24px">
-          <div class="card-header">
-            <span class="card-title">💬 חיבורי WhatsApp — Green API</span>
-            <button class="btn btn-primary btn-sm" onclick="openModal('wa-modal')">✚ חבר מספר חדש</button>
-          </div>
+          <div class="card-header"><span class="card-title">💬 חיבורי WhatsApp — Green API</span><button class="btn btn-primary btn-sm" onclick="openModal('wa-modal')">✚ חבר מספר חדש</button></div>
           <div style="padding:20px">
             <div style="background:rgba(34,211,160,.06);border:1px solid rgba(34,211,160,.18);border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;color:var(--text2)">
               <strong style="color:var(--green)">כיצד מחברים Green API?</strong><br>
               1. היכנס ל-console.green-api.com וצור Instance חדש<br>
               2. העתק את <strong>idInstance</strong> ואת <strong>apiTokenInstance</strong><br>
-              3. לחץ "חבר מספר חדש", הדבק את הפרטים וסרוק QR בוואטסאפ<br>
-              4. לאחר החיבור — בנה קמפיין עם ערוץ WhatsApp
+              3. לחץ "חבר מספר חדש", הדבק את הפרטים וסרוק QR בוואטסאפ
             </div>
-            <table>
-              <thead><tr><th>כינוי</th><th>מספר</th><th>Instance ID</th><th>סטטוס</th><th>נוצר</th><th>פעולות</th></tr></thead>
-              <tbody id="wa-instances-table"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">טוען...</td></tr></tbody>
-            </table>
+            <table><thead><tr><th>כינוי</th><th>מספר</th><th>Instance ID</th><th>סטטוס</th><th>נוצר</th><th>פעולות</th></tr></thead>
+            <tbody id="wa-instances-table"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">טוען...</td></tr></tbody></table>
           </div>
         </div>
         <div class="card">
@@ -589,12 +330,11 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
         </div>
       </div>
 
-      <!-- ════ SETTINGS ════ -->
+      <!-- SETTINGS -->
       <div class="section" id="sec-settings">
         <div class="card">
           <div class="card-header"><span class="card-title">הגדרות שליחה</span></div>
           <div style="padding:24px;max-width:520px">
-            <!-- Provider selector -->
             <div class="form-group" style="margin-bottom:16px">
               <label class="form-label">ספק שליחה פעיל</label>
               <select class="form-input" id="active-provider" onchange="switchProvider(this.value)" style="max-width:200px">
@@ -603,37 +343,21 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
                 <option value="smtp">SMTP (Dev/Gmail)</option>
               </select>
             </div>
-
             <div class="tabs">
               <div class="tab active" onclick="settingsTab('sendgrid',this)">SendGrid</div>
               <div class="tab" onclick="settingsTab('brevo',this)">Brevo</div>
               <div class="tab" onclick="settingsTab('smtp',this)">SMTP</div>
               <div class="tab" onclick="settingsTab('ses',this)">Amazon SES</div>
             </div>
-
             <div id="settings-sendgrid">
               <div class="form-group"><label class="form-label">API Key</label><input class="form-input" type="password" placeholder="SG.xxxxxxxx..."/></div>
               <div class="form-group"><label class="form-label">From Email</label><input class="form-input" type="email"/></div>
-              <div style="background:rgba(91,110,245,.08);border:1px solid rgba(91,110,245,.2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-top:8px">
-                מקבלים 100 מיילים/יום בחינם · <a href="https://sendgrid.com" target="_blank" style="color:var(--accent2)">sendgrid.com</a>
-              </div>
             </div>
-
             <div id="settings-brevo" style="display:none">
-              <div class="form-group">
-                <label class="form-label">SMTP User (המייל שלך ב-Brevo)</label>
-                <input class="form-input" type="email" placeholder="your@email.com"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">SMTP Key (לא הסיסמה — מפתח SMTP)</label>
-                <input class="form-input" type="password" placeholder="xsmtp-..."/>
-              </div>
-              <div style="background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-top:8px">
-                300 מיילים/יום בחינם · Host: smtp-relay.brevo.com · Port: 587<br>
-                <a href="https://app.brevo.com" target="_blank" style="color:var(--green)">app.brevo.com</a> → SMTP & API → Generate SMTP Key
-              </div>
+              <div class="form-group"><label class="form-label">SMTP User</label><input class="form-input" type="email" placeholder="your@email.com"/></div>
+              <div class="form-group"><label class="form-label">SMTP Key</label><input class="form-input" type="password" placeholder="xsmtp-..."/></div>
+              <div style="background:rgba(34,211,160,.08);border:1px solid rgba(34,211,160,.2);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-top:8px">300 מיילים/יום בחינם · Host: smtp-relay.brevo.com · Port: 587</div>
             </div>
-
             <div id="settings-smtp" style="display:none">
               <div class="form-row">
                 <div class="form-group"><label class="form-label">Host</label><input class="form-input" placeholder="smtp.gmail.com"/></div>
@@ -644,195 +368,115 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
                 <div class="form-group"><label class="form-label">Password</label><input class="form-input" type="password"/></div>
               </div>
             </div>
-
             <div id="settings-ses" style="display:none">
               <div class="form-row">
                 <div class="form-group"><label class="form-label">Access Key</label><input class="form-input"/></div>
                 <div class="form-group"><label class="form-label">Secret Key</label><input class="form-input" type="password"/></div>
               </div>
-              <div class="form-row">
-                <div class="form-group"><label class="form-label">Region</label>
-                  <select class="form-input"><option>us-east-1</option><option>eu-west-1</option><option>ap-southeast-1</option></select>
-                </div>
-                <div class="form-group"><label class="form-label">From Email</label><input class="form-input" type="email"/></div>
-              </div>
-            </div>
-            <div class="form-group" style="margin-top:8px">
-              <label class="form-label">Rate Limit (מיילים לדקה)</label>
-              <input type="range" min="10" max="300" value="60" id="rate-slider" oninput="document.getElementById('rate-val').textContent=this.value" style="width:100%"/>
-              <div style="font-size:12px;color:var(--muted);margin-top:4px"><span id="rate-val">60</span> מיילים/דקה</div>
             </div>
             <button class="btn btn-primary" onclick="toast('ההגדרות נשמרו','success')">שמור הגדרות</button>
           </div>
         </div>
       </div>
 
-    </div><!-- /content -->
-  </div><!-- /main -->
-</div><!-- /app -->
+    </div>
+  </div>
+</div>
 
-<!-- ═══ CAMPAIGN MODAL ═══ -->
+<!-- CAMPAIGN MODAL -->
 <div class="modal-overlay" id="campaign-modal" style="align-items:flex-start;padding:20px;overflow-y:auto">
   <div class="modal" style="width:780px;max-width:96vw">
-    <div class="modal-header">
-      <span class="modal-title">✚ קמפיין חדש</span>
-      <button class="modal-close" onclick="closeModal('campaign-modal')">✕</button>
-    </div>
+    <div class="modal-header"><span class="modal-title">✚ קמפיין חדש</span><button class="modal-close" onclick="closeModal('campaign-modal')">✕</button></div>
 
-    <!-- Row 1: Name + Rate -->
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">שם הקמפיין</label>
-        <input class="form-input" id="c-name" placeholder="קמפיין ינואר 2025"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Rate Limit (מיילים/דקה)</label>
-        <input type="number" class="form-input" id="c-rate" value="60"/>
-      </div>
-    </div>
-
-    <!-- Row 2: From -->
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">From Name</label>
-        <input class="form-input" id="c-from-name" placeholder="החברה שלי"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">From Email</label>
-        <input class="form-input" id="c-from-email" type="email" placeholder="hello@company.com"/>
-      </div>
-    </div>
-
-    <!-- Subject -->
+    <!-- ערוץ שליחה -->
     <div class="form-group">
-      <label class="form-label">Subject</label>
-      <input class="form-input" id="c-subject" placeholder="שלום {{name}}, יש לנו משהו בשבילך"/>
+      <label class="form-label">ערוץ שליחה</label>
+      <div style="display:flex;gap:10px">
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:8px;border:1px solid var(--border-hi);background:var(--bg3)">
+          <input type="radio" name="c-channel" value="email" checked onchange="updateChannelUI(this.value)"/> 📧 מייל בלבד
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:8px;border:1px solid var(--border-hi);background:var(--bg3)">
+          <input type="radio" name="c-channel" value="whatsapp" onchange="updateChannelUI(this.value)"/> 💬 וואטסאפ בלבד
+        </label>
+        <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border-radius:8px;border:1px solid var(--border-hi);background:var(--bg3)">
+          <input type="radio" name="c-channel" value="both" onchange="updateChannelUI(this.value)"/> 📧💬 מייל + וואטסאפ
+        </label>
+      </div>
     </div>
 
-    <!-- Visual Email Editor -->
-    <div class="form-group">
-      <label class="form-label" style="margin-bottom:8px">עורך המייל</label>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">שם הקמפיין</label><input class="form-input" id="c-name" placeholder="קמפיין ינואר 2025"/></div>
+      <div class="form-group"><label class="form-label">Rate Limit (מיילים/דקה)</label><input type="number" class="form-input" id="c-rate" value="60"/></div>
+    </div>
 
-      <!-- Toolbar -->
-      <div id="editor-toolbar" style="
-        background:var(--bg3);border:1px solid var(--border-hi);
-        border-bottom:none;border-radius:8px 8px 0 0;
-        padding:8px 10px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;
-      ">
-        <!-- Font family -->
-        <select onchange="execCmd('fontName',this.value)" style="
-          background:var(--bg4);border:1px solid var(--border);border-radius:5px;
-          color:var(--text);font-size:12px;padding:4px 6px;cursor:pointer;
-        ">
-          <option value="Arial">Arial</option>
-          <option value="Georgia">Georgia</option>
-          <option value="Helvetica">Helvetica</option>
-          <option value="Tahoma">Tahoma</option>
-          <option value="Times New Roman">Times New Roman</option>
-          <option value="Verdana">Verdana</option>
-          <option value="Courier New">Courier New</option>
-        </select>
-
-        <!-- Font size -->
-        <select onchange="execCmd('fontSize',this.value)" style="
-          background:var(--bg4);border:1px solid var(--border);border-radius:5px;
-          color:var(--text);font-size:12px;padding:4px 6px;cursor:pointer;width:56px;
-        ">
-          <option value="1">10</option>
-          <option value="2">12</option>
-          <option value="3" selected>14</option>
-          <option value="4">18</option>
-          <option value="5">24</option>
-          <option value="6">32</option>
-          <option value="7">48</option>
-        </select>
-
-        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
-
-        <!-- Format buttons -->
-        <button class="tbtn" title="Bold" onclick="execCmd('bold')"><b>B</b></button>
-        <button class="tbtn" title="Italic" onclick="execCmd('italic')"><i>I</i></button>
-        <button class="tbtn" title="Underline" onclick="execCmd('underline')"><u>U</u></button>
-        <button class="tbtn" title="Strikethrough" onclick="execCmd('strikeThrough')"><s>S</s></button>
-
-        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
-
-        <!-- Color -->
-        <label title="צבע טקסט" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
-          A <input type="color" id="txt-color" value="#000000" onchange="applyTextColor(this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
-        </label>
-        <label title="צבע רקע טקסט" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">
-          BG <input type="color" id="bg-color" value="#ffff00" onchange="applyBgColor(this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/>
-        </label>
-
-        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
-
-        <!-- Align -->
-        <button class="tbtn" title="יישור שמאל" onclick="execCmd('justifyRight')">≡→</button>
-        <button class="tbtn" title="מרכז" onclick="execCmd('justifyCenter')">≡</button>
-        <button class="tbtn" title="יישור ימין" onclick="execCmd('justifyLeft')">←≡</button>
-
-        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
-
-        <!-- Lists -->
-        <button class="tbtn" title="רשימת תבליטים" onclick="execCmd('insertUnorderedList')">• ≡</button>
-        <button class="tbtn" title="רשימה ממוספרת" onclick="execCmd('insertOrderedList')">1. ≡</button>
-
-        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
-
-        <!-- Emoji picker -->
-        <div style="position:relative;display:inline-block">
-          <button class="tbtn" title="אימוג׳י" onclick="toggleEmojiPicker()" id="emoji-btn">😊</button>
-          <div id="emoji-picker" style="
-            display:none;position:absolute;top:32px;right:0;z-index:200;
-            background:var(--bg2);border:1px solid var(--border-hi);
-            border-radius:10px;padding:10px;width:280px;
-            box-shadow:0 8px 32px rgba(0,0,0,.5);
-          ">
-            <div style="font-size:11px;color:var(--muted);margin-bottom:6px">בחר אימוג׳י</div>
-            <div id="emoji-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:160px;overflow-y:auto;font-size:20px"></div>
+    <!-- שדות מייל -->
+    <div id="email-fields">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label">From Name</label><input class="form-input" id="c-from-name" placeholder="החברה שלי"/></div>
+        <div class="form-group"><label class="form-label">From Email</label><input class="form-input" id="c-from-email" type="email" placeholder="hello@company.com"/></div>
+      </div>
+      <div class="form-group"><label class="form-label">Subject</label><input class="form-input" id="c-subject" placeholder="שלום {{name}}, יש לנו משהו בשבילך"/></div>
+      <div class="form-group">
+        <label class="form-label" style="margin-bottom:8px">עורך המייל</label>
+        <div id="editor-toolbar" style="background:var(--bg3);border:1px solid var(--border-hi);border-bottom:none;border-radius:8px 8px 0 0;padding:8px 10px;display:flex;flex-wrap:wrap;gap:4px;align-items:center;">
+          <select onchange="execCmd('fontName',this.value)" style="background:var(--bg4);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:12px;padding:4px 6px;cursor:pointer;">
+            <option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Helvetica">Helvetica</option><option value="Tahoma">Tahoma</option><option value="Verdana">Verdana</option>
+          </select>
+          <select onchange="execCmd('fontSize',this.value)" style="background:var(--bg4);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:12px;padding:4px 6px;cursor:pointer;width:56px;">
+            <option value="1">10</option><option value="2">12</option><option value="3" selected>14</option><option value="4">18</option><option value="5">24</option><option value="6">32</option>
+          </select>
+          <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+          <button class="tbtn" onclick="execCmd('bold')"><b>B</b></button>
+          <button class="tbtn" onclick="execCmd('italic')"><i>I</i></button>
+          <button class="tbtn" onclick="execCmd('underline')"><u>U</u></button>
+          <button class="tbtn" onclick="execCmd('strikeThrough')"><s>S</s></button>
+          <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+          <label title="צבע טקסט" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">A <input type="color" id="txt-color" value="#000000" onchange="applyTextColor(this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/></label>
+          <label title="צבע רקע" style="display:flex;align-items:center;gap:3px;cursor:pointer;font-size:11px;color:var(--muted)">BG <input type="color" id="bg-color" value="#ffff00" onchange="applyBgColor(this.value)" style="width:22px;height:22px;border:none;background:none;cursor:pointer;padding:0"/></label>
+          <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+          <button class="tbtn" onclick="execCmd('justifyRight')">≡→</button>
+          <button class="tbtn" onclick="execCmd('justifyCenter')">≡</button>
+          <button class="tbtn" onclick="execCmd('justifyLeft')">←≡</button>
+          <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+          <button class="tbtn" onclick="execCmd('insertUnorderedList')">• ≡</button>
+          <button class="tbtn" onclick="execCmd('insertOrderedList')">1. ≡</button>
+          <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+          <div style="position:relative;display:inline-block">
+            <button class="tbtn" onclick="toggleEmojiPicker()" id="emoji-btn">😊</button>
+            <div id="emoji-picker" style="display:none;position:absolute;top:32px;right:0;z-index:200;background:var(--bg2);border:1px solid var(--border-hi);border-radius:10px;padding:10px;width:280px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
+              <div style="font-size:11px;color:var(--muted);margin-bottom:6px">בחר אימוג׳י</div>
+              <div id="emoji-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:160px;overflow-y:auto;font-size:20px"></div>
+            </div>
           </div>
+          <button class="tbtn" onclick="document.getElementById('img-upload').click()">🖼</button>
+          <input type="file" id="img-upload" accept="image/*,.gif" style="display:none" onchange="insertImage(this)"/>
+          <button class="tbtn" onclick="insertLinkButton()" style="font-size:10px;padding:4px 7px">🔗 כפתור</button>
+          <button class="tbtn" onclick="document.getElementById('attach-files').click()" style="font-size:10px;padding:4px 7px">📎 קובץ</button>
+          <input type="file" id="attach-files" multiple accept=".pdf,.html,.doc,.docx,.xls,.xlsx,.zip" style="display:none" onchange="addAttachments(this)"/>
+          <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
+          <button class="tbtn" onclick="insertVar('{{name}}')" style="font-size:10px;padding:3px 6px">{{name}}</button>
+          <button class="tbtn" onclick="insertVar('{{company}}')" style="font-size:10px;padding:3px 6px">{{company}}</button>
         </div>
-
-        <!-- Insert image -->
-        <button class="tbtn" title="הכנס תמונה/GIF" onclick="document.getElementById('img-upload').click()">🖼</button>
-        <input type="file" id="img-upload" accept="image/*,.gif" style="display:none" onchange="insertImage(this)"/>
-
-        <!-- Insert link button -->
-        <button class="tbtn" title="כפתור קישור" onclick="insertLinkButton()" style="font-size:10px;padding:4px 7px">🔗 כפתור</button>
-
-        <!-- Attach files -->
-        <button class="tbtn" title="צרף קבצים" onclick="document.getElementById('attach-files').click()" style="font-size:10px;padding:4px 7px">📎 קובץ</button>
-        <input type="file" id="attach-files" multiple accept=".pdf,.html,.doc,.docx,.xls,.xlsx,.zip" style="display:none" onchange="addAttachments(this)"/>
-
-        <!-- Variables -->
-        <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
-        <button class="tbtn" onclick="insertVar('{{name}}')" style="font-size:10px;padding:3px 6px">{{name}}</button>
-        <button class="tbtn" onclick="insertVar('{{company}}')" style="font-size:10px;padding:3px 6px">{{company}}</button>
+        <div id="email-editor" contenteditable="true" dir="rtl" style="min-height:260px;padding:16px;background:var(--bg3);border:1px solid var(--border-hi);border-radius:0 0 8px 8px;color:var(--text);font-size:14px;line-height:1.7;outline:none;overflow-y:auto;" placeholder="כתוב את תוכן המייל כאן..."></div>
+        <div id="attachments-list" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
       </div>
-
-      <!-- Editor area -->
-      <div
-        id="email-editor"
-        contenteditable="true"
-        dir="rtl"
-        style="
-          min-height:260px;padding:16px;
-          background:var(--bg3);border:1px solid var(--border-hi);
-          border-radius:0 0 8px 8px;color:var(--text);
-          font-size:14px;line-height:1.7;outline:none;
-          overflow-y:auto;
-        "
-        placeholder="כתוב את תוכן המייל כאן... אפשר להשתמש ב-{{name}} ו-{{company}}"
-      ></div>
-
-      <!-- Attachments list -->
-      <div id="attachments-list" style="margin-top:8px;display:flex;flex-wrap:wrap;gap:6px"></div>
     </div>
 
-    <!-- Hidden fields for API -->
-    <input type="hidden" id="c-html"/>
-    <input type="hidden" id="c-text"/>
+    <!-- שדות WhatsApp -->
+    <div id="wa-fields" style="display:none">
+      <div class="form-group">
+        <label class="form-label">מספר WhatsApp לשליחה</label>
+        <select class="form-input" id="c-wa-instance" style="max-width:300px">
+          <option value="">— בחר מספר מחובר —</option>
+        </select>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">אם אין מספרים — חבר קודם בלשונית WhatsApp</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">תוכן הודעת WhatsApp</label>
+        <textarea class="form-input" id="c-wa-template" rows="4" placeholder="שלום {{name}}, יש לנו הצעה מיוחדת עבורך! 🎉&#10;&#10;לפרטים נוספים צור קשר."></textarea>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px">ניתן להשתמש ב-{{name}}, {{company}}, {{email}}</div>
+      </div>
+    </div>
 
     <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
       <button class="btn" onclick="closeModal('campaign-modal')">ביטול</button>
@@ -841,38 +485,23 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
   </div>
 </div>
 
-<!-- ═══ LAUNCH MODAL ═══ -->
+<!-- LAUNCH MODAL -->
 <div class="modal-overlay" id="launch-modal" style="align-items:flex-start;padding:20px;overflow-y:auto">
   <div class="modal" style="width:680px;max-width:96vw">
-    <div class="modal-header">
-      <span class="modal-title" id="launch-title">שליחת קמפיין</span>
-      <button class="modal-close" onclick="closeModal('launch-modal')">✕</button>
-    </div>
-
-    <!-- Stats bar -->
+    <div class="modal-header"><span class="modal-title" id="launch-title">שליחת קמפיין</span><button class="modal-close" onclick="closeModal('launch-modal')">✕</button></div>
     <div style="background:var(--bg3);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;gap:24px;font-size:13px">
       <div><span style="color:var(--muted)">נבחרו: </span><span id="launch-selected-count" style="font-weight:600;color:var(--accent2)">0</span></div>
       <div><span style="color:var(--muted)">סה"כ פעילים: </span><span id="launch-contact-count" style="font-weight:600">—</span></div>
       <div><span style="color:var(--muted)">זמן משוער: </span><span id="launch-eta" style="font-family:var(--mono)">—</span></div>
     </div>
-
-    <!-- Search + Select All -->
     <div style="display:flex;gap:8px;margin-bottom:12px;align-items:center">
-      <input class="form-input" id="launch-search" placeholder="חיפוש לפי מייל או שם..." style="flex:1"
-        oninput="filterLaunchContacts(this.value)"/>
+      <input class="form-input" id="launch-search" placeholder="חיפוש לפי מייל, שם או טלפון..." style="flex:1" oninput="filterLaunchContacts(this.value)"/>
       <button class="btn btn-sm" onclick="selectAllLaunch(true)">✓ בחר הכל</button>
       <button class="btn btn-sm" onclick="selectAllLaunch(false)">✕ בטל הכל</button>
     </div>
-
-    <!-- Contact list -->
-    <div id="launch-contact-list" style="
-      max-height:320px;overflow-y:auto;
-      border:1px solid var(--border);border-radius:8px;
-      background:var(--bg3);margin-bottom:16px;
-    ">
+    <div id="launch-contact-list" style="max-height:320px;overflow-y:auto;border:1px solid var(--border);border-radius:8px;background:var(--bg3);margin-bottom:16px;">
       <div style="text-align:center;padding:20px;color:var(--muted)">טוען...</div>
     </div>
-
     <div style="display:flex;gap:10px;justify-content:flex-end">
       <button class="btn" onclick="closeModal('launch-modal')">ביטול</button>
       <button class="btn btn-primary" onclick="launchCampaign()" id="launch-btn">🚀 שלח לנבחרים</button>
@@ -880,1261 +509,16 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
   </div>
 </div>
 
-<div id="toast"></div>
-
-<script>
-// ── Config ────────────────────────────────────────────────────────────────────
-const API = 'https://mailflow-api-378f.onrender.com';
-let TOKEN = localStorage.getItem('mf_token') || '';
-let currentPage = 1;
-let contactSearch = '';
-let launchCampaignId = null;
-let analyticsData = [];
-
-// ── API helper ────────────────────────────────────────────────────────────────
-async function api(method, path, body, isForm) {
-  const headers = { 'Authorization': `Bearer ${TOKEN}` };
-  if (!isForm) headers['Content-Type'] = 'application/json';
-  const opts = { method, headers };
-  if (body) opts.body = isForm ? body : JSON.stringify(body);
-  try {
-    const r = await fetch(API + path, opts);
-    if (r.status === 401) { TOKEN = ''; return null; }
-    return r.ok ? r.json() : null;
-  } catch { return null; }
-}
-
-// ── Toast ─────────────────────────────────────────────────────────────────────
-function toast(msg, type = '') {
-  const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.className = 'show ' + type;
-  clearTimeout(el._t);
-  el._t = setTimeout(() => el.className = '', 3000);
-}
-
-// ── Nav ───────────────────────────────────────────────────────────────────────
-const titles = {
-  dashboard:'דאשבורד', campaigns:'קמפיינים', contacts:'אנשי קשר',
-  upload:'העלאת קובץ', analytics:'אנליטיקה', followup:'Follow-up', settings:'הגדרות'
-};
-function showSection(name, btn) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  document.getElementById('sec-' + name).classList.add('active');
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-  if (btn) btn.classList.add('active');
-  document.getElementById('page-title').textContent = titles[name];
-  if (name === 'dashboard') loadDashboard();
-  if (name === 'campaigns') loadCampaigns();
-  if (name === 'contacts') loadContacts();
-  if (name === 'analytics') loadAnalytics();
-  if (name === 'followup') loadFollowupCampaigns();
-}
-
-// ── Modal ─────────────────────────────────────────────────────────────────────
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-// ── Badge helpers ─────────────────────────────────────────────────────────────
-function statusBadge(s) {
-  const map = {
-    sent:'green',sending:'blue',draft:'gray',scheduled:'amber',
-    failed:'red',paused:'amber',cancelled:'red',active:'green',
-    unsubscribed:'amber',bounced:'red',complained:'red'
-  };
-  return `<span class="badge badge-${map[s]||'gray'}">${s}</span>`;
-}
-
-// ── Date format ───────────────────────────────────────────────────────────────
-function fmt(d) {
-  if (!d) return '—';
-  return new Date(d).toLocaleDateString('he-IL', {day:'numeric',month:'short',year:'numeric'});
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// DASHBOARD
-// ─────────────────────────────────────────────────────────────────────────────
-async function loadDashboard() {
-  const [stats, contacts] = await Promise.all([
-    api('GET', '/analytics/campaigns'),
-    api('GET', '/contacts?page=1&page_size=1&status=active'),
-  ]);
-
-  if (stats) {
-    analyticsData = stats;
-    const active = stats.filter(c => c.status === 'sending').length;
-    const avgOpen = stats.length ? (stats.reduce((a,c)=>a+c.open_rate,0)/stats.length).toFixed(1) : 0;
-    const avgClick = stats.length ? (stats.reduce((a,c)=>a+c.click_rate,0)/stats.length).toFixed(1) : 0;
-    document.getElementById('stat-active').textContent = active;
-    document.getElementById('stat-total').textContent = stats.length;
-    document.getElementById('stat-open').textContent = avgOpen + '%';
-    document.getElementById('stat-click').textContent = avgClick + '%';
-
-    const tbody = document.getElementById('dashboard-campaigns');
-    tbody.innerHTML = stats.slice(0,6).map(c => `
-      <tr>
-        <td style="font-weight:500">${c.name}</td>
-        <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div></div>
-            <span style="font-size:12px">${c.open_rate}%</span>
-          </div>
-        </td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div></div>
-            <span style="font-size:12px">${c.click_rate}%</span>
-          </div>
-        </td>
-        <td>${statusBadge(c.status)}</td>
-      </tr>
-    `).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">אין קמפיינים</td></tr>';
-
-    drawChart(stats.slice(0,8));
-  }
-
-  if (contacts) {
-    document.getElementById('stat-contacts').textContent = contacts.total?.toLocaleString() || '0';
-  }
-
-  // Daily email counter — count today's sends
-  if (stats) {
-    const today = new Date().toISOString().slice(0, 10);
-    const todaySent = stats.reduce((sum, c) => {
-      // Use sent_at date if available, else estimate
-      return sum + (c.sent || 0);
-    }, 0);
-    // Get today's count from API
-    const todayRes = await api('GET', '/analytics/today');
-    const sentToday = todayRes?.sent_today || 0;
-    const limit = 300;
-    const remaining = Math.max(0, limit - sentToday);
-    const pct = Math.min(100, (sentToday / limit) * 100);
-    document.getElementById('daily-used').textContent = sentToday;
-    document.getElementById('daily-remaining').textContent = remaining;
-    document.getElementById('daily-bar').style.width = pct + '%';
-    document.getElementById('daily-bar').style.background =
-      pct > 80 ? 'var(--red)' : pct > 60 ? 'var(--amber)' : 'var(--green)';
-  }
-}
-
-function drawChart(data) {
-  const canvas = document.getElementById('perf-chart');
-  if (!canvas || !data.length) return;
-  const ctx = canvas.getContext('2d');
-  canvas.width = canvas.offsetWidth * devicePixelRatio;
-  canvas.height = 240 * devicePixelRatio;
-  ctx.scale(devicePixelRatio, devicePixelRatio);
-  const W = canvas.offsetWidth, H = 240;
-  ctx.clearRect(0,0,W,H);
-
-  const pad = {l:40,r:20,t:20,b:40};
-  const cw = W - pad.l - pad.r;
-  const ch = H - pad.t - pad.b;
-  const n = data.length;
-  const barW = Math.min(40, cw / n - 8);
-
-  ctx.fillStyle = 'rgba(255,255,255,0.03)';
-  ctx.fillRect(pad.l, pad.t, cw, ch);
-
-  // Grid lines
-  [0,25,50,75,100].forEach(v => {
-    const y = pad.t + ch - (v/100)*ch;
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
-    ctx.lineWidth = 1;
-    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l+cw, y); ctx.stroke();
-    ctx.fillStyle = 'rgba(148,163,184,0.6)';
-    ctx.font = '10px "JetBrains Mono"';
-    ctx.textAlign = 'right';
-    ctx.fillText(v+'%', pad.l-6, y+4);
-  });
-
-  data.forEach((c, i) => {
-    const x = pad.l + (i / n) * cw + (cw/n - barW*2 - 4)/2;
-    const openH = (c.open_rate/100)*ch;
-    const clickH = (c.click_rate/100)*ch;
-
-    // Open bar
-    const grad1 = ctx.createLinearGradient(0, pad.t+ch-openH, 0, pad.t+ch);
-    grad1.addColorStop(0, 'rgba(34,211,160,0.9)');
-    grad1.addColorStop(1, 'rgba(34,211,160,0.2)');
-    ctx.fillStyle = grad1;
-    ctx.beginPath();
-    ctx.roundRect(x, pad.t+ch-openH, barW, openH, [3,3,0,0]);
-    ctx.fill();
-
-    // Click bar
-    const grad2 = ctx.createLinearGradient(0, pad.t+ch-clickH, 0, pad.t+ch);
-    grad2.addColorStop(0, 'rgba(91,110,245,0.9)');
-    grad2.addColorStop(1, 'rgba(91,110,245,0.2)');
-    ctx.fillStyle = grad2;
-    ctx.beginPath();
-    ctx.roundRect(x+barW+4, pad.t+ch-clickH, barW, clickH, [3,3,0,0]);
-    ctx.fill();
-
-    // Label
-    const name = c.name.length > 10 ? c.name.slice(0,8)+'…' : c.name;
-    ctx.fillStyle = 'rgba(148,163,184,0.7)';
-    ctx.font = '10px "IBM Plex Sans Hebrew"';
-    ctx.textAlign = 'center';
-    ctx.fillText(name, x + barW, pad.t+ch+16);
-  });
-
-  // Legend
-  ctx.fillStyle = 'rgba(34,211,160,0.9)';
-  ctx.fillRect(W-120, 8, 10, 10);
-  ctx.fillStyle = 'rgba(148,163,184,0.8)';
-  ctx.font = '11px "IBM Plex Sans Hebrew"';
-  ctx.textAlign = 'left';
-  ctx.fillText('Open Rate', W-106, 17);
-  ctx.fillStyle = 'rgba(91,110,245,0.9)';
-  ctx.fillRect(W-120, 24, 10, 10);
-  ctx.fillStyle = 'rgba(148,163,184,0.8)';
-  ctx.fillText('Click Rate', W-106, 33);
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CAMPAIGNS
-// ─────────────────────────────────────────────────────────────────────────────
-async function loadCampaigns() {
-  const data = await api('GET', '/analytics/campaigns');
-  if (!data) return;
-  analyticsData = data;
-  const tbody = document.getElementById('campaigns-table');
-  tbody.innerHTML = data.map(c => `
-    <tr>
-      <td style="font-weight:500">${c.name}</td>
-      <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
-      <td>${c.open_rate}%</td>
-      <td>${c.click_rate}%</td>
-      <td>${c.bounce_rate}%</td>
-      <td>${statusBadge(c.status)}</td>
-      <td>
-        <div style="display:flex;gap:6px">
-          <button class="btn btn-sm ${c.status === 'sent' ? '' : 'btn-primary'}" onclick="prepareLaunch('${c.id}','${c.name}')">
-            ${c.status === 'sent' ? '🔁 שלח שוב' : '🚀 שלח'}
-          </button>
-          <button class="btn btn-sm btn-danger" onclick="deleteCampaign('${c.id}')">🗑</button>
-        </div>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין קמפיינים</td></tr>';
-}
-
-async function createCampaign() {
-  const body = {
-    name: document.getElementById('c-name').value,
-    subject: document.getElementById('c-subject').value,
-    body_html: getEditorHTML(),
-    body_text: getEditorText(),
-    attachments: attachedFiles || [],
-    from_name: document.getElementById('c-from-name').value,
-    from_email: document.getElementById('c-from-email').value,
-    rate_limit_per_minute: parseInt(document.getElementById('c-rate').value) || 60,
-  };
-  if (!body.name || !body.subject) { toast('מלא שם ו-Subject', 'error'); return; }
-  const res = await api('POST', '/campaigns', body);
-  if (res) {
-    closeModal('campaign-modal');
-    toast('הקמפיין נוצר בהצלחה ✓', 'success');
-    loadCampaigns();
-  } else toast('שגיאה ביצירת הקמפיין', 'error');
-}
-
-let launchAllContacts = [];
-let launchFilteredContacts = [];
-
-async function prepareLaunch(id, name) {
-  launchCampaignId = id;
-  document.getElementById('launch-title').textContent = 'שליחת: ' + name;
-  document.getElementById('launch-search').value = '';
-
-  // Load all active contacts
-  const listEl = document.getElementById('launch-contact-list');
-  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">טוען אנשי קשר...</div>';
-  openModal('launch-modal');
-
-  let allContacts = [];
-  let page = 1;
-  while (true) {
-    const res = await api('GET', `/contacts?page=${page}&page_size=100&status=active`);
-    if (!res || !res.items.length) break;
-    allContacts = allContacts.concat(res.items);
-    if (allContacts.length >= res.total) break;
-    page++;
-  }
-
-  launchAllContacts = allContacts;
-  launchFilteredContacts = [...allContacts];
-
-  document.getElementById('launch-contact-count').textContent = allContacts.length.toLocaleString();
-  renderLaunchContacts();
-  updateLaunchCount();
-}
-
-function renderLaunchContacts() {
-  const listEl = document.getElementById('launch-contact-list');
-  if (!launchFilteredContacts.length) {
-    listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">אין אנשי קשר</div>';
-    return;
-  }
-  listEl.innerHTML = launchFilteredContacts.map(c => `
-    <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .1s"
-      onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background=''">
-      <input type="checkbox" id="chk-${c.id}" checked
-        style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)"
-        onchange="updateLaunchCount()"/>
-      <div style="flex:1;min-width:0">
-        <div style="font-size:13px;font-weight:500">${c.name || '—'}</div>
-        <div style="font-size:11px;color:var(--muted);font-family:var(--mono)">${c.email}</div>
-      </div>
-      <div style="font-size:11px;color:var(--muted)">${c.company || ''}</div>
-    </label>
-  `).join('');
-  updateLaunchCount();
-}
-
-function filterLaunchContacts(q) {
-  const ql = q.toLowerCase();
-  launchFilteredContacts = launchAllContacts.filter(c =>
-    c.email.toLowerCase().includes(ql) ||
-    (c.name || '').toLowerCase().includes(ql) ||
-    (c.company || '').toLowerCase().includes(ql)
-  );
-  renderLaunchContacts();
-}
-
-function selectAllLaunch(checked) {
-  launchFilteredContacts.forEach(c => {
-    const el = document.getElementById('chk-' + c.id);
-    if (el) el.checked = checked;
-  });
-  updateLaunchCount();
-}
-
-function updateLaunchCount() {
-  const checked = launchAllContacts.filter(c => {
-    const el = document.getElementById('chk-' + c.id);
-    return el && el.checked;
-  });
-  document.getElementById('launch-selected-count').textContent = checked.length;
-  const eta = Math.ceil(checked.length * 0.5 / 60);
-  document.getElementById('launch-eta').textContent =
-    checked.length === 0 ? '—' : checked.length < 120 ? 'פחות מדקה' : `~${eta} דקות`;
-}
-
-function getSelectedContactIds() {
-  return launchAllContacts
-    .filter(c => { const el = document.getElementById('chk-' + c.id); return el && el.checked; })
-    .map(c => c.id);
-}
-
-async function launchCampaign() {
-  if (!launchCampaignId) return;
-  const selectedIds = getSelectedContactIds();
-  if (!selectedIds.length) { toast('בחר לפחות איש קשר אחד', 'error'); return; }
-
-  const btn = document.getElementById('launch-btn');
-  btn.textContent = 'שולח...';
-  btn.disabled = true;
-
-  const res = await api('POST', `/campaigns/${launchCampaignId}/launch`,
-    { contact_ids: selectedIds }
-  );
-
-  btn.textContent = '🚀 שלח לנבחרים';
-  btn.disabled = false;
-
-  if (res) {
-    closeModal('launch-modal');
-    toast(`${res.queued} מיילים נשלחים ✓`, 'success');
-    loadCampaigns();
-  } else {
-    toast('שגיאה בשליחה', 'error');
-  }
-}
-
-async function deleteContact(id, email) {
-  if (!confirm(`למחוק את ${email}?`)) return;
-  const res = await api('DELETE', `/contacts/${id}`);
-  if (res) { toast('נמחק ✓', 'success'); loadContacts(); }
-  else toast('שגיאה במחיקה', 'error');
-}
-
-async function deleteCampaign(id) {
-  if (!confirm('למחוק קמפיין זה?')) return;
-  await api('DELETE', `/campaigns/${id}`);
-  toast('נמחק ✓', 'success');
-  loadCampaigns();
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// CONTACTS
-// ─────────────────────────────────────────────────────────────────────────────
-async function loadContacts() {
-  const q = `/contacts?page=${currentPage}&page_size=50${contactSearch ? '&search=' + contactSearch : ''}`;
-  const data = await api('GET', q);
-  if (!data) return;
-
-  const [active, unsub, bounce] = await Promise.all([
-    api('GET', '/contacts?page=1&page_size=1&status=active'),
-    api('GET', '/contacts?page=1&page_size=1&status=unsubscribed'),
-    api('GET', '/contacts?page=1&page_size=1&status=bounced'),
-  ]);
-  document.getElementById('ct-active').textContent = active?.total?.toLocaleString() || '0';
-  document.getElementById('ct-unsub').textContent = unsub?.total?.toLocaleString() || '0';
-  document.getElementById('ct-bounce').textContent = bounce?.total?.toLocaleString() || '0';
-
-  const tbody = document.getElementById('contacts-table');
-  tbody.innerHTML = data.items.map(c => `
-    <tr>
-      <td style="font-family:var(--mono);font-size:12px">${c.email}</td>
-      <td>${c.name || '—'}</td>
-      <td>${c.company || '—'}</td>
-      <td>${statusBadge(c.status)}</td>
-      <td style="color:var(--muted);font-size:12px">${fmt(c.created_at)}</td>
-      <td>
-        <button class="btn btn-sm btn-danger" onclick="deleteContact('${c.id}','${c.email}')" title="מחק">🗑</button>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
-
-  document.getElementById('page-info').textContent = `עמוד ${currentPage} · ${data.total.toLocaleString()} סה"כ`;
-}
-
-let searchTimer;
-function searchContacts(v) {
-  contactSearch = v;
-  currentPage = 1;
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(loadContacts, 400);
-}
-function nextPage() { currentPage++; loadContacts(); }
-function prevPage() { if (currentPage > 1) { currentPage--; loadContacts(); } }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// UPLOAD
-// ─────────────────────────────────────────────────────────────────────────────
-function ev(e) { e.preventDefault(); e.stopPropagation(); }
-
-function handleDrop(e) {
-  ev(e);
-  document.getElementById('drop-zone').classList.remove('drag');
-  const file = e.dataTransfer.files[0];
-  if (file) uploadFile(file);
-}
-
-function handleFileSelect(input) {
-  const file = input.files[0];
-  if (file) uploadFile(file);
-}
-
-async function uploadFile(file) {
-  const zone = document.getElementById('drop-zone');
-  zone.querySelector('.upload-title').textContent = 'מעלה: ' + file.name;
-  zone.querySelector('.upload-sub').textContent = 'אנא המתן...';
-
-  const form = new FormData();
-  form.append('file', file);
-
-  if (!TOKEN) {
-    // Demo mode without backend
-    showFakeUploadResult(file);
-    return;
-  }
-
-  const res = await api('POST', '/uploads', form, true);
-  if (res) {
-    showUploadResult(res);
-    toast(`${res.inserted} אנשי קשר יובאו ✓`, 'success');
-  } else {
-    toast('שגיאה בהעלאה', 'error');
-  }
-  zone.querySelector('.upload-title').textContent = 'גרור קובץ לכאן או לחץ לבחירה';
-  zone.querySelector('.upload-sub').textContent = 'CSV או Excel (.xlsx) · עד 25MB';
-}
-
-function showUploadResult(res) {
-  document.getElementById('up-valid').textContent = res.valid_count;
-  document.getElementById('up-total').textContent = res.row_count;
-  document.getElementById('up-dupes').textContent = res.duplicates;
-  document.getElementById('up-invalid').textContent = res.invalid;
-
-  const dcols = res.detected_columns;
-  document.getElementById('detected-cols').textContent =
-    `זוהו: מייל=${dcols.email||'?'}, שם=${dcols.name||'—'}, חברה=${dcols.company||'—'}`;
-
-  if (res.preview?.length) {
-    const cols = Object.keys(res.preview[0]);
-    document.getElementById('preview-head').innerHTML =
-      '<tr>' + cols.map(c=>`<th>${c}</th>`).join('') + '</tr>';
-    document.getElementById('preview-body').innerHTML =
-      res.preview.map(row =>
-        '<tr>' + cols.map(c=>`<td>${row[c]||''}</td>`).join('') + '</tr>'
-      ).join('');
-  }
-  document.getElementById('upload-result').style.display = 'block';
-}
-
-function showFakeUploadResult(file) {
-  // Demo preview when no backend
-  document.getElementById('up-valid').textContent = '—';
-  document.getElementById('up-total').textContent = '—';
-  document.getElementById('up-dupes').textContent = '—';
-  document.getElementById('up-invalid').textContent = '—';
-  document.getElementById('detected-cols').textContent = 'Backend לא מחובר — Demo Mode';
-  document.getElementById('upload-result').style.display = 'block';
-  toast('Demo mode: Backend לא פעיל', '');
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ANALYTICS
-// ─────────────────────────────────────────────────────────────────────────────
-async function loadAnalytics() {
-  const data = await api('GET', '/analytics/campaigns') || mockAnalytics();
-  analyticsData = data;
-
-  const tbody = document.getElementById('analytics-table');
-  tbody.innerHTML = data.map(c => `
-    <tr>
-      <td style="font-weight:500">${c.name}</td>
-      <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
-      <td>${c.opens}</td>
-      <td>${c.clicks}</td>
-      <td>${c.bounces}</td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="progress-bar" style="width:80px">
-            <div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div>
-          </div>
-          <span style="font-size:12px;font-family:var(--mono)">${c.open_rate}%</span>
-        </div>
-      </td>
-      <td>
-        <div style="display:flex;align-items:center;gap:8px">
-          <div class="progress-bar" style="width:80px">
-            <div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div>
-          </div>
-          <span style="font-size:12px;font-family:var(--mono)">${c.click_rate}%</span>
-        </div>
-      </td>
-    </tr>
-  `).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין נתונים</td></tr>';
-
-  // Rate comparison bars
-  const ratesEl = document.getElementById('analytics-rates');
-  const avg = key => data.length ? (data.reduce((s,c)=>s+c[key],0)/data.length).toFixed(1) : 0;
-  const metrics = [
-    {label:'Open Rate', val:avg('open_rate'), color:'var(--green)'},
-    {label:'Click Rate', val:avg('click_rate'), color:'var(--accent)'},
-    {label:'Bounce Rate', val:avg('bounce_rate'), color:'var(--red)'},
-  ];
-  ratesEl.innerHTML = metrics.map(m => `
-    <div class="rate-row">
-      <div class="rate-label">${m.label}</div>
-      <div class="rate-bar"><div class="rate-fill" style="width:${m.val}%;background:${m.color}"></div></div>
-      <div class="rate-pct" style="font-family:var(--mono)">${m.val}%</div>
-    </div>
-  `).join('');
-}
-
-function mockAnalytics() {
-  return [
-    {id:'1',name:'קמפיין ינואר',status:'sent',sent:1240,opens:310,clicks:87,bounces:12,open_rate:25.0,click_rate:7.0,bounce_rate:1.0},
-    {id:'2',name:'ניוזלטר פברואר',status:'sent',sent:980,opens:294,clicks:108,bounces:8,open_rate:30.0,click_rate:11.0,bounce_rate:0.8},
-    {id:'3',name:'קמפיין מרץ',status:'sending',sent:450,opens:162,clicks:54,bounces:3,open_rate:36.0,click_rate:12.0,bounce_rate:0.7},
-  ];
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// FOLLOW-UP
-// ─────────────────────────────────────────────────────────────────────────────
-async function loadFollowupCampaigns() {
-  const data = await api('GET', '/campaigns') || [];
-  const sel = document.getElementById('followup-campaign-select');
-  sel.innerHTML = '<option value="">— בחר קמפיין —</option>';
-  data.forEach(c => {
-    const opt = document.createElement('option');
-    opt.value = c.id;
-    opt.textContent = c.name;
-    sel.appendChild(opt);
-  });
-}
-
-async function loadFollowupRules(campaignId) {
-  if (!campaignId) return;
-  document.getElementById('show-fu-form').style.display = 'inline-flex';
-  const data = await api('GET', `/campaigns/${campaignId}/followup`) || [];
-  const list = document.getElementById('followup-rules-list');
-  list.innerHTML = data.length ? data.map(r => `
-    <div style="background:var(--bg3);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
-      <div>
-        <div style="font-weight:500;margin-bottom:4px">${r.subject}</div>
-        <div style="font-size:12px;color:var(--muted)">
-          טריגר: ${r.trigger === 'not_opened' ? 'לא נפתח' : 'נפתח לא לחץ'} ·
-          המתן ${r.wait_hours} שעות
-        </div>
-      </div>
-      <span class="badge badge-${r.is_active ? 'green' : 'gray'}">${r.is_active ? 'פעיל' : 'כבוי'}</span>
-    </div>
-  `).join('') : '<div style="color:var(--muted);font-size:13px">אין כללים לקמפיין זה</div>';
-}
-
-async function runFollowup() {
-  const res = await api('POST', '/followup/run');
-  if (res !== null) {
-    toast(`Follow-up: ${res.processed} מיילים נשלחו ✓`, 'success');
-  } else {
-    toast('שגיאה בהרצת Follow-up', 'error');
-  }
-}
-
-function toggleFuForm() {
-  const el = document.getElementById('followup-form');
-  el.style.display = el.style.display === 'none' ? 'block' : 'none';
-}
-
-async function saveFollowupRule() {
-  const campaignId = document.getElementById('followup-campaign-select').value;
-  if (!campaignId) { toast('בחר קמפיין', 'error'); return; }
-  const body = {
-    trigger_event: document.getElementById('fu-trigger').value,
-    wait_hours: parseInt(document.getElementById('fu-hours').value),
-    followup_subject: document.getElementById('fu-subject').value,
-    followup_body_html: document.getElementById('fu-html').value,
-  };
-  const res = await api('POST', `/campaigns/${campaignId}/followup`, body);
-  if (res) {
-    toast('כלל נשמר ✓', 'success');
-    toggleFuForm();
-    loadFollowupRules(campaignId);
-  } else toast('שגיאה', 'error');
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// SETTINGS TABS
-// ─────────────────────────────────────────────────────────────────────────────
-function settingsTab(name, el) {
-  ['smtp','sendgrid','ses','brevo'].forEach(t => {
-    document.getElementById('settings-'+t).style.display = t === name ? 'block' : 'none';
-  });
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-}
-
-function switchProvider(val) {
-  toast('ספק ' + val + ' נבחר — עדכן ב-Railway Variables', 'success');
-}
-
-// ─────────────────────────────────────────────────────────────────────────────
-// INIT – Load demo data if no backend
-// ─────────────────────────────────────────────────────────────────────────────
-(async function init() {
-  // Try real backend
-  const health = await fetch(API + '/health').then(r=>r.json()).catch(()=>null);
-  if (!health) {
-    // Demo mode: show mock analytics
-    analyticsData = mockAnalytics();
-    document.getElementById('stat-active').textContent = '1';
-    document.getElementById('stat-total').textContent = '3';
-    document.getElementById('stat-open').textContent = '30.3%';
-    document.getElementById('stat-click').textContent = '10.0%';
-    document.getElementById('stat-contacts').textContent = '2,670';
-
-    const tbody = document.getElementById('dashboard-campaigns');
-    tbody.innerHTML = analyticsData.map(c => `
-      <tr>
-        <td style="font-weight:500">${c.name}</td>
-        <td style="font-family:var(--mono)">${c.sent.toLocaleString()}</td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div></div>
-            <span style="font-size:12px">${c.open_rate}%</span>
-          </div>
-        </td>
-        <td>
-          <div style="display:flex;align-items:center;gap:8px">
-            <div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div></div>
-            <span style="font-size:12px">${c.click_rate}%</span>
-          </div>
-        </td>
-        <td>${statusBadge(c.status)}</td>
-      </tr>
-    `).join('');
-
-    setTimeout(() => drawChart(analyticsData), 100);
-  } else {
-    loadDashboard();
-  }
-})();
-
-// ── Login ─────────────────────────────────────────────────────────────────────
-async function doLogin() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
-  const errEl = document.getElementById('login-error');
-  errEl.textContent = '';
-  
-  try {
-    const r = await fetch(API + '/auth/token', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-      body: 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password)
-    });
-    if (!r.ok) { errEl.textContent = 'מייל או סיסמה שגויים'; return; }
-    const data = await r.json();
-    TOKEN = data.access_token;
-    localStorage.setItem('mf_token', TOKEN);
-    document.getElementById('login-overlay').style.display = 'none';
-    loadDashboard();
-  } catch(e) {
-    errEl.textContent = 'שגיאת התחברות';
-  }
-}
-
-
-// ═══════════════════════════════════════════════════════════════════════════
-// EMAIL EDITOR FUNCTIONS
-// ═══════════════════════════════════════════════════════════════════════════
-
-function execCmd(cmd, val) {
-  const editor = document.getElementById('email-editor');
-  if (!editor) return;
-  editor.focus();
-  try {
-    document.execCommand(cmd, false, val !== undefined ? val : null);
-  } catch(e) {}
-}
-
-function insertVar(v) {
-  const editor = document.getElementById('email-editor');
-  if (!editor) return;
-  editor.focus();
-  const sel = window.getSelection();
-  if (sel.rangeCount) {
-    const range = sel.getRangeAt(0);
-    range.deleteContents();
-    range.insertNode(document.createTextNode(v));
-    range.collapse(false);
-  } else {
-    editor.innerHTML += v;
-  }
-}
-
-// Emoji
-const EMOJIS = ['😊','😀','😎','🎉','🔥','💡','✅','❌','📧','📢','💼','🚀','⭐','💪','🙏','👋','💰','📈','🎯','🏆','💎','🌟','❤️','👍','🔗','📎','📄','🖼','💬','🔔','⚡','🌈','🎁','🤝','📱','💻','🛒','✉️','📝','🗂️'];
-
-function initEmojiGrid() {
-  const grid = document.getElementById('emoji-grid');
-  if (!grid || grid.children.length > 0) return;
-  EMOJIS.forEach(e => {
-    const btn = document.createElement('button');
-    btn.textContent = e;
-    btn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:4px;transition:background .1s';
-    btn.onmouseover = () => btn.style.background = 'var(--bg4)';
-    btn.onmouseout  = () => btn.style.background = 'none';
-    btn.onclick = (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      insertVar(e);
-      toggleEmojiPicker();
-    };
-    grid.appendChild(btn);
-  });
-}
-
-function toggleEmojiPicker() {
-  const p = document.getElementById('emoji-picker');
-  if (!p) return;
-  const isOpen = p.style.display === 'block';
-  p.style.display = isOpen ? 'none' : 'block';
-  if (!isOpen) initEmojiGrid();
-}
-
-document.addEventListener('click', e => {
-  if (!e.target.closest('#emoji-btn') && !e.target.closest('#emoji-picker')) {
-    const p = document.getElementById('emoji-picker');
-    if (p) p.style.display = 'none';
-  }
-});
-
-// Insert image/GIF — upload to imgbb for email compatibility
-// ── Image upload + editor ──────────────────────────────────────────────────
-
-// Upload image to ImgBB (free CDN, works in all email clients)
-async function insertImage(input) {
-  const file = input.files[0];
-  if (!file) return;
-  input.value = '';
-
-  const editor = document.getElementById('email-editor');
-  const loadId = 'img-load-' + Date.now();
-
-  // Show loading indicator
-  editor.focus();
-  document.execCommand('insertHTML', false,
-    `<span id="${loadId}" style="display:inline-block;padding:6px 12px;background:#333;color:#aaa;border-radius:4px;font-size:12px">⏳ מעלה תמונה...</span>`
-  );
-
-  try {
-    // Convert to base64
-    const b64 = await new Promise((res, rej) => {
-      const r = new FileReader();
-      r.onload = () => res(r.result.split(',')[1]);
-      r.onerror = rej;
-      r.readAsDataURL(file);
-    });
-
-    // Upload to our API which serves as CDN
-    let imgUrl;
-    try {
-      const fd2 = new FormData();
-      fd2.append('file', file);
-      const r2 = await fetch(API + '/uploads/image', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${TOKEN}` },
-        body: fd2
-      });
-      if (r2.ok) {
-        const d2 = await r2.json();
-        imgUrl = d2.url;
-      }
-    } catch(uploadErr) {
-      console.warn('API upload failed:', uploadErr);
-    }
-
-    // Remove loading span
-    const loadSpan = document.getElementById(loadId);
-    if (loadSpan) loadSpan.remove();
-
-    if (imgUrl) {
-      insertImageWithControls(editor, imgUrl, file.name);
-    } else {
-      // Last resort: inline base64 (may not show in some email clients)
-      insertImageWithControls(editor, `data:${file.type};base64,${b64}`, file.name);
-      toast('⚠️ התמונה עלתה מקומית — ייתכן שלא תופיע בכל תיבות המייל', '');
-    }
-  } catch(e) {
-    const loadSpan = document.getElementById(loadId);
-    if (loadSpan) loadSpan.remove();
-    toast('שגיאה בהעלאת תמונה: ' + e.message, 'error');
-  }
-}
-
-function insertImageWithControls(editor, src, name) {
-  const imgId = 'img-' + Date.now();
-  const wrapId = 'wrap-' + imgId;
-
-  const html = `<div id="${wrapId}" style="display:block;margin:8px 0;line-height:0">
-    <img id="${imgId}" src="${src}" alt="${name}"
-      style="width:320px;max-width:100%;border-radius:4px;cursor:pointer;display:block"
-      onclick="showImgControls('${imgId}')"
-    />
-    <div id="ctrl-${imgId}" style="display:none;margin-top:6px;padding:8px;background:#1c2030;border:1px solid #333;border-radius:8px;line-height:1.4">
-      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-        <button class="tbtn" onclick="resizeImg('${imgId}',0.75)" title="הקטן">🔍−</button>
-        <button class="tbtn" onclick="resizeImg('${imgId}',1.33)" title="הגדל">🔍+</button>
-        <span style="color:#666;font-size:11px">גודל:</span>
-        <input type="range" min="80" max="900" value="320"
-          style="width:100px;cursor:pointer"
-          oninput="setImgWidth('${imgId}',+this.value)"
-          title="גודל"/>
-        <span id="size-${imgId}" style="color:#888;font-size:11px;font-family:monospace">320px</span>
-        <span style="color:#444">|</span>
-        <button class="tbtn" onclick="floatImg('${imgId}','right')" title="יישור ימין (טקסט מימין)">⬅📝</button>
-        <button class="tbtn" onclick="floatImg('${imgId}','none')"  title="בלוק — שורה שלמה">⬜</button>
-        <button class="tbtn" onclick="floatImg('${imgId}','left')" title="יישור שמאל (טקסט משמאל)">📝➡</button>
-        <button class="tbtn" style="color:#f87171;margin-right:auto" onclick="removeImg('${wrapId}')" title="מחק תמונה">🗑 מחק</button>
-      </div>
-    </div>
-  </div><br>`;
-
-  editor.focus();
-  document.execCommand('insertHTML', false, html);
-  setTimeout(() => showImgControls(imgId), 100);
-}
-
-function showImgControls(imgId) {
-  // Hide all other controls
-  document.querySelectorAll('[id^="ctrl-img-"]').forEach(el => el.style.display = 'none');
-  const ctrl = document.getElementById('ctrl-' + imgId);
-  if (ctrl) ctrl.style.display = 'block';
-}
-
-function resizeImg(imgId, factor) {
-  const img = document.getElementById(imgId);
-  if (!img) return;
-  const cur = parseInt(img.style.width) || 320;
-  const nw = Math.max(80, Math.min(900, Math.round(cur * factor)));
-  img.style.width = nw + 'px';
-  const sizeEl = document.getElementById('size-' + imgId);
-  if (sizeEl) sizeEl.textContent = nw + 'px';
-  // Sync slider
-  const ctrl = document.getElementById('ctrl-' + imgId);
-  if (ctrl) { const sl = ctrl.querySelector('input[type=range]'); if (sl) sl.value = nw; }
-}
-
-function setImgWidth(imgId, val) {
-  const img = document.getElementById(imgId);
-  if (!img) return;
-  img.style.width = val + 'px';
-  const sizeEl = document.getElementById('size-' + imgId);
-  if (sizeEl) sizeEl.textContent = val + 'px';
-}
-
-function floatImg(imgId, direction) {
-  const img = document.getElementById(imgId);
-  const wrap = document.getElementById('wrap-' + imgId);
-  if (!img || !wrap) return;
-  if (direction === 'right') {
-    // Image on right, text wraps on left
-    wrap.style.cssText = 'float:right;margin:4px 0 8px 16px;line-height:0;display:block';
-  } else if (direction === 'left') {
-    // Image on left, text wraps on right
-    wrap.style.cssText = 'float:left;margin:4px 16px 8px 0;line-height:0;display:block';
-  } else {
-    // Full block, no float
-    wrap.style.cssText = 'display:block;clear:both;margin:8px 0;line-height:0';
-  }
-}
-
-function removeImg(wrapId) {
-  const wrap = document.getElementById(wrapId);
-  if (wrap) { wrap.nextSibling && wrap.nextSibling.nodeName === 'BR' && wrap.nextSibling.remove(); wrap.remove(); }
-}
-
-// Hide controls when clicking outside
-document.addEventListener('click', e => {
-  if (!e.target.closest('[id^="wrap-img-"]') && !e.target.closest('[id^="ctrl-img-"]') && e.target.id && !e.target.id.startsWith('img-')) {
-    document.querySelectorAll('[id^="ctrl-img-"]').forEach(el => el.style.display = 'none');
-  }
-});
-
-// Insert CTA button
-function insertLinkButton() {
-  const url = prompt('הכנס URL לכפתור (או השאר ריק לשימוש בלינק מאוחר יותר):', 'https://');
-  if (url === null) return;
-  const text = prompt('טקסט על הכפתור:', 'לחץ כאן');
-  if (!text) return;
-  const finalUrl = url || '#';
-  const html = `<div style="text-align:center;margin:20px 0"><a href="${finalUrl}" style="display:inline-block;background:#5b6ef5;color:#ffffff;padding:13px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;font-family:Arial,sans-serif">${text}</a></div><br>`;
-  const editor = document.getElementById('email-editor');
-  editor.focus();
-  document.execCommand('insertHTML', false, html);
-}
-
-// Attachments
-let attachedFiles = [];
-
-function addAttachments(input) {
-  Array.from(input.files).forEach(file => {
-    const reader = new FileReader();
-    reader.onload = ev => {
-      attachedFiles.push({
-        name: file.name,
-        data: ev.target.result.split(',')[1],
-        type: file.type
-      });
-      renderAttachments();
-    };
-    reader.readAsDataURL(file);
-  });
-  input.value = '';
-}
-
-function renderAttachments() {
-  const list = document.getElementById('attachments-list');
-  if (!list) return;
-  list.innerHTML = attachedFiles.map((f, i) => `
-    <div class="attach-chip">
-      📎 ${f.name}
-      <button onclick="removeAttachment(${i})" title="הסר">✕</button>
-    </div>
-  `).join('');
-}
-
-function removeAttachment(i) {
-  attachedFiles.splice(i, 1);
-  renderAttachments();
-}
-
-// Get editor content as clean HTML
-function getEditorHTML() {
-  const editor = document.getElementById('email-editor');
-  if (!editor || !editor.innerHTML.trim()) return '';
-
-  // Clone editor and remove all control panels (not for email)
-  const clone = editor.cloneNode(true);
-
-  // Remove all control divs
-  clone.querySelectorAll('[id^="ctrl-"]').forEach(el => el.remove());
-
-  // Fix image wrappers — convert to email-safe HTML table layout
-  clone.querySelectorAll('[id^="wrap-img-"]').forEach(wrap => {
-    const img = wrap.querySelector('img');
-    if (!img) { wrap.remove(); return; }
-
-    const wrapStyle = wrap.getAttribute('style') || '';
-    const imgWidth = img.style.width || '320px';
-    const imgSrc = img.getAttribute('src') || '';
-    const imgAlt = img.getAttribute('alt') || '';
-
-    let emailHtml;
-    if (wrapStyle.includes('float:right') || wrapStyle.includes('float: right')) {
-      // Image on right, text on left — use table for email compatibility
-      emailHtml = `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0">
-        <tr>
-          <td style="padding-right:12px;vertical-align:top">
-            <img src="${imgSrc}" alt="${imgAlt}" width="${parseInt(imgWidth)}" style="width:${imgWidth};max-width:100%;display:block;border-radius:4px"/>
-          </td>
-          <td style="vertical-align:top;width:100%">&nbsp;</td>
-        </tr>
-      </table>`;
-    } else if (wrapStyle.includes('float:left') || wrapStyle.includes('float: left')) {
-      // Image on left, text on right
-      emailHtml = `<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0">
-        <tr>
-          <td style="vertical-align:top;width:100%">&nbsp;</td>
-          <td style="padding-left:12px;vertical-align:top">
-            <img src="${imgSrc}" alt="${imgAlt}" width="${parseInt(imgWidth)}" style="width:${imgWidth};max-width:100%;display:block;border-radius:4px"/>
-          </td>
-        </tr>
-      </table>`;
-    } else {
-      // Center/block
-      emailHtml = `<div style="text-align:center;margin:8px 0">
-        <img src="${imgSrc}" alt="${imgAlt}" width="${parseInt(imgWidth)}" style="width:${imgWidth};max-width:100%;display:inline-block;border-radius:4px"/>
-      </div>`;
-    }
-
-    const tempDiv = document.createElement('div');
-    tempDiv.innerHTML = emailHtml;
-    wrap.replaceWith(tempDiv.firstChild);
-  });
-
-  // Also fix any plain img tags with onclick
-  clone.querySelectorAll('img').forEach(img => {
-    img.removeAttribute('onclick');
-    img.style.cursor = 'default';
-    // Ensure width is set as attribute too (for Outlook)
-    if (img.style.width) {
-      img.setAttribute('width', parseInt(img.style.width));
-    }
-  });
-
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
-<div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)">
-  <div style="padding:32px;direction:rtl;text-align:right;color:#333333;font-size:15px;line-height:1.7">
-    ${clone.innerHTML}
-    <br>
-    <div style="border-top:1px solid #eeeeee;padding-top:16px;margin-top:24px;font-size:12px;color:#999999;text-align:center">
-      <a href="{{unsubscribe_url}}" style="color:#999999;text-decoration:underline">הסר מרשימה</a>
-    </div>
-  </div>
-</div>
-</body></html>`;
-}
-
-function getEditorText() {
-  const editor = document.getElementById('email-editor');
-  if (!editor) return '';
-  return editor.innerText || editor.textContent || '';
-}
-
-// Reset editor when campaign modal opens
-const _origOpenModal = openModal;
-openModal = function(id) {
-  _origOpenModal(id);
-  if (id === 'campaign-modal') {
-    setTimeout(() => {
-      const editor = document.getElementById('email-editor');
-      if (editor) editor.innerHTML = '';
-      attachedFiles = [];
-      renderAttachments();
-    }, 100);
-  }
-};
-
-
-// Text/BG color — works in editor AND in email clients
-function applyTextColor(color) {
-  const editor = document.getElementById('email-editor');
-  editor.focus();
-  const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
-    toast('סמן טקסט קודם', '');
-    return;
-  }
-  // Save selection
-  const range = sel.getRangeAt(0).cloneRange();
-  const selected = range.extractContents();
-  const span = document.createElement('span');
-  span.style.color = color;
-  span.appendChild(selected);
-  range.insertNode(span);
-  // Restore selection
-  sel.removeAllRanges();
-  const newRange = document.createRange();
-  newRange.selectNodeContents(span);
-  sel.addRange(newRange);
-}
-
-function applyBgColor(color) {
-  const editor = document.getElementById('email-editor');
-  editor.focus();
-  const sel = window.getSelection();
-  if (!sel || sel.rangeCount === 0 || sel.isCollapsed) {
-    toast('סמן טקסט קודם', '');
-    return;
-  }
-  const range = sel.getRangeAt(0).cloneRange();
-  const selected = range.extractContents();
-  const span = document.createElement('span');
-  span.style.backgroundColor = color;
-  span.appendChild(selected);
-  range.insertNode(span);
-  sel.removeAllRanges();
-  const newRange = document.createRange();
-  newRange.selectNodeContents(span);
-  sel.addRange(newRange);
-}
-function showRegister() {
-  document.getElementById('login-overlay').style.display = 'none';
-  const el = document.getElementById('register-overlay');
-  el.style.display = 'flex';
-}
-
-function showLogin() {
-  document.getElementById('register-overlay').style.display = 'none';
-  const el = document.getElementById('login-overlay');
-  el.style.display = 'flex';
-}
-
-async function doRegister() {
-  const name = document.getElementById('reg-name').value;
-  const email = document.getElementById('reg-email').value;
-  const password = document.getElementById('reg-password').value;
-  const errEl = document.getElementById('reg-error');
-  errEl.textContent = '';
-
-  if (!name || !email || !password) { errEl.textContent = 'מלא את כל השדות'; return; }
-  if (password.length < 6) { errEl.textContent = 'סיסמה חייבת להיות לפחות 6 תווים'; return; }
-
-  try {
-    const r = await fetch(API + '/auth/register', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email, password, name})
-    });
-    const data = await r.json();
-    if (!r.ok) {
-      errEl.textContent = data.detail || 'שגיאה בהרשמה';
-      return;
-    }
-    TOKEN = data.access_token;
-    localStorage.setItem('mf_token', TOKEN);
-    document.getElementById('register-overlay').style.display = 'none';
-    toast('ברוך הבא! ' + name, 'success');
-    loadDashboard();
-  } catch(e) {
-    errEl.textContent = 'שגיאת התחברות';
-  }
-}
-
-// Check if already logged in on page load
-if (TOKEN) {
-  document.getElementById('login-overlay').style.display = 'none';
-}
-
-</script>
-
-<!-- LOGIN OVERLAY -->
-<div id="login-overlay" style="
-  position:fixed;inset:0;background:var(--bg);
-  display:flex;align-items:center;justify-content:center;
-  z-index:1000;flex-direction:column;gap:20px;
-">
-  <div style="text-align:center;margin-bottom:8px">
-    <div style="font-size:32px;margin-bottom:8px">✉</div>
-    <div style="font-size:22px;font-weight:600">MailFlow</div>
-    <div style="color:var(--muted);font-size:13px;margin-top:4px">התחבר לחשבון שלך</div>
-  </div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:320px">
-    <div class="form-group">
-      <label class="form-label">מייל</label>
-      <input class="form-input" id="login-email" type="email" placeholder="your@email.com" style="direction:ltr"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">סיסמה</label>
-      <input class="form-input" id="login-password" type="password" placeholder="••••••••" style="direction:ltr" onkeydown="if(event.key==='Enter')doLogin()"/>
-    </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()">כניסה</button>
-    <div id="login-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
-    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
-      אין לך חשבון? <span onclick="showRegister()" style="color:var(--accent2);cursor:pointer;text-decoration:underline">הירשם כאן</span>
-    </div>
-  </div>
-</div>
-
-<!-- REGISTER OVERLAY -->
-<div id="register-overlay" style="
-  position:fixed;inset:0;background:var(--bg);
-  display:none;align-items:center;justify-content:center;
-  z-index:1001;flex-direction:column;gap:20px;
-">
-  <div style="text-align:center;margin-bottom:8px">
-    <div style="font-size:32px;margin-bottom:8px">✉</div>
-    <div style="font-size:22px;font-weight:600">MailFlow</div>
-    <div style="color:var(--muted);font-size:13px;margin-top:4px">יצירת חשבון חדש</div>
-  </div>
-  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:320px">
-    <div class="form-group">
-      <label class="form-label">שם מלא</label>
-      <input class="form-input" id="reg-name" type="text" placeholder="ישראל ישראלי"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">מייל</label>
-      <input class="form-input" id="reg-email" type="email" placeholder="your@email.com" style="direction:ltr"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">סיסמה</label>
-      <input class="form-input" id="reg-password" type="password" placeholder="לפחות 6 תווים" style="direction:ltr" onkeydown="if(event.key==='Enter')doRegister()"/>
-    </div>
-    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doRegister()">צור חשבון</button>
-    <div id="reg-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
-    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">
-      כבר יש לך חשבון? <span onclick="showLogin()" style="color:var(--accent2);cursor:pointer;text-decoration:underline">התחבר כאן</span>
-    </div>
-  </div>
-</div>
-
-<!-- ═══ WHATSAPP INSTANCE MODAL ═══ -->
+<!-- WHATSAPP INSTANCE MODAL -->
 <div class="modal-overlay" id="wa-modal">
   <div class="modal" style="width:520px;max-width:96vw">
-    <div class="modal-header">
-      <span class="modal-title">💬 חיבור מספר WhatsApp</span>
-      <button class="modal-close" onclick="closeModal('wa-modal')">✕</button>
-    </div>
-    <div class="form-group">
-      <label class="form-label">כינוי (לזיהוי שלך בלבד)</label>
-      <input class="form-input" id="wa-label" placeholder="מכירות IL, תמיכה..."/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">idInstance (מ-Green API)</label>
-      <input class="form-input" id="wa-id-instance" placeholder="1234567890" style="direction:ltr;font-family:monospace"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">apiTokenInstance (מ-Green API)</label>
-      <input class="form-input" id="wa-api-token" placeholder="abc123..." style="direction:ltr;font-family:monospace"/>
-    </div>
-    <div class="form-group">
-      <label class="form-label">מספר הטלפון (אופציונלי)</label>
-      <input class="form-input" id="wa-phone" placeholder="0501234567" style="direction:ltr"/>
-    </div>
+    <div class="modal-header"><span class="modal-title">💬 חיבור מספר WhatsApp</span><button class="modal-close" onclick="closeModal('wa-modal')">✕</button></div>
+    <div class="form-group"><label class="form-label">כינוי</label><input class="form-input" id="wa-label" placeholder="מכירות IL, תמיכה..."/></div>
+    <div class="form-group"><label class="form-label">idInstance</label><input class="form-input" id="wa-id-instance" placeholder="1234567890" style="direction:ltr;font-family:monospace"/></div>
+    <div class="form-group"><label class="form-label">apiTokenInstance</label><input class="form-input" id="wa-api-token" placeholder="abc123..." style="direction:ltr;font-family:monospace"/></div>
+    <div class="form-group"><label class="form-label">מספר טלפון (אופציונלי)</label><input class="form-input" id="wa-phone" placeholder="0501234567" style="direction:ltr"/></div>
     <div style="background:rgba(91,110,245,.06);border:1px solid rgba(91,110,245,.18);border-radius:8px;padding:12px;font-size:12px;color:var(--text2);margin-bottom:20px">
-      <strong>איפה למצוא את הפרטים?</strong><br>
-      היכנס ל <a href="https://console.green-api.com" target="_blank" style="color:var(--accent2)">console.green-api.com</a> → My instances → בחר instance → תראה את idInstance ואת apiTokenInstance
+      היכנס ל <a href="https://console.green-api.com" target="_blank" style="color:var(--accent2)">console.green-api.com</a> → My instances → בחר instance
     </div>
     <div id="wa-qr-container" style="display:none;text-align:center;margin-bottom:16px">
       <img id="wa-qr-img" src="" style="max-width:220px;border-radius:8px;border:2px solid var(--border)"/>
@@ -2147,132 +531,685 @@ if (TOKEN) {
   </div>
 </div>
 
-<script>
-// ════ WHATSAPP MANAGEMENT ════
+<div id="toast"></div>
 
+<script>
+const API = 'https://mailflow-api-378f.onrender.com';
+let TOKEN = localStorage.getItem('mf_token') || '';
+let currentPage = 1;
+let contactSearch = '';
+let launchCampaignId = null;
+let analyticsData = [];
+
+async function api(method, path, body, isForm) {
+  const headers = { 'Authorization': `Bearer ${TOKEN}` };
+  if (!isForm) headers['Content-Type'] = 'application/json';
+  const opts = { method, headers };
+  if (body) opts.body = isForm ? body : JSON.stringify(body);
+  try {
+    const r = await fetch(API + path, opts);
+    if (r.status === 401) { TOKEN = ''; return null; }
+    return r.ok ? r.json() : null;
+  } catch { return null; }
+}
+
+function toast(msg, type = '') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = 'show ' + type;
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.className = '', 3500);
+}
+
+const titles = { dashboard:'דאשבורד', campaigns:'קמפיינים', contacts:'אנשי קשר', upload:'העלאת קובץ', analytics:'אנליטיקה', followup:'Follow-up', settings:'הגדרות', whatsapp:'WhatsApp' };
+
+function showSection(name, btn) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.getElementById('sec-' + name).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  document.getElementById('page-title').textContent = titles[name] || name;
+  if (name === 'dashboard') loadDashboard();
+  if (name === 'campaigns') loadCampaigns();
+  if (name === 'contacts') loadContacts();
+  if (name === 'analytics') loadAnalytics();
+  if (name === 'followup') loadFollowupCampaigns();
+  if (name === 'whatsapp') { loadWaInstances(); loadWaTodayStats(); }
+}
+
+function openModal(id) {
+  document.getElementById(id).classList.add('open');
+  if (id === 'campaign-modal') {
+    setTimeout(() => {
+      const editor = document.getElementById('email-editor');
+      if (editor) editor.innerHTML = '';
+      attachedFiles = [];
+      renderAttachments();
+      loadWaInstancesForModal();
+    }, 100);
+  }
+}
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function statusBadge(s) {
+  const map = { sent:'green', sending:'blue', draft:'gray', failed:'red', paused:'amber', active:'green', unsubscribed:'amber', bounced:'red' };
+  return `<span class="badge badge-${map[s]||'gray'}">${s}</span>`;
+}
+function channelBadge(ch) {
+  if (ch === 'whatsapp') return '<span class="badge badge-green">💬 WA</span>';
+  if (ch === 'both') return '<span class="badge badge-blue">📧💬</span>';
+  return '<span class="badge badge-gray">📧 מייל</span>';
+}
+function fmt(d) {
+  if (!d) return '—';
+  return new Date(d).toLocaleDateString('he-IL', {day:'numeric',month:'short',year:'numeric'});
+}
+
+// ── Channel UI toggle ──────────────────────────────────────────────────────
+function updateChannelUI(channel) {
+  const emailFields = document.getElementById('email-fields');
+  const waFields = document.getElementById('wa-fields');
+  if (channel === 'email') { emailFields.style.display='block'; waFields.style.display='none'; }
+  else if (channel === 'whatsapp') { emailFields.style.display='none'; waFields.style.display='block'; }
+  else { emailFields.style.display='block'; waFields.style.display='block'; }
+}
+
+async function loadWaInstancesForModal() {
+  const sel = document.getElementById('c-wa-instance');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— בחר מספר מחובר —</option>';
+  const instances = await api('GET', '/whatsapp/instances') || [];
+  instances.forEach(i => {
+    const opt = document.createElement('option');
+    opt.value = i.id;
+    opt.textContent = `${i.label} (${i.phone_number || i.id_instance}) — ${i.state === 'authorized' ? '✅' : '❌'}`;
+    sel.appendChild(opt);
+  });
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────────────────────
+async function loadDashboard() {
+  const [stats, contacts, todayRes] = await Promise.all([
+    api('GET', '/analytics/campaigns'),
+    api('GET', '/contacts?page=1&page_size=1&status=active'),
+    api('GET', '/analytics/today'),
+  ]);
+  if (stats) {
+    analyticsData = stats;
+    const active = stats.filter(c => c.status === 'sending').length;
+    const avgOpen  = stats.length ? (stats.reduce((a,c)=>a+c.open_rate,0)/stats.length).toFixed(1) : 0;
+    const avgClick = stats.length ? (stats.reduce((a,c)=>a+c.click_rate,0)/stats.length).toFixed(1) : 0;
+    document.getElementById('stat-active').textContent = active;
+    document.getElementById('stat-total').textContent = stats.length;
+    document.getElementById('stat-open').textContent = avgOpen + '%';
+    document.getElementById('stat-click').textContent = avgClick + '%';
+    const tbody = document.getElementById('dashboard-campaigns');
+    tbody.innerHTML = stats.slice(0,6).map(c => `<tr>
+      <td style="font-weight:500">${c.name}</td>
+      <td style="font-family:var(--mono)">${(c.sent||0).toLocaleString()}</td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div></div><span style="font-size:12px">${c.open_rate}%</span></div></td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:60px"><div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div></div><span style="font-size:12px">${c.click_rate}%</span></div></td>
+      <td>${statusBadge(c.status)}</td>
+    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--muted)">אין קמפיינים</td></tr>';
+    drawChart(stats.slice(0,8));
+  }
+  if (contacts) document.getElementById('stat-contacts').textContent = (contacts.total||0).toLocaleString();
+  if (todayRes) {
+    const sentToday = todayRes.sent_today || 0;
+    const remaining = todayRes.remaining ?? 300;
+    const pct = Math.min(100, (sentToday / 300) * 100);
+    document.getElementById('daily-used').textContent = sentToday;
+    document.getElementById('daily-remaining').textContent = remaining;
+    document.getElementById('daily-bar').style.width = pct + '%';
+    document.getElementById('daily-bar').style.background = pct > 80 ? 'var(--red)' : pct > 60 ? 'var(--amber)' : 'var(--green)';
+  }
+}
+
+function drawChart(data) {
+  const canvas = document.getElementById('perf-chart');
+  if (!canvas || !data.length) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * devicePixelRatio;
+  canvas.height = 240 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = canvas.offsetWidth, H = 240;
+  ctx.clearRect(0,0,W,H);
+  const pad = {l:40,r:20,t:20,b:40};
+  const cw = W - pad.l - pad.r, ch = H - pad.t - pad.b;
+  const n = data.length, barW = Math.min(40, cw / n - 8);
+  [0,25,50,75,100].forEach(v => {
+    const y = pad.t + ch - (v/100)*ch;
+    ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+    ctx.fillStyle='rgba(148,163,184,0.6)';ctx.font='10px "JetBrains Mono"';ctx.textAlign='right';ctx.fillText(v+'%',pad.l-6,y+4);
+  });
+  data.forEach((c,i) => {
+    const x = pad.l + (i/n)*cw + (cw/n - barW*2-4)/2;
+    const openH=(c.open_rate/100)*ch, clickH=(c.click_rate/100)*ch;
+    const g1=ctx.createLinearGradient(0,pad.t+ch-openH,0,pad.t+ch);g1.addColorStop(0,'rgba(34,211,160,.9)');g1.addColorStop(1,'rgba(34,211,160,.2)');
+    ctx.fillStyle=g1;ctx.beginPath();ctx.roundRect(x,pad.t+ch-openH,barW,openH,[3,3,0,0]);ctx.fill();
+    const g2=ctx.createLinearGradient(0,pad.t+ch-clickH,0,pad.t+ch);g2.addColorStop(0,'rgba(91,110,245,.9)');g2.addColorStop(1,'rgba(91,110,245,.2)');
+    ctx.fillStyle=g2;ctx.beginPath();ctx.roundRect(x+barW+4,pad.t+ch-clickH,barW,clickH,[3,3,0,0]);ctx.fill();
+    const name=c.name.length>10?c.name.slice(0,8)+'…':c.name;
+    ctx.fillStyle='rgba(148,163,184,0.7)';ctx.font='10px "IBM Plex Sans Hebrew"';ctx.textAlign='center';ctx.fillText(name,x+barW,pad.t+ch+16);
+  });
+}
+
+// ── CAMPAIGNS ──────────────────────────────────────────────────────────────
+async function loadCampaigns() {
+  const data = await api('GET', '/analytics/campaigns');
+  if (!data) return;
+  analyticsData = data;
+  const tbody = document.getElementById('campaigns-table');
+  tbody.innerHTML = data.map(c => `<tr>
+    <td style="font-weight:500">${c.name}</td>
+    <td>${channelBadge(c.channel)}</td>
+    <td style="font-family:var(--mono)">${(c.sent||0).toLocaleString()}</td>
+    <td>${c.open_rate}%</td>
+    <td>${c.click_rate}%</td>
+    <td style="font-family:var(--mono);color:var(--green)">${c.wa_sent||0}</td>
+    <td>${statusBadge(c.status)}</td>
+    <td><div style="display:flex;gap:6px">
+      <button class="btn btn-sm ${c.status==='sent'?'':'btn-primary'}" onclick="prepareLaunch('${c.id}','${c.name}')">${c.status==='sent'?'🔁 שלח שוב':'🚀 שלח'}</button>
+      <button class="btn btn-sm btn-danger" onclick="deleteCampaign('${c.id}')">🗑</button>
+    </div></td>
+  </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--muted)">אין קמפיינים</td></tr>';
+}
+
+async function createCampaign() {
+  const channel = document.querySelector('input[name="c-channel"]:checked')?.value || 'email';
+  const body = {
+    name: document.getElementById('c-name').value,
+    channel,
+    rate_limit_per_minute: parseInt(document.getElementById('c-rate').value) || 60,
+    attachments: attachedFiles || [],
+  };
+  if (channel !== 'whatsapp') {
+    body.subject    = document.getElementById('c-subject').value;
+    body.body_html  = getEditorHTML();
+    body.body_text  = getEditorText();
+    body.from_name  = document.getElementById('c-from-name').value;
+    body.from_email = document.getElementById('c-from-email').value;
+  }
+  if (channel !== 'email') {
+    body.wa_instance_id      = document.getElementById('c-wa-instance').value;
+    body.wa_message_template = document.getElementById('c-wa-template').value;
+  }
+  if (!body.name) { toast('מלא שם לקמפיין', 'error'); return; }
+  if (channel !== 'whatsapp' && !body.subject) { toast('מלא Subject', 'error'); return; }
+  if (channel !== 'email' && !body.wa_instance_id) { toast('בחר מספר WhatsApp', 'error'); return; }
+  if (channel !== 'email' && !body.wa_message_template) { toast('מלא תוכן הודעת WhatsApp', 'error'); return; }
+
+  const res = await api('POST', '/campaigns', body);
+  if (res) { closeModal('campaign-modal'); toast('הקמפיין נוצר בהצלחה ✓', 'success'); loadCampaigns(); }
+  else toast('שגיאה ביצירת הקמפיין', 'error');
+}
+
+let launchAllContacts = [], launchFilteredContacts = [];
+
+async function prepareLaunch(id, name) {
+  launchCampaignId = id;
+  document.getElementById('launch-title').textContent = 'שליחת: ' + name;
+  document.getElementById('launch-search').value = '';
+  const listEl = document.getElementById('launch-contact-list');
+  listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">טוען...</div>';
+  openModal('launch-modal');
+  let allContacts = [], page = 1;
+  while (true) {
+    const res = await api('GET', `/contacts?page=${page}&page_size=100&status=active`);
+    if (!res || !res.items.length) break;
+    allContacts = allContacts.concat(res.items);
+    if (allContacts.length >= res.total) break;
+    page++;
+  }
+  launchAllContacts = allContacts;
+  launchFilteredContacts = [...allContacts];
+  document.getElementById('launch-contact-count').textContent = allContacts.length.toLocaleString();
+  renderLaunchContacts();
+}
+
+function renderLaunchContacts() {
+  const listEl = document.getElementById('launch-contact-list');
+  if (!launchFilteredContacts.length) { listEl.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted)">אין אנשי קשר</div>'; return; }
+  listEl.innerHTML = launchFilteredContacts.map(c => `
+    <label style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);cursor:pointer" onmouseover="this.style.background='var(--bg4)'" onmouseout="this.style.background=''">
+      <input type="checkbox" id="chk-${c.id}" checked style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)" onchange="updateLaunchCount()"/>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:500">${c.name || '—'}</div>
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono)">${c.email || ''} ${c.phone ? '· 📱 '+c.phone : ''}</div>
+      </div>
+      <div style="font-size:11px;color:var(--muted)">${c.company || ''}</div>
+    </label>`).join('');
+  updateLaunchCount();
+}
+
+function filterLaunchContacts(q) {
+  const ql = q.toLowerCase();
+  launchFilteredContacts = launchAllContacts.filter(c =>
+    (c.email||'').toLowerCase().includes(ql) ||
+    (c.name||'').toLowerCase().includes(ql) ||
+    (c.phone||'').includes(ql) ||
+    (c.company||'').toLowerCase().includes(ql)
+  );
+  renderLaunchContacts();
+}
+
+function selectAllLaunch(checked) {
+  launchFilteredContacts.forEach(c => { const el=document.getElementById('chk-'+c.id); if(el) el.checked=checked; });
+  updateLaunchCount();
+}
+function updateLaunchCount() {
+  const checked = launchAllContacts.filter(c => { const el=document.getElementById('chk-'+c.id); return el&&el.checked; });
+  document.getElementById('launch-selected-count').textContent = checked.length;
+  const eta = Math.ceil(checked.length * 0.5 / 60);
+  document.getElementById('launch-eta').textContent = checked.length===0 ? '—' : checked.length<120 ? 'פחות מדקה' : `~${eta} דקות`;
+}
+function getSelectedContactIds() {
+  return launchAllContacts.filter(c => { const el=document.getElementById('chk-'+c.id); return el&&el.checked; }).map(c => c.id);
+}
+
+async function launchCampaign() {
+  if (!launchCampaignId) return;
+  const selectedIds = getSelectedContactIds();
+  if (!selectedIds.length) { toast('בחר לפחות איש קשר אחד', 'error'); return; }
+  const btn = document.getElementById('launch-btn');
+  btn.textContent = 'שולח...'; btn.disabled = true;
+  const res = await api('POST', `/campaigns/${launchCampaignId}/launch`, { contact_ids: selectedIds });
+  btn.textContent = '🚀 שלח לנבחרים'; btn.disabled = false;
+  if (res) { closeModal('launch-modal'); toast(`${(res.email_queued||0)} מיילים + ${(res.wa_queued||0)} WA נשלחים ✓`, 'success'); loadCampaigns(); }
+  else toast('שגיאה בשליחה', 'error');
+}
+
+async function deleteCampaign(id) {
+  if (!confirm('למחוק קמפיין זה?')) return;
+  await api('DELETE', `/campaigns/${id}`);
+  toast('נמחק ✓', 'success'); loadCampaigns();
+}
+
+// ── CONTACTS ──────────────────────────────────────────────────────────────
+async function loadContacts() {
+  const q = `/contacts?page=${currentPage}&page_size=50${contactSearch ? '&search='+contactSearch : ''}`;
+  const data = await api('GET', q);
+  if (!data) return;
+  const [active, unsub, bounce] = await Promise.all([
+    api('GET', '/contacts?page=1&page_size=1&status=active'),
+    api('GET', '/contacts?page=1&page_size=1&status=unsubscribed'),
+    api('GET', '/contacts?page=1&page_size=1&status=bounced'),
+  ]);
+  document.getElementById('ct-active').textContent  = (active?.total||0).toLocaleString();
+  document.getElementById('ct-unsub').textContent   = (unsub?.total||0).toLocaleString();
+  document.getElementById('ct-bounce').textContent  = (bounce?.total||0).toLocaleString();
+  const tbody = document.getElementById('contacts-table');
+  tbody.innerHTML = data.items.map(c => `<tr>
+    <td style="font-family:var(--mono);font-size:12px">${c.email || '<span style="color:var(--muted)">—</span>'}</td>
+    <td style="font-family:var(--mono);font-size:12px;color:var(--green)">${c.phone ? '📱 '+c.phone : '<span style="color:var(--muted)">—</span>'}</td>
+    <td>${c.name || '—'}</td>
+    <td>${c.company || '—'}</td>
+    <td>${statusBadge(c.status)}</td>
+    <td style="color:var(--muted);font-size:12px">${fmt(c.created_at)}</td>
+    <td><button class="btn btn-sm btn-danger" onclick="deleteContact('${c.id}','${c.email||c.phone}')">🗑</button></td>
+  </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
+  document.getElementById('page-info').textContent = `עמוד ${currentPage} · ${(data.total||0).toLocaleString()} סה"כ`;
+}
+
+async function deleteContact(id, label) {
+  if (!confirm(`למחוק את ${label}?`)) return;
+  const res = await api('DELETE', `/contacts/${id}`);
+  if (res) { toast('נמחק ✓', 'success'); loadContacts(); }
+  else toast('שגיאה במחיקה', 'error');
+}
+
+let searchTimer;
+function searchContacts(v) { contactSearch=v; currentPage=1; clearTimeout(searchTimer); searchTimer=setTimeout(loadContacts,400); }
+function nextPage() { currentPage++; loadContacts(); }
+function prevPage() { if(currentPage>1){currentPage--;loadContacts();} }
+
+// ── UPLOAD ─────────────────────────────────────────────────────────────────
+function ev(e) { e.preventDefault(); e.stopPropagation(); }
+function handleDrop(e) { ev(e); document.getElementById('drop-zone').classList.remove('drag'); const f=e.dataTransfer.files[0]; if(f) uploadFile(f); }
+function handleFileSelect(input) { const f=input.files[0]; if(f) uploadFile(f); }
+
+async function uploadFile(file) {
+  const zone = document.getElementById('drop-zone');
+  zone.querySelector('.upload-title').textContent = 'מעלה: ' + file.name;
+  zone.querySelector('.upload-sub').textContent = 'אנא המתן...';
+  const form = new FormData();
+  form.append('file', file);
+  const res = await api('POST', '/uploads', form, true);
+  if (res) {
+    showUploadResult(res);
+    toast(`${res.inserted} אנשי קשר יובאו ✓`, 'success');
+  } else {
+    toast('שגיאה בהעלאה', 'error');
+  }
+  zone.querySelector('.upload-title').textContent = 'גרור קובץ לכאן או לחץ לבחירה';
+  zone.querySelector('.upload-sub').textContent = 'CSV או Excel (.xlsx) · עד 25MB · תומך בעמודות מייל + טלפון';
+}
+
+function showUploadResult(res) {
+  document.getElementById('up-valid').textContent   = res.valid_count;
+  document.getElementById('up-total').textContent   = res.row_count;
+  document.getElementById('up-dupes').textContent   = res.duplicates;
+  document.getElementById('up-invalid').textContent = res.invalid;
+
+  const dc = res.detected_columns || {};
+  const parts = [];
+  if (dc.email) parts.push('מייל=' + dc.email);
+  if (dc.phones && dc.phones.length) parts.push('טלפון=' + dc.phones.join(', '));
+  if (dc.name) parts.push('שם=' + dc.name);
+  if (dc.company) parts.push('חברה=' + dc.company);
+  document.getElementById('detected-cols').textContent = parts.length ? 'זוהו: ' + parts.join(' | ') : '';
+
+  if (res.preview?.length) {
+    const cols = Object.keys(res.preview[0]);
+    document.getElementById('preview-head').innerHTML = '<tr>' + cols.map(c=>`<th>${c}</th>`).join('') + '</tr>';
+    document.getElementById('preview-body').innerHTML = res.preview.map(row =>
+      '<tr>' + cols.map(c=>`<td>${row[c]||''}</td>`).join('') + '</tr>'
+    ).join('');
+  }
+  document.getElementById('upload-result').style.display = 'block';
+}
+
+// ── ANALYTICS ──────────────────────────────────────────────────────────────
+async function loadAnalytics() {
+  const data = await api('GET', '/analytics/campaigns') || [];
+  analyticsData = data;
+  const tbody = document.getElementById('analytics-table');
+  tbody.innerHTML = data.map(c => `<tr>
+    <td style="font-weight:500">${c.name}</td>
+    <td style="font-family:var(--mono)">${(c.sent||0).toLocaleString()}</td>
+    <td>${c.opens||0}</td><td>${c.clicks||0}</td><td>${c.bounces||0}</td>
+    <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${c.open_rate}%;background:var(--green)"></div></div><span style="font-size:12px">${c.open_rate}%</span></div></td>
+    <td><div style="display:flex;align-items:center;gap:8px"><div class="progress-bar" style="width:80px"><div class="progress-fill" style="width:${c.click_rate}%;background:var(--accent)"></div></div><span style="font-size:12px">${c.click_rate}%</span></div></td>
+  </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין נתונים</td></tr>';
+
+  const avg = key => data.length ? (data.reduce((s,c)=>s+c[key],0)/data.length).toFixed(1) : 0;
+  document.getElementById('analytics-rates').innerHTML = [
+    {label:'Open Rate', val:avg('open_rate'), color:'var(--green)'},
+    {label:'Click Rate', val:avg('click_rate'), color:'var(--accent)'},
+    {label:'Bounce Rate', val:avg('bounce_rate'), color:'var(--red)'},
+  ].map(m => `<div class="rate-row"><div class="rate-label">${m.label}</div><div class="rate-bar"><div class="rate-fill" style="width:${m.val}%;background:${m.color}"></div></div><div class="rate-pct">${m.val}%</div></div>`).join('');
+}
+
+// ── FOLLOW-UP ──────────────────────────────────────────────────────────────
+async function loadFollowupCampaigns() {
+  const data = await api('GET', '/campaigns') || [];
+  const sel = document.getElementById('followup-campaign-select');
+  sel.innerHTML = '<option value="">— בחר קמפיין —</option>';
+  data.forEach(c => { const opt=document.createElement('option'); opt.value=c.id; opt.textContent=c.name; sel.appendChild(opt); });
+}
+async function loadFollowupRules(campaignId) {
+  if (!campaignId) return;
+  const data = await api('GET', `/campaigns/${campaignId}/followup`) || [];
+  document.getElementById('followup-rules-list').innerHTML = data.length ? data.map(r =>
+    `<div style="background:var(--bg3);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-weight:500;margin-bottom:4px">${r.subject}</div>
+      <div style="font-size:12px;color:var(--muted)">טריגר: ${r.trigger==='not_opened'?'לא נפתח':'נפתח לא לחץ'} · המתן ${r.wait_hours} שעות</div></div>
+      <span class="badge badge-${r.is_active?'green':'gray'}">${r.is_active?'פעיל':'כבוי'}</span>
+    </div>`).join('') : '<div style="color:var(--muted);font-size:13px">אין כללים לקמפיין זה</div>';
+}
+async function runFollowup() {
+  const res = await api('POST', '/followup/run');
+  if (res !== null) toast(`Follow-up: ${res.processed} מיילים נשלחו ✓`, 'success');
+  else toast('שגיאה', 'error');
+}
+function toggleFuForm() {
+  const el = document.getElementById('followup-form');
+  el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+async function saveFollowupRule() {
+  const campaignId = document.getElementById('followup-campaign-select').value;
+  if (!campaignId) { toast('בחר קמפיין', 'error'); return; }
+  const body = {
+    trigger_event: document.getElementById('fu-trigger').value,
+    wait_hours: parseInt(document.getElementById('fu-hours').value),
+    followup_subject: document.getElementById('fu-subject').value,
+    followup_body_html: document.getElementById('fu-html').value,
+  };
+  const res = await api('POST', `/campaigns/${campaignId}/followup`, body);
+  if (res) { toast('כלל נשמר ✓', 'success'); toggleFuForm(); loadFollowupRules(campaignId); }
+  else toast('שגיאה', 'error');
+}
+
+// ── SETTINGS ──────────────────────────────────────────────────────────────
+function settingsTab(name, el) {
+  ['smtp','sendgrid','ses','brevo'].forEach(t => document.getElementById('settings-'+t).style.display = t===name?'block':'none');
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function switchProvider(val) { toast('ספק ' + val + ' נבחר', 'success'); }
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+(async function init() {
+  const health = await fetch(API + '/health').then(r=>r.json()).catch(()=>null);
+  if (health) loadDashboard();
+})();
+
+// ── LOGIN ──────────────────────────────────────────────────────────────────
+async function doLogin() {
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const errEl = document.getElementById('login-error');
+  errEl.textContent = '';
+  try {
+    const r = await fetch(API + '/auth/token', {
+      method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'username='+encodeURIComponent(email)+'&password='+encodeURIComponent(password)
+    });
+    if (!r.ok) { errEl.textContent='מייל או סיסמה שגויים'; return; }
+    const data = await r.json();
+    TOKEN = data.access_token;
+    localStorage.setItem('mf_token', TOKEN);
+    document.getElementById('login-overlay').style.display = 'none';
+    loadDashboard();
+  } catch(e) { errEl.textContent='שגיאת התחברות'; }
+}
+
+async function doRegister() {
+  const name=document.getElementById('reg-name').value, email=document.getElementById('reg-email').value, password=document.getElementById('reg-password').value;
+  const errEl=document.getElementById('reg-error'); errEl.textContent='';
+  if(!name||!email||!password){errEl.textContent='מלא את כל השדות';return;}
+  if(password.length<6){errEl.textContent='סיסמה לפחות 6 תווים';return;}
+  try {
+    const r=await fetch(API+'/auth/register',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email,password,name})});
+    const data=await r.json();
+    if(!r.ok){errEl.textContent=data.detail||'שגיאה בהרשמה';return;}
+    TOKEN=data.access_token; localStorage.setItem('mf_token',TOKEN);
+    document.getElementById('register-overlay').style.display='none';
+    toast('ברוך הבא! '+name,'success'); loadDashboard();
+  } catch(e){errEl.textContent='שגיאת התחברות';}
+}
+
+function showRegister(){document.getElementById('login-overlay').style.display='none';document.getElementById('register-overlay').style.display='flex';}
+function showLogin(){document.getElementById('register-overlay').style.display='none';document.getElementById('login-overlay').style.display='flex';}
+
+if (TOKEN) document.getElementById('login-overlay').style.display = 'none';
+
+// ── EMAIL EDITOR ──────────────────────────────────────────────────────────
+function execCmd(cmd, val) {
+  const editor=document.getElementById('email-editor');if(!editor)return;editor.focus();
+  try{document.execCommand(cmd,false,val!==undefined?val:null);}catch(e){}
+}
+function insertVar(v) {
+  const editor=document.getElementById('email-editor');if(!editor)return;editor.focus();
+  const sel=window.getSelection();
+  if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(document.createTextNode(v));range.collapse(false);}
+  else editor.innerHTML+=v;
+}
+const EMOJIS=['😊','😀','😎','🎉','🔥','💡','✅','❌','📧','📢','💼','🚀','⭐','💪','🙏','👋','💰','📈','🎯','🏆','💎','🌟','❤️','👍','🔗','📎','📄','🖼','💬','🔔','⚡','🌈','🎁','🤝','📱','💻','🛒','✉️','📝'];
+function initEmojiGrid(){const grid=document.getElementById('emoji-grid');if(!grid||grid.children.length>0)return;EMOJIS.forEach(e=>{const btn=document.createElement('button');btn.textContent=e;btn.style.cssText='background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:4px';btn.onclick=ev=>{ev.preventDefault();ev.stopPropagation();insertVar(e);toggleEmojiPicker();};grid.appendChild(btn);});}
+function toggleEmojiPicker(){const p=document.getElementById('emoji-picker');if(!p)return;p.style.display=p.style.display==='block'?'none':'block';if(p.style.display==='block')initEmojiGrid();}
+document.addEventListener('click',e=>{if(!e.target.closest('#emoji-btn')&&!e.target.closest('#emoji-picker')){const p=document.getElementById('emoji-picker');if(p)p.style.display='none';}});
+
+async function insertImage(input) {
+  const file=input.files[0]; if(!file)return; input.value='';
+  const editor=document.getElementById('email-editor');
+  const loadId='img-load-'+Date.now();
+  editor.focus();
+  document.execCommand('insertHTML',false,`<span id="${loadId}" style="display:inline-block;padding:6px 12px;background:#333;color:#aaa;border-radius:4px;font-size:12px">⏳ מעלה תמונה...</span>`);
+  try {
+    let imgUrl;
+    const fd=new FormData(); fd.append('file',file);
+    const r=await fetch(API+'/uploads/image',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN},body:fd});
+    if(r.ok){const d=await r.json();imgUrl=d.url;}
+    const loadSpan=document.getElementById(loadId); if(loadSpan)loadSpan.remove();
+    if(imgUrl){
+      insertImageWithControls(editor,imgUrl,file.name);
+    } else {
+      // fallback base64
+      const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file);});
+      insertImageWithControls(editor,b64,file.name);
+      toast('⚠️ התמונה עלתה כ-base64 מקומי','');
+    }
+  } catch(e){
+    const s=document.getElementById(loadId);if(s)s.remove();
+    toast('שגיאה: '+e.message,'error');
+  }
+}
+
+function insertImageWithControls(editor,src,name){
+  const imgId='img-'+Date.now(), wrapId='wrap-'+imgId;
+  const html=`<div id="${wrapId}" style="display:block;margin:8px 0;line-height:0">
+    <img id="${imgId}" src="${src}" alt="${name}" style="width:320px;max-width:100%;border-radius:4px;cursor:pointer;display:block" onclick="showImgControls('${imgId}')"/>
+    <div id="ctrl-${imgId}" style="display:none;margin-top:6px;padding:8px;background:#1c2030;border:1px solid #333;border-radius:8px;line-height:1.4">
+      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+        <button class="tbtn" onclick="resizeImg('${imgId}',0.75)">🔍−</button>
+        <button class="tbtn" onclick="resizeImg('${imgId}',1.33)">🔍+</button>
+        <input type="range" min="80" max="900" value="320" style="width:100px" oninput="setImgWidth('${imgId}',+this.value)"/>
+        <span id="size-${imgId}" style="color:#888;font-size:11px;font-family:monospace">320px</span>
+        <span style="color:#444">|</span>
+        <button class="tbtn" onclick="floatImg('${imgId}','right')">⬅📝</button>
+        <button class="tbtn" onclick="floatImg('${imgId}','none')">⬜</button>
+        <button class="tbtn" onclick="floatImg('${imgId}','left')">📝➡</button>
+        <button class="tbtn" style="color:#f87171;margin-right:auto" onclick="removeImg('${wrapId}')">🗑 מחק</button>
+      </div>
+    </div>
+  </div><br>`;
+  editor.focus(); document.execCommand('insertHTML',false,html);
+  setTimeout(()=>showImgControls(imgId),100);
+}
+function showImgControls(imgId){document.querySelectorAll('[id^="ctrl-img-"]').forEach(el=>el.style.display='none');const c=document.getElementById('ctrl-'+imgId);if(c)c.style.display='block';}
+function resizeImg(imgId,f){const img=document.getElementById(imgId);if(!img)return;const nw=Math.max(80,Math.min(900,Math.round((parseInt(img.style.width)||320)*f)));img.style.width=nw+'px';const s=document.getElementById('size-'+imgId);if(s)s.textContent=nw+'px';}
+function setImgWidth(imgId,val){const img=document.getElementById(imgId);if(!img)return;img.style.width=val+'px';const s=document.getElementById('size-'+imgId);if(s)s.textContent=val+'px';}
+function floatImg(imgId,dir){const img=document.getElementById(imgId),wrap=document.getElementById('wrap-'+imgId);if(!img||!wrap)return;if(dir==='right')wrap.style.cssText='float:right;margin:4px 0 8px 16px;line-height:0;display:block';else if(dir==='left')wrap.style.cssText='float:left;margin:4px 16px 8px 0;line-height:0;display:block';else wrap.style.cssText='display:block;clear:both;margin:8px 0;line-height:0';}
+function removeImg(wrapId){const w=document.getElementById(wrapId);if(w){if(w.nextSibling&&w.nextSibling.nodeName==='BR')w.nextSibling.remove();w.remove();}}
+
+function insertLinkButton(){
+  const url=prompt('URL:','https://');if(url===null)return;
+  const text=prompt('טקסט על הכפתור:','לחץ כאן');if(!text)return;
+  const html=`<div style="text-align:center;margin:20px 0"><a href="${url||'#'}" style="display:inline-block;background:#5b6ef5;color:#ffffff;padding:13px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;font-family:Arial,sans-serif">${text}</a></div><br>`;
+  document.getElementById('email-editor').focus();document.execCommand('insertHTML',false,html);
+}
+
+let attachedFiles=[];
+function addAttachments(input){Array.from(input.files).forEach(file=>{const reader=new FileReader();reader.onload=ev=>{attachedFiles.push({name:file.name,data:ev.target.result.split(',')[1],type:file.type});renderAttachments();};reader.readAsDataURL(file);});input.value='';}
+function renderAttachments(){const list=document.getElementById('attachments-list');if(!list)return;list.innerHTML=attachedFiles.map((f,i)=>`<div class="attach-chip">📎 ${f.name}<button onclick="removeAttachment(${i})">✕</button></div>`).join('');}
+function removeAttachment(i){attachedFiles.splice(i,1);renderAttachments();}
+
+function getEditorHTML(){
+  const editor=document.getElementById('email-editor');
+  if(!editor||!editor.innerHTML.trim())return'';
+  const clone=editor.cloneNode(true);
+  clone.querySelectorAll('[id^="ctrl-"]').forEach(el=>el.remove());
+  clone.querySelectorAll('[id^="wrap-img-"]').forEach(wrap=>{
+    const img=wrap.querySelector('img');if(!img){wrap.remove();return;}
+    const ws=wrap.getAttribute('style')||'',iw=img.style.width||'320px',isrc=img.getAttribute('src')||'',ialt=img.getAttribute('alt')||'';
+    let emailHtml;
+    if(ws.includes('float:right')||ws.includes('float: right'))emailHtml=`<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0"><tr><td style="padding-right:12px;vertical-align:top"><img src="${isrc}" alt="${ialt}" width="${parseInt(iw)}" style="width:${iw};max-width:100%;display:block;border-radius:4px"/></td><td style="vertical-align:top;width:100%">&nbsp;</td></tr></table>`;
+    else if(ws.includes('float:left')||ws.includes('float: left'))emailHtml=`<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0"><tr><td style="vertical-align:top;width:100%">&nbsp;</td><td style="padding-left:12px;vertical-align:top"><img src="${isrc}" alt="${ialt}" width="${parseInt(iw)}" style="width:${iw};max-width:100%;display:block;border-radius:4px"/></td></tr></table>`;
+    else emailHtml=`<div style="text-align:center;margin:8px 0"><img src="${isrc}" alt="${ialt}" width="${parseInt(iw)}" style="width:${iw};max-width:100%;display:inline-block;border-radius:4px"/></div>`;
+    const t=document.createElement('div');t.innerHTML=emailHtml;wrap.replaceWith(t.firstChild);
+  });
+  clone.querySelectorAll('img').forEach(img=>{img.removeAttribute('onclick');img.style.cursor='default';if(img.style.width)img.setAttribute('width',parseInt(img.style.width));});
+  return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif"><div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:10px;overflow:hidden"><div style="padding:32px;direction:rtl;text-align:right;color:#333333;font-size:15px;line-height:1.7">${clone.innerHTML}</div></div></body></html>`;
+}
+function getEditorText(){const e=document.getElementById('email-editor');return e?e.innerText||e.textContent||'':'';}
+
+function applyTextColor(color){const e=document.getElementById('email-editor');e.focus();const sel=window.getSelection();if(!sel||sel.isCollapsed){toast('סמן טקסט קודם','');return;}const range=sel.getRangeAt(0).cloneRange();const selected=range.extractContents();const span=document.createElement('span');span.style.color=color;span.appendChild(selected);range.insertNode(span);}
+function applyBgColor(color){const e=document.getElementById('email-editor');e.focus();const sel=window.getSelection();if(!sel||sel.isCollapsed){toast('סמן טקסט קודם','');return;}const range=sel.getRangeAt(0).cloneRange();const selected=range.extractContents();const span=document.createElement('span');span.style.backgroundColor=color;span.appendChild(selected);range.insertNode(span);}
+
+// ── WHATSAPP ──────────────────────────────────────────────────────────────
 async function loadWaInstances() {
   try {
-    const r = await fetch(API + '/whatsapp/instances', {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    if (!r.ok) { document.getElementById('wa-instances-table').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red)">שגיאה בטעינה</td></tr>'; return; }
-    const instances = await r.json();
-    const tbody = document.getElementById('wa-instances-table');
-    if (!instances.length) {
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">אין מספרים מחוברים עדיין. לחץ "חבר מספר חדש"</td></tr>';
-      return;
-    }
-    tbody.innerHTML = instances.map(i => {
-      const stateColor = i.state === 'authorized' ? 'green' : i.state === 'notAuthorized' ? 'red' : 'amber';
-      const stateLabel = i.state === 'authorized' ? '✅ מחובר' : i.state === 'notAuthorized' ? '❌ לא מחובר' : '⏳ ' + i.state;
-      return `<tr>
-        <td><strong>${i.label}</strong></td>
-        <td style="font-family:monospace">${i.phone_number || '—'}</td>
-        <td style="font-family:monospace;font-size:12px">${i.id_instance}</td>
-        <td><span class="badge badge-${stateColor}">${stateLabel}</span></td>
-        <td style="font-size:12px;color:var(--muted)">${i.created_at ? new Date(i.created_at).toLocaleDateString('he-IL') : '—'}</td>
-        <td>
-          <button class="btn btn-sm" onclick="checkWaStatus('${i.id}')">בדוק</button>
-          ${i.state !== 'authorized' ? `<button class="btn btn-sm" onclick="showWaQR('${i.id}')" style="margin-right:4px">QR</button>` : ''}
-          <button class="btn btn-sm btn-danger" onclick="deleteWaInstance('${i.id}')" style="margin-right:4px">מחק</button>
-        </td>
-      </tr>`;
+    const r=await fetch(API+'/whatsapp/instances',{headers:{'Authorization':'Bearer '+TOKEN}});
+    if(!r.ok){document.getElementById('wa-instances-table').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red)">שגיאה בטעינה</td></tr>';return;}
+    const instances=await r.json();
+    const tbody=document.getElementById('wa-instances-table');
+    if(!instances.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:30px">אין מספרים מחוברים</td></tr>';return;}
+    tbody.innerHTML=instances.map(i=>{
+      const sc=i.state==='authorized'?'green':i.state==='notAuthorized'?'red':'amber';
+      const sl=i.state==='authorized'?'✅ מחובר':i.state==='notAuthorized'?'❌ לא מחובר':'⏳ '+i.state;
+      return `<tr><td><strong>${i.label}</strong></td><td style="font-family:monospace">${i.phone_number||'—'}</td><td style="font-family:monospace;font-size:12px">${i.id_instance}</td><td><span class="badge badge-${sc}">${sl}</span></td><td style="font-size:12px;color:var(--muted)">${i.created_at?new Date(i.created_at).toLocaleDateString('he-IL'):'—'}</td>
+      <td><button class="btn btn-sm" onclick="checkWaStatus('${i.id}')">בדוק</button>${i.state!=='authorized'?`<button class="btn btn-sm" onclick="showWaQR('${i.id}')" style="margin-right:4px">QR</button>`:''}<button class="btn btn-sm btn-danger" onclick="deleteWaInstance('${i.id}')" style="margin-right:4px">מחק</button></td></tr>`;
     }).join('');
-  } catch(e) {
-    document.getElementById('wa-instances-table').innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--red)">' + e.message + '</td></tr>';
-  }
+  } catch(e){document.getElementById('wa-instances-table').innerHTML='<tr><td colspan="6" style="text-align:center;color:var(--red)">'+e.message+'</td></tr>';}
 }
 
-async function addWaInstance() {
-  const label = document.getElementById('wa-label').value.trim();
-  const idInstance = document.getElementById('wa-id-instance').value.trim();
-  const apiToken = document.getElementById('wa-api-token').value.trim();
-  const phone = document.getElementById('wa-phone').value.trim();
-
-  if (!label || !idInstance || !apiToken) { toast('מלא את כל השדות החובה', 'error'); return; }
-
-  try {
-    const r = await fetch(API + '/whatsapp/instances', {
-      method: 'POST',
-      headers: { 'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ label, id_instance: idInstance, api_token: apiToken, phone_number: phone || null })
-    });
-    const data = await r.json();
-    if (!r.ok) { toast(data.detail || 'שגיאה', 'error'); return; }
-
-    toast('✅ ' + data.message, 'success');
-    closeModal('wa-modal');
-    loadWaInstances();
-
-    // If not authorized, offer QR
-    if (data.state !== 'authorized') {
-      setTimeout(() => {
-        if (confirm('המספר עדיין לא מחובר. האם לפתוח QR לסריקה?')) {
-          showWaQR(data.id);
-        }
-      }, 500);
-    }
-  } catch(e) {
-    toast('שגיאה: ' + e.message, 'error');
-  }
+async function loadWaTodayStats() {
+  const d=await api('GET','/analytics/today');
+  if(d) document.getElementById('wa-today-sent').textContent=d.wa_sent_today??'0';
 }
 
-async function checkWaStatus(instanceId) {
-  try {
-    const r = await fetch(API + '/whatsapp/instances/' + instanceId + '/status', {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    const data = await r.json();
-    const label = data.state === 'authorized' ? '✅ מחובר' : '❌ ' + data.state;
-    toast(data.label + ': ' + label, data.state === 'authorized' ? 'success' : '');
-    loadWaInstances();
-  } catch(e) { toast('שגיאה: ' + e.message, 'error'); }
+async function addWaInstance(){
+  const label=document.getElementById('wa-label').value.trim();
+  const idInstance=document.getElementById('wa-id-instance').value.trim();
+  const apiToken=document.getElementById('wa-api-token').value.trim();
+  const phone=document.getElementById('wa-phone').value.trim();
+  if(!label||!idInstance||!apiToken){toast('מלא את כל השדות','error');return;}
+  try{
+    const r=await fetch(API+'/whatsapp/instances',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN,'Content-Type':'application/json'},body:JSON.stringify({label,id_instance:idInstance,api_token:apiToken,phone_number:phone||null})});
+    const data=await r.json();
+    if(!r.ok){toast(data.detail||'שגיאה','error');return;}
+    toast('✅ נוסף בהצלחה','success');closeModal('wa-modal');loadWaInstances();
+    if(data.state!=='authorized')setTimeout(()=>{if(confirm('המספר לא מחובר. לפתוח QR?'))showWaQR(data.id);},500);
+  }catch(e){toast('שגיאה: '+e.message,'error');}
 }
 
-async function showWaQR(instanceId) {
-  try {
-    const r = await fetch(API + '/whatsapp/instances/' + instanceId + '/qr', {
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    const data = await r.json();
-    if (data.type === 'qrCode' && data.message) {
-      document.getElementById('wa-qr-img').src = 'data:image/png;base64,' + data.message;
-      document.getElementById('wa-qr-container').style.display = 'block';
-      openModal('wa-modal');
-      toast('סרוק את ה-QR בוואטסאפ', 'success');
-    } else if (data.type === 'alreadyLogged') {
-      toast('✅ כבר מחובר!', 'success');
-      loadWaInstances();
-    } else {
-      toast('לא ניתן לקבל QR: ' + (data.message || JSON.stringify(data)), 'error');
-    }
-  } catch(e) { toast('שגיאה: ' + e.message, 'error'); }
+async function checkWaStatus(instanceId){
+  const r=await fetch(API+'/whatsapp/instances/'+instanceId+'/status',{headers:{'Authorization':'Bearer '+TOKEN}});
+  const data=await r.json();
+  toast(data.label+': '+(data.state==='authorized'?'✅ מחובר':'❌ '+data.state),data.state==='authorized'?'success':'');
+  loadWaInstances();
 }
 
-async function deleteWaInstance(instanceId) {
-  if (!confirm('למחוק את החיבור הזה?')) return;
-  try {
-    const r = await fetch(API + '/whatsapp/instances/' + instanceId, {
-      method: 'DELETE',
-      headers: { 'Authorization': 'Bearer ' + TOKEN }
-    });
-    if (r.ok) { toast('החיבור נמחק', ''); loadWaInstances(); }
-    else toast('שגיאה במחיקה', 'error');
-  } catch(e) { toast('שגיאה: ' + e.message, 'error'); }
+async function showWaQR(instanceId){
+  const r=await fetch(API+'/whatsapp/instances/'+instanceId+'/qr',{headers:{'Authorization':'Bearer '+TOKEN}});
+  const data=await r.json();
+  if(data.type==='qrCode'&&data.message){document.getElementById('wa-qr-img').src='data:image/png;base64,'+data.message;document.getElementById('wa-qr-container').style.display='block';openModal('wa-modal');toast('סרוק את ה-QR','success');}
+  else if(data.type==='alreadyLogged'){toast('✅ כבר מחובר!','success');loadWaInstances();}
+  else toast('לא ניתן לקבל QR','error');
 }
 
-// Load WA instances when switching to whatsapp section
-const _origShowSection2 = showSection;
-showSection = function(sec, el) {
-  _origShowSection2(sec, el);
-  if (sec === 'whatsapp') {
-    loadWaInstances();
-    fetch(API + '/analytics/today', { headers: { 'Authorization': 'Bearer ' + TOKEN } })
-      .then(r => r.json())
-      .then(d => { document.getElementById('wa-today-sent').textContent = d.wa_sent_today ?? '0'; })
-      .catch(() => {});
-  }
-};
+async function deleteWaInstance(instanceId){
+  if(!confirm('למחוק?'))return;
+  const r=await fetch(API+'/whatsapp/instances/'+instanceId,{method:'DELETE',headers:{'Authorization':'Bearer '+TOKEN}});
+  if(r.ok){toast('נמחק','');loadWaInstances();}else toast('שגיאה','error');
+}
 </script>
+
+<!-- LOGIN -->
+<div id="login-overlay" style="position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:1000;flex-direction:column;gap:20px;">
+  <div style="text-align:center;margin-bottom:8px"><div style="font-size:32px">✉</div><div style="font-size:22px;font-weight:600">MailFlow</div><div style="color:var(--muted);font-size:13px;margin-top:4px">התחבר לחשבון שלך</div></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:320px">
+    <div class="form-group"><label class="form-label">מייל</label><input class="form-input" id="login-email" type="email" placeholder="your@email.com" style="direction:ltr"/></div>
+    <div class="form-group"><label class="form-label">סיסמה</label><input class="form-input" id="login-password" type="password" placeholder="••••••••" style="direction:ltr" onkeydown="if(event.key==='Enter')doLogin()"/></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doLogin()">כניסה</button>
+    <div id="login-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">אין לך חשבון? <span onclick="showRegister()" style="color:var(--accent2);cursor:pointer;text-decoration:underline">הירשם כאן</span></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="register-overlay" style="position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;z-index:1001;flex-direction:column;gap:20px;">
+  <div style="text-align:center;margin-bottom:8px"><div style="font-size:32px">✉</div><div style="font-size:22px;font-weight:600">MailFlow</div></div>
+  <div style="background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:28px;width:320px">
+    <div class="form-group"><label class="form-label">שם מלא</label><input class="form-input" id="reg-name" type="text"/></div>
+    <div class="form-group"><label class="form-label">מייל</label><input class="form-input" id="reg-email" type="email" style="direction:ltr"/></div>
+    <div class="form-group"><label class="form-label">סיסמה</label><input class="form-input" id="reg-password" type="password" style="direction:ltr" onkeydown="if(event.key==='Enter')doRegister()"/></div>
+    <button class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px" onclick="doRegister()">צור חשבון</button>
+    <div id="reg-error" style="color:var(--red);font-size:12px;margin-top:10px;text-align:center"></div>
+    <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted)">כבר יש לך חשבון? <span onclick="showLogin()" style="color:var(--accent2);cursor:pointer;text-decoration:underline">התחבר כאן</span></div>
+  </div>
+</div>
+
 </body>
 </html>
