@@ -217,8 +217,17 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
               <button class="btn btn-sm" onclick="loadContacts()">רענן</button>
             </div>
           </div>
+          <!-- Bulk action bar — מוצג רק כשיש סימונים -->
+          <div id="bulk-action-bar" style="display:none;padding:10px 16px;background:rgba(91,110,245,.08);border-bottom:1px solid var(--border);display:none;align-items:center;gap:12px">
+            <span id="bulk-count" style="font-size:13px;font-weight:600;color:var(--accent2)">0 נבחרו</span>
+            <button class="btn btn-sm btn-danger" onclick="deleteSelectedContacts()">🗑 מחק נבחרים</button>
+            <button class="btn btn-sm" onclick="clearSelection()" style="margin-right:auto">✕ בטל בחירה</button>
+          </div>
           <table>
             <thead><tr>
+              <th style="width:40px;padding-right:16px">
+                <input type="checkbox" id="select-all-contacts" title="בחר הכל" style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)" onchange="toggleSelectAll(this.checked)"/>
+              </th>
               <th>מייל</th>
               <th>טלפון</th>
               <th>שם</th>
@@ -227,7 +236,7 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
               <th>נוצר</th>
               <th></th>
             </tr></thead>
-            <tbody id="contacts-table"><tr><td colspan="7" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
+            <tbody id="contacts-table"><tr><td colspan="8" style="text-align:center;color:var(--muted)">טוען...</td></tr></tbody>
           </table>
           <div style="padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px">
             <button class="btn btn-sm" onclick="prevPage()">‹ הקודם</button>
@@ -870,7 +879,16 @@ async function loadContacts() {
   document.getElementById('ct-unsub').textContent   = (unsub?.total||0).toLocaleString();
   document.getElementById('ct-bounce').textContent  = (bounce?.total||0).toLocaleString();
   const tbody = document.getElementById('contacts-table');
-  tbody.innerHTML = data.items.map(c => `<tr>
+  // Reset select-all checkbox
+  const selectAllCb = document.getElementById('select-all-contacts');
+  if (selectAllCb) selectAllCb.checked = false;
+  updateBulkBar();
+  tbody.innerHTML = data.items.map(c => `<tr id="row-${c.id}">
+    <td style="padding-right:16px;width:40px">
+      <input type="checkbox" class="contact-cb" data-id="${c.id}" data-label="${c.email||c.phone||''}"
+        style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent)"
+        onchange="onContactCheck()"/>
+    </td>
     <td style="font-family:var(--mono);font-size:12px">${c.email || '<span style="color:var(--muted)">—</span>'}</td>
     <td style="font-family:var(--mono);font-size:12px;color:var(--green)">${c.phone ? '📱 '+c.phone : '<span style="color:var(--muted)">—</span>'}</td>
     <td>${c.name || '—'}</td>
@@ -878,8 +896,74 @@ async function loadContacts() {
     <td>${statusBadge(c.status)}</td>
     <td style="color:var(--muted);font-size:12px">${fmt(c.created_at)}</td>
     <td><button class="btn btn-sm btn-danger" onclick="deleteContact('${c.id}','${c.email||c.phone}')">🗑</button></td>
-  </tr>`).join('') || '<tr><td colspan="7" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
+  </tr>`).join('') || '<tr><td colspan="8" style="text-align:center;color:var(--muted)">אין אנשי קשר</td></tr>';
   document.getElementById('page-info').textContent = `עמוד ${currentPage} · ${(data.total||0).toLocaleString()} סה"כ`;
+}
+
+// ── Bulk selection ────────────────────────────────────────────────────────
+function getCheckedContactIds() {
+  return Array.from(document.querySelectorAll('.contact-cb:checked')).map(cb => cb.dataset.id);
+}
+
+function onContactCheck() {
+  updateBulkBar();
+  // Update select-all state
+  const all = document.querySelectorAll('.contact-cb');
+  const checked = document.querySelectorAll('.contact-cb:checked');
+  const selectAll = document.getElementById('select-all-contacts');
+  if (selectAll) {
+    selectAll.checked = all.length > 0 && checked.length === all.length;
+    selectAll.indeterminate = checked.length > 0 && checked.length < all.length;
+  }
+}
+
+function toggleSelectAll(checked) {
+  document.querySelectorAll('.contact-cb').forEach(cb => cb.checked = checked);
+  updateBulkBar();
+}
+
+function clearSelection() {
+  document.querySelectorAll('.contact-cb').forEach(cb => cb.checked = false);
+  const selectAll = document.getElementById('select-all-contacts');
+  if (selectAll) { selectAll.checked = false; selectAll.indeterminate = false; }
+  updateBulkBar();
+}
+
+function updateBulkBar() {
+  const checked = document.querySelectorAll('.contact-cb:checked');
+  const bar = document.getElementById('bulk-action-bar');
+  const countEl = document.getElementById('bulk-count');
+  if (!bar) return;
+  if (checked.length > 0) {
+    bar.style.display = 'flex';
+    if (countEl) countEl.textContent = checked.length + ' נבחרו';
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+async function deleteSelectedContacts() {
+  const ids = getCheckedContactIds();
+  if (!ids.length) return;
+  if (!confirm(`למחוק ${ids.length} אנשי קשר? פעולה זו בלתי הפיכה.`)) return;
+
+  let deleted = 0;
+  let failed = 0;
+  // Show progress
+  toast(`מוחק ${ids.length} אנשי קשר...`, '');
+
+  for (const id of ids) {
+    const res = await api('DELETE', `/contacts/${id}`);
+    if (res) deleted++;
+    else failed++;
+  }
+
+  if (failed === 0) {
+    toast(`✓ ${deleted} אנשי קשר נמחקו בהצלחה`, 'success');
+  } else {
+    toast(`נמחקו ${deleted}, נכשלו ${failed}`, 'error');
+  }
+  loadContacts();
 }
 
 async function deleteContact(id, label) {
