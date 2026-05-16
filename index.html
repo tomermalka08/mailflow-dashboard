@@ -580,13 +580,15 @@ function showSection(name, btn) {
 function openModal(id) {
   document.getElementById(id).classList.add('open');
   if (id === 'campaign-modal') {
-    setTimeout(() => {
-      const editor = document.getElementById('email-editor');
-      if (editor) editor.innerHTML = '';
-      attachedFiles = [];
-      renderAttachments();
-      loadWaInstancesForModal();
-    }, 100);
+    const editor = document.getElementById('email-editor');
+    if (editor) editor.innerHTML = '';
+    if (typeof attachedFiles !== 'undefined') attachedFiles = [];
+    if (typeof renderAttachments === 'function') renderAttachments();
+    // Reset to email channel
+    const emailRadio = document.querySelector('input[name="c-channel"][value="email"]');
+    if (emailRadio) { emailRadio.checked = true; updateChannelUI('email'); }
+    // Load WA instances
+    setTimeout(loadWaInstancesForModal, 300);
   }
 }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
@@ -616,15 +618,27 @@ function updateChannelUI(channel) {
 
 async function loadWaInstancesForModal() {
   const sel = document.getElementById('c-wa-instance');
-  if (!sel) return;
-  sel.innerHTML = '<option value="">— בחר מספר מחובר —</option>';
-  const instances = await api('GET', '/whatsapp/instances') || [];
-  instances.forEach(i => {
-    const opt = document.createElement('option');
-    opt.value = i.id;
-    opt.textContent = `${i.label} (${i.phone_number || i.id_instance}) — ${i.state === 'authorized' ? '✅' : '❌'}`;
-    sel.appendChild(opt);
-  });
+  if (!sel) { console.warn('c-wa-instance not found'); return; }
+  sel.innerHTML = '<option value="">טוען מספרים...</option>';
+  try {
+    const instances = await api('GET', '/whatsapp/instances') || [];
+    sel.innerHTML = '<option value="">— בחר מספר מחובר —</option>';
+    if (!instances.length) {
+      sel.innerHTML = '<option value="">אין מספרים מחוברים — חבר קודם בלשונית WhatsApp</option>';
+      return;
+    }
+    instances.forEach(i => {
+      const opt = document.createElement('option');
+      opt.value = i.id;
+      const status = i.state === 'authorized' ? '✅ מחובר' : '❌ לא מחובר';
+      opt.textContent = `${i.label} | ${i.phone_number || i.id_instance} | ${status}`;
+      sel.appendChild(opt);
+    });
+    console.log('WA instances loaded:', instances.length);
+  } catch(e) {
+    sel.innerHTML = '<option value="">שגיאה בטעינת מספרים</option>';
+    console.error('loadWaInstancesForModal error:', e);
+  }
 }
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────────
@@ -717,8 +731,9 @@ async function loadCampaigns() {
 
 async function createCampaign() {
   const channel = document.querySelector('input[name="c-channel"]:checked')?.value || 'email';
+  if (!attachedFiles) attachedFiles = [];
   const body = {
-    name: document.getElementById('c-name').value,
+    name: (document.getElementById('c-name').value || '').trim(),
     channel,
     rate_limit_per_minute: parseInt(document.getElementById('c-rate').value) || 60,
     attachments: attachedFiles || [],
@@ -735,7 +750,7 @@ async function createCampaign() {
     body.wa_message_template = document.getElementById('c-wa-template').value;
   }
   if (!body.name) { toast('מלא שם לקמפיין', 'error'); return; }
-  if (channel !== 'whatsapp' && !body.subject) { toast('מלא Subject', 'error'); return; }
+  if (channel !== 'whatsapp' && !body.subject) { toast('מלא Subject למייל', 'error'); return; }
   if (channel !== 'email' && !body.wa_instance_id) { toast('בחר מספר WhatsApp', 'error'); return; }
   if (channel !== 'email' && !body.wa_message_template) { toast('מלא תוכן הודעת WhatsApp', 'error'); return; }
 
