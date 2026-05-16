@@ -540,6 +540,8 @@ let currentPage = 1;
 let contactSearch = '';
 let launchCampaignId = null;
 let analyticsData = [];
+let attachedFiles = [];
+let waInstances = [];
 
 async function api(method, path, body, isForm) {
   const headers = { 'Authorization': `Bearer ${TOKEN}` };
@@ -611,34 +613,48 @@ function fmt(d) {
 function updateChannelUI(channel) {
   const emailFields = document.getElementById('email-fields');
   const waFields = document.getElementById('wa-fields');
-  if (channel === 'email') { emailFields.style.display='block'; waFields.style.display='none'; }
-  else if (channel === 'whatsapp') { emailFields.style.display='none'; waFields.style.display='block'; }
-  else { emailFields.style.display='block'; waFields.style.display='block'; }
+  if (channel === 'email') {
+    emailFields.style.display='block'; waFields.style.display='none';
+  } else if (channel === 'whatsapp') {
+    emailFields.style.display='none'; waFields.style.display='block';
+    populateWaSelect(); // populate when shown
+  } else {
+    emailFields.style.display='block'; waFields.style.display='block';
+    populateWaSelect(); // populate when shown
+  }
 }
 
 async function loadWaInstancesForModal() {
-  const sel = document.getElementById('c-wa-instance');
-  if (!sel) { console.warn('c-wa-instance not found'); return; }
-  sel.innerHTML = '<option value="">טוען מספרים...</option>';
+  // Load and cache WA instances globally
   try {
-    const instances = await api('GET', '/whatsapp/instances') || [];
-    sel.innerHTML = '<option value="">— בחר מספר מחובר —</option>';
-    if (!instances.length) {
-      sel.innerHTML = '<option value="">אין מספרים מחוברים — חבר קודם בלשונית WhatsApp</option>';
-      return;
-    }
-    instances.forEach(i => {
-      const opt = document.createElement('option');
-      opt.value = i.id;
-      const status = i.state === 'authorized' ? '✅ מחובר' : '❌ לא מחובר';
-      opt.textContent = `${i.label} | ${i.phone_number || i.id_instance} | ${status}`;
-      sel.appendChild(opt);
-    });
-    console.log('WA instances loaded:', instances.length);
+    waInstances = await api('GET', '/whatsapp/instances') || [];
+    console.log('WA instances cached:', waInstances.length, waInstances);
   } catch(e) {
-    sel.innerHTML = '<option value="">שגיאה בטעינת מספרים</option>';
-    console.error('loadWaInstancesForModal error:', e);
+    console.error('Failed to load WA instances:', e);
+    waInstances = [];
   }
+  populateWaSelect();
+}
+
+function populateWaSelect() {
+  const sel = document.getElementById('c-wa-instance');
+  if (!sel) { console.warn('c-wa-instance select not found in DOM'); return; }
+  sel.innerHTML = '<option value="">— בחר מספר מחובר —</option>';
+  if (!waInstances.length) {
+    const opt = document.createElement('option');
+    opt.value = '';
+    opt.textContent = 'אין מספרים מחוברים — חבר בלשונית WhatsApp';
+    sel.appendChild(opt);
+    return;
+  }
+  waInstances.forEach(i => {
+    const opt = document.createElement('option');
+    opt.value = i.id;
+    const status = i.state === 'authorized' ? '✅' : '❌';
+    opt.textContent = `${status} ${i.label} | ${i.phone_number || i.id_instance}`;
+    sel.appendChild(opt);
+  });
+  console.log('WA select populated with', waInstances.length, 'instances');
 }
 
 // ── DASHBOARD ──────────────────────────────────────────────────────────────
@@ -1115,7 +1131,6 @@ function insertLinkButton(){
   document.getElementById('email-editor').focus();document.execCommand('insertHTML',false,html);
 }
 
-let attachedFiles=[];
 function addAttachments(input){Array.from(input.files).forEach(file=>{const reader=new FileReader();reader.onload=ev=>{attachedFiles.push({name:file.name,data:ev.target.result.split(',')[1],type:file.type});renderAttachments();};reader.readAsDataURL(file);});input.value='';}
 function renderAttachments(){const list=document.getElementById('attachments-list');if(!list)return;list.innerHTML=attachedFiles.map((f,i)=>`<div class="attach-chip">📎 ${f.name}<button onclick="removeAttachment(${i})">✕</button></div>`).join('');}
 function removeAttachment(i){attachedFiles.splice(i,1);renderAttachments();}
