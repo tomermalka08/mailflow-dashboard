@@ -1171,7 +1171,7 @@ function insertVar(v) {
   if(sel.rangeCount){const range=sel.getRangeAt(0);range.deleteContents();range.insertNode(document.createTextNode(v));range.collapse(false);}
   else editor.innerHTML+=v;
 }
-const EMOJIS=['😊','😀','😎','🎉','🔥','💡','✅','❌','📧','📢','💼','🚀','⭐','💪','🙏','👋','💰','📈','🎯','🏆','💎','🌟','❤️','👍','🔗','📎','📄','🖼','💬','🔔','⚡','🌈','🎁','🤝','📱','💻','🛒','✉️','📝'];
+
 function initEmojiGrid(){const grid=document.getElementById('emoji-grid');if(!grid||grid.children.length>0)return;EMOJIS.forEach(e=>{const btn=document.createElement('button');btn.textContent=e;btn.style.cssText='background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:4px';btn.onclick=ev=>{ev.preventDefault();ev.stopPropagation();insertVar(e);toggleEmojiPicker();};grid.appendChild(btn);});}
 function positionAndToggleEmoji(btn) {
   const picker = document.getElementById('emoji-picker');
