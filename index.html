@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
@@ -451,11 +450,13 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
           <button class="tbtn" onclick="execCmd('insertOrderedList')">1. ≡</button>
           <div style="width:1px;height:22px;background:var(--border);margin:0 2px"></div>
           <div style="position:relative;display:inline-block">
-            <button class="tbtn" onclick="toggleEmojiPicker()" id="emoji-btn">😊</button>
-            <div id="emoji-picker" style="display:none;position:absolute;top:32px;right:0;z-index:200;background:var(--bg2);border:1px solid var(--border-hi);border-radius:10px;padding:10px;width:280px;box-shadow:0 8px 32px rgba(0,0,0,.5);">
-              <div style="font-size:11px;color:var(--muted);margin-bottom:6px">בחר אימוג׳י</div>
-              <div id="emoji-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:160px;overflow-y:auto;font-size:20px"></div>
-            </div>
+            <div style="position:relative;display:inline-block">
+            <button class="tbtn" type="button" id="emoji-btn" onclick="positionAndToggleEmoji(this)">😊</button>
+          </div>
+          <div id="emoji-picker" style="display:none;position:fixed;z-index:9999;background:var(--bg2);border:1px solid var(--border-hi);border-radius:10px;padding:12px;width:300px;box-shadow:0 8px 32px rgba(0,0,0,.9);">
+            <div style="font-size:11px;color:var(--muted);margin-bottom:8px;font-weight:600">בחר אימוג׳י</div>
+            <div id="emoji-grid" style="display:flex;flex-wrap:wrap;gap:4px;max-height:200px;overflow-y:auto;font-size:22px"></div>
+          </div>
           </div>
           <button class="tbtn" onclick="document.getElementById('img-upload').click()">🖼</button>
           <input type="file" id="img-upload" accept="image/*,.gif" style="display:none" onchange="insertImage(this)"/>
@@ -482,8 +483,28 @@ textarea.form-input{min-height:160px;resize:vertical;font-family:var(--mono);fon
       </div>
       <div class="form-group">
         <label class="form-label">תוכן הודעת WhatsApp</label>
-        <textarea class="form-input" id="c-wa-template" rows="4" placeholder="שלום {{name}}, יש לנו הצעה מיוחדת עבורך! 🎉&#10;&#10;לפרטים נוספים צור קשר."></textarea>
-        <div style="font-size:11px;color:var(--muted);margin-top:4px">ניתן להשתמש ב-{{name}}, {{company}}, {{email}}</div>
+        <textarea class="form-input" id="c-wa-template" rows="8"
+          style="font-size:14px;line-height:1.7;resize:vertical;min-height:180px"
+          placeholder="שלום {{name}} 👋
+
+יש לנו הצעה מיוחדת עבורך!
+
+📌 פרטים:
+• ...
+• ...
+
+לפרטים נוספים צור קשר ↩️"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px">
+          <div style="font-size:11px;color:var(--muted)">ניתן להשתמש ב-{{name}}, {{company}}, {{email}}</div>
+          <div style="display:flex;gap:6px">
+            <button type="button" class="btn btn-sm" onclick="insertWaVar('{{name}}')" style="font-size:11px;padding:3px 8px">{{name}}</button>
+            <button type="button" class="btn btn-sm" onclick="insertWaVar('{{company}}')" style="font-size:11px;padding:3px 8px">{{company}}</button>
+            <button type="button" class="btn btn-sm" onclick="insertWaEmojiPicker()" style="font-size:11px;padding:3px 8px">😊</button>
+          </div>
+        </div>
+        <div id="wa-emoji-picker" style="display:none;background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:10px;margin-top:6px">
+          <div style="display:flex;flex-wrap:wrap;gap:4px;font-size:20px" id="wa-emoji-grid"></div>
+        </div>
       </div>
     </div>
 
@@ -1152,94 +1173,276 @@ function insertVar(v) {
 }
 const EMOJIS=['😊','😀','😎','🎉','🔥','💡','✅','❌','📧','📢','💼','🚀','⭐','💪','🙏','👋','💰','📈','🎯','🏆','💎','🌟','❤️','👍','🔗','📎','📄','🖼','💬','🔔','⚡','🌈','🎁','🤝','📱','💻','🛒','✉️','📝'];
 function initEmojiGrid(){const grid=document.getElementById('emoji-grid');if(!grid||grid.children.length>0)return;EMOJIS.forEach(e=>{const btn=document.createElement('button');btn.textContent=e;btn.style.cssText='background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:4px';btn.onclick=ev=>{ev.preventDefault();ev.stopPropagation();insertVar(e);toggleEmojiPicker();};grid.appendChild(btn);});}
+function positionAndToggleEmoji(btn) {
+  const picker = document.getElementById('emoji-picker');
+  if (!picker) return;
+  if (picker.style.display === 'block') { picker.style.display = 'none'; return; }
+  const rect = btn.getBoundingClientRect();
+  picker.style.top = (rect.bottom + 6) + 'px';
+  picker.style.left = Math.max(4, rect.left - 220) + 'px';
+  picker.style.display = 'block';
+  initEmojiGrid();
+}
+
 function toggleEmojiPicker(){const p=document.getElementById('emoji-picker');if(!p)return;p.style.display=p.style.display==='block'?'none':'block';if(p.style.display==='block')initEmojiGrid();}
 document.addEventListener('click',e=>{if(!e.target.closest('#emoji-btn')&&!e.target.closest('#emoji-picker')){const p=document.getElementById('emoji-picker');if(p)p.style.display='none';}});
 
 async function insertImage(input) {
-  const file=input.files[0]; if(!file)return; input.value='';
-  const editor=document.getElementById('email-editor');
-  const loadId='img-load-'+Date.now();
+  const file = input.files[0];
+  if (!file) return;
+  input.value = '';
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+
+  // Show loading placeholder
+  const placeholderId = 'ph-' + Date.now();
   editor.focus();
-  document.execCommand('insertHTML',false,`<span id="${loadId}" style="display:inline-block;padding:6px 12px;background:#333;color:#aaa;border-radius:4px;font-size:12px">⏳ מעלה תמונה...</span>`);
+  const ph = document.createElement('div');
+  ph.id = placeholderId;
+  ph.style.cssText = 'display:inline-block;padding:8px 14px;background:#2a2e42;color:#94a3b8;border-radius:6px;font-size:12px;margin:4px 0';
+  ph.textContent = '⏳ מעלה תמונה...';
+  
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    range.collapse(false);
+    range.insertNode(ph);
+  } else {
+    editor.appendChild(ph);
+  }
+
   try {
-    let imgUrl;
-    const fd=new FormData(); fd.append('file',file);
-    const r=await fetch(API+'/uploads/image',{method:'POST',headers:{'Authorization':'Bearer '+TOKEN},body:fd});
-    if(r.ok){const d=await r.json();imgUrl=d.url;}
-    const loadSpan=document.getElementById(loadId); if(loadSpan)loadSpan.remove();
-    if(imgUrl){
-      insertImageWithControls(editor,imgUrl,file.name);
-    } else {
-      // fallback base64
-      const b64=await new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result);r.onerror=rej;r.readAsDataURL(file);});
-      insertImageWithControls(editor,b64,file.name);
-      toast('⚠️ התמונה עלתה כ-base64 מקומי','');
+    const fd = new FormData();
+    fd.append('file', file);
+    const r = await fetch(API + '/uploads/image', {
+      method: 'POST',
+      headers: { 'Authorization': 'Bearer ' + TOKEN },
+      body: fd
+    });
+    
+    const phEl = document.getElementById(placeholderId);
+    if (phEl) phEl.remove();
+
+    if (!r.ok) { toast('שגיאה בהעלאת תמונה', 'error'); return; }
+    const data = await r.json();
+    const imgUrl = data.url;
+
+    if (!imgUrl || imgUrl.includes('YOUR-APP-NAME')) {
+      toast('שגיאה: URL תמונה לא תקין', 'error');
+      return;
     }
-  } catch(e){
-    const s=document.getElementById(loadId);if(s)s.remove();
-    toast('שגיאה: '+e.message,'error');
+
+    // Insert image as simple img tag — email-safe
+    const imgHtml = `<img src="${imgUrl}" alt="${file.name}" style="max-width:100%;width:400px;display:block;margin:8px auto;border-radius:4px" data-email-img="true"/>`;
+    editor.focus();
+    document.execCommand('insertHTML', false, '<br>' + imgHtml + '<br>');
+    toast('✓ תמונה הועלתה', 'success');
+  } catch (e) {
+    const phEl = document.getElementById(placeholderId);
+    if (phEl) phEl.remove();
+    toast('שגיאה: ' + e.message, 'error');
   }
 }
 
-function insertImageWithControls(editor,src,name){
-  const imgId='img-'+Date.now(), wrapId='wrap-'+imgId;
-  const html=`<div id="${wrapId}" style="display:block;margin:8px 0;line-height:0">
-    <img id="${imgId}" src="${src}" alt="${name}" style="width:320px;max-width:100%;border-radius:4px;cursor:pointer;display:block" onclick="showImgControls('${imgId}')"/>
-    <div id="ctrl-${imgId}" style="display:none;margin-top:6px;padding:8px;background:#1c2030;border:1px solid #333;border-radius:8px;line-height:1.4">
-      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
-        <button class="tbtn" onclick="resizeImg('${imgId}',0.75)">🔍−</button>
-        <button class="tbtn" onclick="resizeImg('${imgId}',1.33)">🔍+</button>
-        <input type="range" min="80" max="900" value="320" style="width:100px" oninput="setImgWidth('${imgId}',+this.value)"/>
-        <span id="size-${imgId}" style="color:#888;font-size:11px;font-family:monospace">320px</span>
-        <span style="color:#444">|</span>
-        <button class="tbtn" onclick="floatImg('${imgId}','right')">⬅📝</button>
-        <button class="tbtn" onclick="floatImg('${imgId}','none')">⬜</button>
-        <button class="tbtn" onclick="floatImg('${imgId}','left')">📝➡</button>
-        <button class="tbtn" style="color:#f87171;margin-right:auto" onclick="removeImg('${wrapId}')">🗑 מחק</button>
-      </div>
-    </div>
-  </div><br>`;
-  editor.focus(); document.execCommand('insertHTML',false,html);
-  setTimeout(()=>showImgControls(imgId),100);
-}
-function showImgControls(imgId){document.querySelectorAll('[id^="ctrl-img-"]').forEach(el=>el.style.display='none');const c=document.getElementById('ctrl-'+imgId);if(c)c.style.display='block';}
-function resizeImg(imgId,f){const img=document.getElementById(imgId);if(!img)return;const nw=Math.max(80,Math.min(900,Math.round((parseInt(img.style.width)||320)*f)));img.style.width=nw+'px';const s=document.getElementById('size-'+imgId);if(s)s.textContent=nw+'px';}
-function setImgWidth(imgId,val){const img=document.getElementById(imgId);if(!img)return;img.style.width=val+'px';const s=document.getElementById('size-'+imgId);if(s)s.textContent=val+'px';}
-function floatImg(imgId,dir){const img=document.getElementById(imgId),wrap=document.getElementById('wrap-'+imgId);if(!img||!wrap)return;if(dir==='right')wrap.style.cssText='float:right;margin:4px 0 8px 16px;line-height:0;display:block';else if(dir==='left')wrap.style.cssText='float:left;margin:4px 16px 8px 0;line-height:0;display:block';else wrap.style.cssText='display:block;clear:both;margin:8px 0;line-height:0';}
-function removeImg(wrapId){const w=document.getElementById(wrapId);if(w){if(w.nextSibling&&w.nextSibling.nodeName==='BR')w.nextSibling.remove();w.remove();}}
-
-function insertLinkButton(){
-  const url=prompt('URL:','https://');if(url===null)return;
-  const text=prompt('טקסט על הכפתור:','לחץ כאן');if(!text)return;
-  const html=`<div style="text-align:center;margin:20px 0"><a href="${url||'#'}" style="display:inline-block;background:#5b6ef5;color:#ffffff;padding:13px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;font-family:Arial,sans-serif">${text}</a></div><br>`;
-  document.getElementById('email-editor').focus();document.execCommand('insertHTML',false,html);
+function insertLinkButton() {
+  const url = prompt('URL לכפתור:', 'https://');
+  if (url === null) return;
+  const text = prompt('טקסט על הכפתור:', 'לחץ כאן');
+  if (!text) return;
+  const html = `<div style="text-align:center;margin:20px 0"><a href="${url||'#'}" style="display:inline-block;background:#5b6ef5;color:#ffffff;padding:13px 30px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px;font-family:Arial,sans-serif">${text}</a></div>`;
+  document.getElementById('email-editor').focus();
+  document.execCommand('insertHTML', false, html);
 }
 
-function addAttachments(input){Array.from(input.files).forEach(file=>{const reader=new FileReader();reader.onload=ev=>{attachedFiles.push({name:file.name,data:ev.target.result.split(',')[1],type:file.type});renderAttachments();};reader.readAsDataURL(file);});input.value='';}
-function renderAttachments(){const list=document.getElementById('attachments-list');if(!list)return;list.innerHTML=attachedFiles.map((f,i)=>`<div class="attach-chip">📎 ${f.name}<button onclick="removeAttachment(${i})">✕</button></div>`).join('');}
-function removeAttachment(i){attachedFiles.splice(i,1);renderAttachments();}
-
-function getEditorHTML(){
-  const editor=document.getElementById('email-editor');
-  if(!editor||!editor.innerHTML.trim())return'';
-  const clone=editor.cloneNode(true);
-  clone.querySelectorAll('[id^="ctrl-"]').forEach(el=>el.remove());
-  clone.querySelectorAll('[id^="wrap-img-"]').forEach(wrap=>{
-    const img=wrap.querySelector('img');if(!img){wrap.remove();return;}
-    const ws=wrap.getAttribute('style')||'',iw=img.style.width||'320px',isrc=img.getAttribute('src')||'',ialt=img.getAttribute('alt')||'';
-    let emailHtml;
-    if(ws.includes('float:right')||ws.includes('float: right'))emailHtml=`<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0"><tr><td style="padding-right:12px;vertical-align:top"><img src="${isrc}" alt="${ialt}" width="${parseInt(iw)}" style="width:${iw};max-width:100%;display:block;border-radius:4px"/></td><td style="vertical-align:top;width:100%">&nbsp;</td></tr></table>`;
-    else if(ws.includes('float:left')||ws.includes('float: left'))emailHtml=`<table cellpadding="0" cellspacing="0" border="0" style="width:100%;margin:8px 0"><tr><td style="vertical-align:top;width:100%">&nbsp;</td><td style="padding-left:12px;vertical-align:top"><img src="${isrc}" alt="${ialt}" width="${parseInt(iw)}" style="width:${iw};max-width:100%;display:block;border-radius:4px"/></td></tr></table>`;
-    else emailHtml=`<div style="text-align:center;margin:8px 0"><img src="${isrc}" alt="${ialt}" width="${parseInt(iw)}" style="width:${iw};max-width:100%;display:inline-block;border-radius:4px"/></div>`;
-    const t=document.createElement('div');t.innerHTML=emailHtml;wrap.replaceWith(t.firstChild);
+function addAttachments(input) {
+  Array.from(input.files).forEach(file => {
+    const reader = new FileReader();
+    reader.onload = ev => {
+      attachedFiles.push({ name: file.name, data: ev.target.result.split(',')[1], type: file.type });
+      renderAttachments();
+    };
+    reader.readAsDataURL(file);
   });
-  clone.querySelectorAll('img').forEach(img=>{img.removeAttribute('onclick');img.style.cursor='default';if(img.style.width)img.setAttribute('width',parseInt(img.style.width));});
-  return `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif"><div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:10px;overflow:hidden"><div style="padding:32px;direction:rtl;text-align:right;color:#333333;font-size:15px;line-height:1.7">${clone.innerHTML}</div></div></body></html>`;
+  input.value = '';
 }
-function getEditorText(){const e=document.getElementById('email-editor');return e?e.innerText||e.textContent||'':'';}
 
-function applyTextColor(color){const e=document.getElementById('email-editor');e.focus();const sel=window.getSelection();if(!sel||sel.isCollapsed){toast('סמן טקסט קודם','');return;}const range=sel.getRangeAt(0).cloneRange();const selected=range.extractContents();const span=document.createElement('span');span.style.color=color;span.appendChild(selected);range.insertNode(span);}
-function applyBgColor(color){const e=document.getElementById('email-editor');e.focus();const sel=window.getSelection();if(!sel||sel.isCollapsed){toast('סמן טקסט קודם','');return;}const range=sel.getRangeAt(0).cloneRange();const selected=range.extractContents();const span=document.createElement('span');span.style.backgroundColor=color;span.appendChild(selected);range.insertNode(span);}
+function renderAttachments() {
+  const list = document.getElementById('attachments-list');
+  if (!list) return;
+  list.innerHTML = attachedFiles.map((f, i) =>
+    `<div class="attach-chip">📎 ${f.name}<button onclick="removeAttachment(${i})">✕</button></div>`
+  ).join('');
+}
+
+function removeAttachment(i) { attachedFiles.splice(i, 1); renderAttachments(); }
+
+function getEditorHTML() {
+  const editor = document.getElementById('email-editor');
+  if (!editor || !editor.innerHTML.trim()) return '';
+  
+  const clone = editor.cloneNode(true);
+  
+  // Fix all images — ensure they have proper src and no onclick
+  clone.querySelectorAll('img').forEach(img => {
+    img.removeAttribute('onclick');
+    img.removeAttribute('id');
+    img.style.cursor = 'default';
+    // Ensure width attribute set for Outlook
+    const w = img.style.width ? parseInt(img.style.width) : 400;
+    img.setAttribute('width', w);
+    img.style.maxWidth = '100%';
+    img.style.display = 'block';
+    img.style.margin = '8px auto';
+  });
+
+  // Remove any control divs
+  clone.querySelectorAll('[id^="ctrl-"]').forEach(el => el.remove());
+  clone.querySelectorAll('[id^="ph-"]').forEach(el => el.remove());
+
+  const innerHtml = clone.innerHTML;
+  
+  return `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+</head>
+<body style="margin:0;padding:0;background:#f5f5f5;font-family:Arial,sans-serif">
+<div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:10px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08)">
+  <div style="padding:32px;direction:rtl;text-align:right;color:#333333;font-size:15px;line-height:1.8">
+    ${innerHtml}
+  </div>
+</div>
+</body>
+</html>`;
+}
+
+function getEditorText() {
+  const e = document.getElementById('email-editor');
+  return e ? (e.innerText || e.textContent || '') : '';
+}
+
+function execCmd(cmd, val) {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+  editor.focus();
+  try { document.execCommand(cmd, false, val !== undefined ? val : null); } catch(e) {}
+}
+
+function insertVar(v) {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+  editor.focus();
+  const sel = window.getSelection();
+  if (sel && sel.rangeCount) {
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    range.insertNode(document.createTextNode(v));
+    range.collapse(false);
+    sel.removeAllRanges();
+    sel.addRange(range);
+  } else {
+    editor.innerHTML += v;
+  }
+}
+
+// ── Emoji picker ───────────────────────────────────────────────────────────
+const EMOJIS = [
+  '😊','😀','😎','🎉','🔥','💡','✅','❌','📧','📢',
+  '💼','🚀','⭐','💪','🙏','👋','💰','📈','🎯','🏆',
+  '💎','🌟','❤️','👍','🔗','📎','📄','🖼','💬','🔔',
+  '⚡','🌈','🎁','🤝','📱','💻','🛒','✉️','📝','🗂️',
+  '👏','🙌','😍','🤩','💥','🌍','🕐','📅','🔑','🎵'
+];
+
+function initEmojiGrid() {
+  const grid = document.getElementById('emoji-grid');
+  if (!grid || grid.children.length > 0) return;
+  EMOJIS.forEach(emoji => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = emoji;
+    btn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:22px;padding:5px;border-radius:4px;transition:background .1s;line-height:1';
+    btn.onmouseover = () => btn.style.background = 'var(--bg4)';
+    btn.onmouseout  = () => btn.style.background = 'none';
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      insertVar(emoji);
+      toggleEmojiPicker();
+    });
+    grid.appendChild(btn);
+  });
+}
+
+function toggleEmojiPicker() {
+  const picker = document.getElementById('emoji-picker');
+  if (!picker) return;
+  const isOpen = picker.style.display === 'block';
+  picker.style.display = isOpen ? 'none' : 'block';
+  if (!isOpen) {
+    initEmojiGrid();
+    // Position picker correctly
+    picker.style.zIndex = '9999';
+  }
+}
+
+// Close emoji picker when clicking outside
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('#emoji-btn') && !e.target.closest('#emoji-picker')) {
+    const p = document.getElementById('emoji-picker');
+    if (p) p.style.display = 'none';
+  }
+}, true);
+
+function applyTextColor(color) {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+  editor.focus();
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) { toast('סמן טקסט קודם', ''); return; }
+  document.execCommand('foreColor', false, color);
+}
+
+function applyBgColor(color) {
+  const editor = document.getElementById('email-editor');
+  if (!editor) return;
+  editor.focus();
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed) { toast('סמן טקסט קודם', ''); return; }
+  document.execCommand('hiliteColor', false, color);
+}
+
+
+function insertWaVar(v) {
+  const ta = document.getElementById('c-wa-template');
+  if (!ta) return;
+  const start = ta.selectionStart, end = ta.selectionEnd;
+  ta.value = ta.value.substring(0, start) + v + ta.value.substring(end);
+  ta.selectionStart = ta.selectionEnd = start + v.length;
+  ta.focus();
+}
+
+function insertWaEmojiPicker() {
+  const picker = document.getElementById('wa-emoji-picker');
+  if (!picker) return;
+  picker.style.display = picker.style.display === 'none' ? 'block' : 'none';
+  const grid = document.getElementById('wa-emoji-grid');
+  if (grid && grid.children.length === 0) {
+    EMOJIS.forEach(emoji => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = emoji;
+      btn.style.cssText = 'background:none;border:none;cursor:pointer;font-size:20px;padding:4px;border-radius:4px';
+      btn.onclick = () => {
+        insertWaVar(emoji);
+        picker.style.display = 'none';
+      };
+      grid.appendChild(btn);
+    });
+  }
+}
+
 
 // ── WHATSAPP ──────────────────────────────────────────────────────────────
 async function loadWaInstances() {
