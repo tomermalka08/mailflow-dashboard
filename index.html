@@ -1116,28 +1116,55 @@ function switchProvider(val) { toast('ספק ' + val + ' נבחר', 'success'); 
 
 // ── INIT ───────────────────────────────────────────────────────────────────
 (async function init() {
-  const health = await fetch(API + '/health').then(r=>r.json()).catch(()=>null);
-  if (health) loadDashboard();
+  // אם יש TOKEN שמור — הסתר login והעמס דשבורד
+  if (TOKEN) {
+    document.getElementById('login-overlay').style.display = 'none';
+    loadDashboard();
+    return;
+  }
+  // אחרת הצג login
+  document.getElementById('login-overlay').style.display = 'flex';
 })();
 
 // ── LOGIN ──────────────────────────────────────────────────────────────────
 async function doLogin() {
-  const email = document.getElementById('login-email').value;
-  const password = document.getElementById('login-password').value;
+  const email = (document.getElementById('login-email').value || '').trim();
+  const password = document.getElementById('login-password').value || '';
   const errEl = document.getElementById('login-error');
   errEl.textContent = '';
+
+  if (!email || !password) { errEl.textContent = 'מלא מייל וסיסמה'; return; }
+
+  const btn = document.querySelector('#login-overlay .btn-primary');
+  if (btn) { btn.textContent = 'מתחבר...'; btn.disabled = true; }
+
   try {
     const r = await fetch(API + '/auth/token', {
-      method:'POST', headers:{'Content-Type':'application/x-www-form-urlencoded'},
-      body:'username='+encodeURIComponent(email)+'&password='+encodeURIComponent(password)
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: 'username=' + encodeURIComponent(email) + '&password=' + encodeURIComponent(password)
     });
-    if (!r.ok) { errEl.textContent='מייל או סיסמה שגויים'; return; }
+
+    if (!r.ok) {
+      errEl.textContent = 'מייל או סיסמה שגויים';
+      return;
+    }
+
     const data = await r.json();
     TOKEN = data.access_token;
-    localStorage.setItem('mf_token', TOKEN);
+
+    // שמור TOKEN
+    try { localStorage.setItem('mf_token', TOKEN); } catch(e) {}
+
+    // הסתר login ועמס דשבורד
     document.getElementById('login-overlay').style.display = 'none';
     loadDashboard();
-  } catch(e) { errEl.textContent='שגיאת התחברות'; }
+
+  } catch(e) {
+    errEl.textContent = 'שגיאת חיבור לשרת: ' + e.message;
+  } finally {
+    if (btn) { btn.textContent = 'כניסה'; btn.disabled = false; }
+  }
 }
 
 async function doRegister() {
@@ -1158,7 +1185,7 @@ async function doRegister() {
 function showRegister(){document.getElementById('login-overlay').style.display='none';document.getElementById('register-overlay').style.display='flex';}
 function showLogin(){document.getElementById('register-overlay').style.display='none';document.getElementById('login-overlay').style.display='flex';}
 
-if (TOKEN) document.getElementById('login-overlay').style.display = 'none';
+// TOKEN check handled in init()
 
 // ── EMAIL EDITOR ──────────────────────────────────────────────────────────
 function execCmd(cmd, val) {
